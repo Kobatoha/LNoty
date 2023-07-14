@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, executor, types, filters
 from config import TOKEN
 
-# /start, /about
+# /start, /about, /help
 # /soloraidboss, /kuka, /loa, /ice, /fortress, /vallok, /olimpiada
 # /hellbound, /antharas, /siege, /hottime, /purge
 
@@ -43,6 +43,12 @@ async def cmd_handler(message: types.Message):
 
 
 @dp.message_handler(commands=['about'])
+async def cmd_handler(message: types.Message):
+    await message.answer('Это телеграм-бот для оповещений в\n'
+                         'Вместе мы ничего не забудем и зафармим то, что зафармить невозможно!')
+
+
+@dp.message_handler(commands=['help'])
 async def cmd_handler(message: types.Message):
     await message.answer('Это телеграм-бот для оповещений в\n'
                          'Вместе мы ничего не забудем и зафармим то, что зафармить невозможно!')
