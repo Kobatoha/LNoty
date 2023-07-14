@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, executor, types, filters
 from config import TOKEN
 
-# /start, /about, /help
+# /start, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olimpiad
 # /hellbound, /antharas, /siege, /primetime, /purge
 
@@ -16,6 +16,10 @@ b3 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
 
 inline_buttons.add(b1, b2)
 inline_buttons.row(b3)
+
+user_results = {
+    'soloraidboss': False
+}
 
 
 @dp.message_handler(commands=['soloraidboss'])
@@ -32,8 +36,43 @@ async def cmd_handler(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setsolorb'))
 async def some_callback_handler(callback_query: types.CallbackQuery):
+    user_results['soloraidboss'] = True
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов установлено')
     await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removesolorb'))
+async def some_callback_handler(callback_query: types.CallbackQuery):
+    user_results['soloraidboss'] = False
+    await callback_query.message.answer('Оповещение о респе одиночных рейд боссов убрано')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='back'))
+async def some_callback_handler(callback_query: types.CallbackQuery):
+    await callback_query.message.answer(
+        '/soloraidboss - Одиночные РБ\n'
+        '/kuka - Кука и Джисра\n'
+        '/loa - Логово Антараса\n'
+        '/frost - Замок Монарха Льда\n'
+        '/fortress - Крепость Орков\n'
+        '/balok - Битва с Валлоком\n'
+        '/olimpiad - Всемирная Олимпиада\n'
+        '/hellbound - Остров Ада\n'
+        '/siege - Осада Гирана\n'
+        '\n'
+        '/primetime - Прайм Тайм Зачистки\n'
+        '/purge - Зачистка\n')
+    await callback_query.answer()
+
+
+@dp.message_handler(commands=['mysettings'])
+async def cmd_handler(message: types.Message):
+    await message.answer(
+        'Установленные настройки:\n'
+        '\n'
+        f'Одиночные РБ - '
+        f"{user_results['soloraidboss']}")
 
 
 @dp.message_handler(commands=['start'])
