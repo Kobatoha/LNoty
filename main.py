@@ -3,11 +3,25 @@ from config import TOKEN
 
 # /start, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olimpiad
-# /hellbound, /antharas, /siege, /primetime, /purge
+# /hellbound, /antharas - skip, /siege, /primetime, /purge
 
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
 
+
+user_settings = {
+    'soloraidboss': False,
+    'kuka': False,
+    'loa': False,
+    'frost': False,
+    'fortress': False,
+    'balok': False,
+    'olimpiad': False,
+    'hellbound': False,
+    'siege': False,
+    'primetime': False,
+    'purge': False
+}
 
 inline_buttons = types.InlineKeyboardMarkup()
 b1 = types.InlineKeyboardButton(text='Уставновить оповещение', callback_data='setsolorb')
@@ -17,13 +31,9 @@ b3 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
 inline_buttons.add(b1, b2)
 inline_buttons.row(b3)
 
-user_results = {
-    'soloraidboss': False
-}
-
 
 @dp.message_handler(commands=['soloraidboss'])
-async def cmd_handler(message: types.Message):
+async def about_soloraidboss(message: types.Message):
     await message.answer('Одиночные Рейд Боссы ресаются каждый нечетный час в :00 минут\n'
                          'С них падает Магическая табличка, и шансово могут упасть:\n'
                          '- Свитки модификации оружия и доспеха ранга А\n'
@@ -35,21 +45,21 @@ async def cmd_handler(message: types.Message):
 
 
 @dp.callback_query_handler(filters.Text(contains='setsolorb'))
-async def some_callback_handler(callback_query: types.CallbackQuery):
-    user_results['soloraidboss'] = True
+async def set_soloraidboss(callback_query: types.CallbackQuery):
+    user_settings['soloraidboss'] = True
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removesolorb'))
-async def some_callback_handler(callback_query: types.CallbackQuery):
-    user_results['soloraidboss'] = False
+async def remove_soloraidboss(callback_query: types.CallbackQuery):
+    user_settings['soloraidboss'] = False
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов убрано')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='back'))
-async def some_callback_handler(callback_query: types.CallbackQuery):
+async def return_menu(callback_query: types.CallbackQuery):
     await callback_query.message.answer(
         '/soloraidboss - Одиночные РБ\n'
         '/kuka - Кука и Джисра\n'
@@ -67,16 +77,36 @@ async def some_callback_handler(callback_query: types.CallbackQuery):
 
 
 @dp.message_handler(commands=['mysettings'])
-async def cmd_handler(message: types.Message):
+async def get_settings(message: types.Message):
     await message.answer(
         'Установленные настройки:\n'
         '\n'
         f'Одиночные РБ - '
-        f"{user_results['soloraidboss']}")
+        f"{user_settings['soloraidboss']}\n"
+        f"Кука и Джисра - "
+        f"{user_settings['kuka']}\n"
+        f"Логово Антараса - "
+        f"{user_settings['loa']}\n"
+        f"Замок Монарха Льда - "
+        f"{user_settings['frost']}\n"
+        f"Крепость Орков - "
+        f"{user_settings['fortress']}\n"
+        f"Битва с Валлоком - "
+        f"{user_settings['balok']}\n"
+        f"Всемирная Олимпиада - "
+        f"{user_settings['olimpiad']}\n"
+        f"Остров Ада - "
+        f"{user_settings['hellbound']}\n"
+        f"Осада Гирана - "
+        f"{user_settings['siege']}\n"
+        f"Прайм Тайм Зачистки - "
+        f"{user_settings['primetime']}\n"
+        f"Зачистка - "
+        f"{user_settings['purge']}")
 
 
 @dp.message_handler(commands=['start'])
-async def cmd_handler(message: types.Message):
+async def start(message: types.Message):
     await message.answer('Привет! Я - твой помощник, брат, сват, мать и питомец.\n'
                          'В Меню ты найдешь все доступные команды.\n'
                          'Так же этот список можно вызвать командой /help\n'
@@ -88,7 +118,7 @@ async def cmd_handler(message: types.Message):
 
 
 @dp.message_handler(commands=['about'])
-async def cmd_handler(message: types.Message):
+async def about(message: types.Message):
     await message.answer('Я - телеграм-бот, который поможет не пропустить игровые активности.\n\n'
                          'Меня создали на добровольных началах, поэтому я свободен и независим.'
                          ' И конечно я всегда открыт для новых идей и предложений.\n\n'
@@ -98,11 +128,12 @@ async def cmd_handler(message: types.Message):
 
 
 @dp.message_handler(commands=['help'])
-async def cmd_handler(message: types.Message):
+async def help(message: types.Message):
     await message.answer('Доступные команды:\n'
                          '\n'
                          '/start - запуск бота\n'
                          '/about - о боте\n'
+                         '/mysettings - персональные настройки\n'
                          '/help - список команд\n'
                          '\n'
                          '/soloraidboss - Одиночные РБ\n'
