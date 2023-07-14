@@ -2,8 +2,8 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from config import TOKEN
 
 # /start, /about, /help
-# /soloraidboss, /kuka, /loa, /ice, /fortress, /vallok, /olimpiada
-# /hellbound, /antharas, /siege, /hottime, /purge
+# /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olimpiad
+# /hellbound, /antharas, /siege, /primetime, /purge
 
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
@@ -39,19 +39,45 @@ async def some_callback_handler(callback_query: types.CallbackQuery):
 @dp.message_handler(commands=['start'])
 async def cmd_handler(message: types.Message):
     await message.answer('Привет! Я - твой помощник, брат, сват, мать и питомец.\n'
-                         'Вместе мы ничего не забудем и зафармим то, что зафармить невозможно!')
+                         'В Меню ты найдешь все доступные команды.\n'
+                         'Так же этот список можно вызвать командой /help\n'
+                         '\n'
+                         'Выбирай интересующую активность и нажми "Установить оповещение".'
+                         ' В таком случае тебе будут приходить уведомления за 10 минут'
+                         ' до начала события.\n\nЗа это время ты успеешь налить чайку,'
+                         ' закинуть в рот печеньку и удобно устроиться перед монитором.')
 
 
 @dp.message_handler(commands=['about'])
 async def cmd_handler(message: types.Message):
-    await message.answer('Это телеграм-бот для оповещений в\n'
-                         'Вместе мы ничего не забудем и зафармим то, что зафармить невозможно!')
+    await message.answer('Я - телеграм-бот, который поможет не пропустить игровые активности.\n\n'
+                         'Меня создали на добровольных началах, поэтому я свободен и независим.'
+                         ' И конечно я всегда открыт для новых идей и предложений.\n\n'
+                         'Мой мастер живет на сервере Lavender и у него везде глаза и уши.'
+                         ' И если у тебя есть идея или предложение, урони свою мысль в мировом чате,'
+                         ' и мастер обязательно её услышит.')
 
 
 @dp.message_handler(commands=['help'])
 async def cmd_handler(message: types.Message):
-    await message.answer('Это телеграм-бот для оповещений в\n'
-                         'Вместе мы ничего не забудем и зафармим то, что зафармить невозможно!')
+    await message.answer('Доступные команды:\n'
+                         '\n'
+                         '/start - запуск бота\n'
+                         '/about - о боте\n'
+                         '/help - список команд\n'
+                         '\n'
+                         '/soloraidboss - Одиночные РБ\n'
+                         '/kuka - Кука и Джисра\n'
+                         '/loa - Логово Антараса\n'
+                         '/frost - Замок Монарха Льда\n'
+                         '/fortress - Крепость Орков\n'
+                         '/balok - Битва с Валлоком\n'
+                         '/olimpiad - Всемирная Олимпиада\n'
+                         '/hellbound - Остров Ада\n'
+                         '/siege - Осада Гирана\n'
+                         '\n'
+                         '/primetime - Прайм Тайм Зачистки\n'
+                         '/purge - Зачистка\n')
 
 
 @dp.message_handler()
