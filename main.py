@@ -23,15 +23,35 @@ user_settings = {
     'purge': False
 }
 
-inline_buttons = types.InlineKeyboardMarkup()
-b1 = types.InlineKeyboardButton(text='Уставновить оповещение', callback_data='setsolorb')
+
+inline_soloraidboss_buttons = types.InlineKeyboardMarkup()
+
+b0 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
+
+b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setsolorb')
 b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesolorb')
-b3 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
 
-inline_buttons.add(b1, b2)
-inline_buttons.row(b3)
+inline_soloraidboss_buttons.add(b1, b2)
+inline_soloraidboss_buttons.row(b0)
+
+inline_kuka_buttons = types.InlineKeyboardMarkup()
+
+b4 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setkuka')
+b5 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removekuka')
+
+inline_kuka_buttons.add(b4, b5)
+inline_kuka_buttons.row(b0)
+
+inline_loa_buttons = types.InlineKeyboardMarkup()
+
+b6 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setloa')
+b7 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeloa')
+
+inline_loa_buttons.add(b6, b7)
+inline_loa_buttons.row(b0)
 
 
+# SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
 async def about_soloraidboss(message: types.Message):
     await message.answer('Одиночные Рейд Боссы ресаются каждый нечетный час в :00 минут\n'
@@ -41,7 +61,7 @@ async def about_soloraidboss(message: types.Message):
                          '- Камни зачарования оружия и доспеха\n'
                          '- Камни Эволюции\n'
                          '- Кристаллы души Адена')
-    await message.answer('Выберите команду:', reply_markup=inline_buttons)
+    await message.answer('Выберите команду:', reply_markup=inline_soloraidboss_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setsolorb'))
@@ -58,6 +78,58 @@ async def remove_soloraidboss(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
+# KUKA SETTINGS
+@dp.message_handler(commands=['kuka'])
+async def about_kuka(message: types.Message):
+    await message.answer('Одиночный босс Кука ресается каждый нечетный час в :50 минут\n'
+                         'После его убийства появляется босс Джисра\n'
+                         'С них шансово могут упасть:\n'
+                         '- Свитки модификации оружия и доспеха ранга А\n'
+                         '- Красящий порошок\n'
+                         '- Камни зачарования оружия и доспеха\n'
+                         '- Камни Эволюции\n'
+                         )
+    await message.answer('Выберите команду:', reply_markup=inline_kuka_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setkuka'))
+async def set_kuka(callback_query: types.CallbackQuery):
+    user_settings['kuka'] = True
+    await callback_query.message.answer('Оповещение о респе Куки установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removekuka'))
+async def remove_soloraidboss(callback_query: types.CallbackQuery):
+    user_settings['kuka'] = False
+    await callback_query.message.answer('Оповещение о респе Куки убрано')
+    await callback_query.answer()
+
+
+# LAIR OF ANTHARAS SETTINGS
+@dp.message_handler(commands=['loa'])
+async def about_kuka(message: types.Message):
+    await message.answer('Всемирная зона Логово Антараса открывается в'
+                         ' понедельник и среду c 18:00 до полуночи.\n'
+                         )
+    await message.answer('Выберите команду:', reply_markup=inline_loa_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setloa'))
+async def set_kuka(callback_query: types.CallbackQuery):
+    user_settings['loa'] = True
+    await callback_query.message.answer('Оповещение об открытии Логова Антараса установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removeloa'))
+async def remove_soloraidboss(callback_query: types.CallbackQuery):
+    user_settings['loa'] = False
+    await callback_query.message.answer('Оповещение об открытии Логова Антараса убрано')
+    await callback_query.answer()
+
+
+# GENERAL SETTINGS
 @dp.callback_query_handler(filters.Text(contains='back'))
 async def return_menu(callback_query: types.CallbackQuery):
     await callback_query.message.answer(
@@ -128,7 +200,7 @@ async def about(message: types.Message):
 
 
 @dp.message_handler(commands=['help'])
-async def help(message: types.Message):
+async def helped(message: types.Message):
     await message.answer('Доступные команды:\n'
                          '\n'
                          '/start - запуск бота\n'
