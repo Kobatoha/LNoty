@@ -99,6 +99,15 @@ b17 = types.InlineKeyboardButton(text='Убрать оповещение', callb
 inline_hellbound_buttons.add(b16, b17)
 inline_hellbound_buttons.row(b0)
 
+# siege giran buttons
+inline_siege_buttons = types.InlineKeyboardMarkup()
+
+b18 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setsiege')
+b19 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesiege')
+
+inline_siege_buttons.add(b18, b19)
+inline_siege_buttons.row(b0)
+
 
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
@@ -284,6 +293,28 @@ async def set_hellbound(callback_query: types.CallbackQuery):
 async def remove_hellbound(callback_query: types.CallbackQuery):
     user_settings['hellbound'] = False
     await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада убрано')
+    await callback_query.answer()
+
+
+# GIRAN`S SIEGE SETTINGS
+@dp.message_handler(commands=['siege'])
+async def about_siege(message: types.Message):
+    await message.answer('Осада Замка Гиран приходит в '
+                         ' доступен в субботу с 10:00 до 00:00. ')
+    await message.answer('Выберите команду:', reply_markup=inline_siege_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setsiege'))
+async def set_siege(callback_query: types.CallbackQuery):
+    user_settings['siege'] = True
+    await callback_query.message.answer('Оповещение о начале Осады Гирана установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removesiege'))
+async def remove_siege(callback_query: types.CallbackQuery):
+    user_settings['siege'] = False
+    await callback_query.message.answer('Оповещение о начале Осады Гирана убрано')
     await callback_query.answer()
 
 
