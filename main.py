@@ -117,6 +117,15 @@ b21 = types.InlineKeyboardButton(text='Убрать оповещение', callb
 inline_primetime_buttons.add(b20, b21)
 inline_primetime_buttons.row(b0)
 
+# purge buttons
+inline_purge_buttons = types.InlineKeyboardMarkup()
+
+b22 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setpurge')
+b23 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removepurge')
+
+inline_purge_buttons.add(b22, b23)
+inline_purge_buttons.row(b0)
+
 
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
@@ -348,6 +357,27 @@ async def set_primetime(callback_query: types.CallbackQuery):
 async def remove_primetime(callback_query: types.CallbackQuery):
     user_settings['primetime'] = False
     await callback_query.message.answer('Оповещение о начале прайм-тайма убрано')
+    await callback_query.answer()
+
+
+# PURGE SETTINGS
+@dp.message_handler(commands=['purge'])
+async def about_purge(message: types.Message):
+    await message.answer('Зачистка обнуляется в полночь в воскресенье')
+    await message.answer('Выберите команду:', reply_markup=inline_purge_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setpurge'))
+async def set_purge(callback_query: types.CallbackQuery):
+    user_settings['purge'] = True
+    await callback_query.message.answer('Оповещение о сборе зачистки установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removepurge'))
+async def remove_purge(callback_query: types.CallbackQuery):
+    user_settings['purge'] = False
+    await callback_query.message.answer('Оповещение о сборе зачистки убрано')
     await callback_query.answer()
 
 
