@@ -63,6 +63,14 @@ b9 = types.InlineKeyboardButton(text='Убрать оповещение', callba
 inline_frost_buttons.add(b8, b9)
 inline_frost_buttons.row(b0)
 
+# orc fortress buttons
+inline_fortress_buttons = types.InlineKeyboardMarkup()
+
+b10 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setfortress')
+b11 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removefortress')
+
+inline_fortress_buttons.add(b10, b11)
+inline_fortress_buttons.row(b0)
 
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
@@ -162,6 +170,27 @@ async def set_frost(callback_query: types.CallbackQuery):
 async def remove_frost(callback_query: types.CallbackQuery):
     user_settings['frost'] = False
     await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда убрано')
+    await callback_query.answer()
+
+
+# ORC FORTRESS SETTINGS
+@dp.message_handler(commands=['fortress'])
+async def about_fortress(message: types.Message):
+    await message.answer('Битва за Крепость Орков проводится ежедневно в 20:00')
+    await message.answer('Выберите команду:', reply_markup=inline_fortress_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setfortress'))
+async def set_fortress(callback_query: types.CallbackQuery):
+    user_settings['fortress'] = True
+    await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removefortress'))
+async def remove_fortress(callback_query: types.CallbackQuery):
+    user_settings['fortress'] = False
+    await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков убрано')
     await callback_query.answer()
 
 
