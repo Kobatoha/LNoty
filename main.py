@@ -90,6 +90,15 @@ b15 = types.InlineKeyboardButton(text='Убрать оповещение', callb
 inline_olympiad_buttons.add(b14, b15)
 inline_olympiad_buttons.row(b0)
 
+# hellbound buttons
+inline_hellbound_buttons = types.InlineKeyboardMarkup()
+
+b16 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='sethellbound')
+b17 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removehellbound')
+
+inline_hellbound_buttons.add(b16, b17)
+inline_hellbound_buttons.row(b0)
+
 
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
@@ -256,10 +265,34 @@ async def remove_olympiad(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
+# HELLBOUND SETTINGS
+@dp.message_handler(commands=['hellbound'])
+async def about_hellbound(message: types.Message):
+    await message.answer('Остров Ада — межсерверная зона охоты для персонажей 85+ и'
+                         ' доступен в субботу с 10:00 до 00:00. ')
+    await message.answer('Выберите команду:', reply_markup=inline_hellbound_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='sethellbound'))
+async def set_hellbound(callback_query: types.CallbackQuery):
+    user_settings['hellbound'] = True
+    await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removehellbound'))
+async def remove_hellbound(callback_query: types.CallbackQuery):
+    user_settings['hellbound'] = False
+    await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада убрано')
+    await callback_query.answer()
+
+
 # GENERAL SETTINGS
 @dp.callback_query_handler(filters.Text(contains='back'))
 async def return_menu(callback_query: types.CallbackQuery):
     await callback_query.message.answer(
+        '/mysettings\n'
+        '\n'
         '/soloraidboss - Одиночные РБ\n'
         '/kuka - Кука и Джисра\n'
         '/loa - Логово Антараса\n'
