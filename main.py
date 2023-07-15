@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from config import TOKEN
 
 # /start, /about, /help, /mysettings
-# /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olimpiad
+# /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
 # /hellbound, /antharas - skip, /siege, /primetime, /purge
 
 mybot = Bot(token=TOKEN)
@@ -16,7 +16,7 @@ user_settings = {
     'frost': False,
     'fortress': False,
     'balok': False,
-    'olimpiad': False,
+    'olympiad': False,
     'hellbound': False,
     'siege': False,
     'primetime': False,
@@ -24,9 +24,11 @@ user_settings = {
 }
 
 
-inline_soloraidboss_buttons = types.InlineKeyboardMarkup()
-
+# general button
 b0 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
+
+# solo raid boss buttons
+inline_soloraidboss_buttons = types.InlineKeyboardMarkup()
 
 b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setsolorb')
 b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesolorb')
@@ -34,6 +36,7 @@ b2 = types.InlineKeyboardButton(text='Убрать оповещение', callba
 inline_soloraidboss_buttons.add(b1, b2)
 inline_soloraidboss_buttons.row(b0)
 
+# kuka buttons
 inline_kuka_buttons = types.InlineKeyboardMarkup()
 
 b4 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setkuka')
@@ -42,6 +45,7 @@ b5 = types.InlineKeyboardButton(text='Убрать оповещение', callba
 inline_kuka_buttons.add(b4, b5)
 inline_kuka_buttons.row(b0)
 
+# lair of antharas buttons
 inline_loa_buttons = types.InlineKeyboardMarkup()
 
 b6 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setloa')
@@ -49,6 +53,15 @@ b7 = types.InlineKeyboardButton(text='Убрать оповещение', callba
 
 inline_loa_buttons.add(b6, b7)
 inline_loa_buttons.row(b0)
+
+# frost lord`s castle buttons
+inline_frost_buttons = types.InlineKeyboardMarkup()
+
+b8 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setfrost')
+b9 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removefrost')
+
+inline_frost_buttons.add(b8, b9)
+inline_frost_buttons.row(b0)
 
 
 # SOLO RAID BOSS SETTINGS
@@ -100,7 +113,7 @@ async def set_kuka(callback_query: types.CallbackQuery):
 
 
 @dp.callback_query_handler(filters.Text(contains='removekuka'))
-async def remove_soloraidboss(callback_query: types.CallbackQuery):
+async def remove_kuka(callback_query: types.CallbackQuery):
     user_settings['kuka'] = False
     await callback_query.message.answer('Оповещение о респе Куки убрано')
     await callback_query.answer()
@@ -108,7 +121,7 @@ async def remove_soloraidboss(callback_query: types.CallbackQuery):
 
 # LAIR OF ANTHARAS SETTINGS
 @dp.message_handler(commands=['loa'])
-async def about_kuka(message: types.Message):
+async def about_loa(message: types.Message):
     await message.answer('Всемирная зона Логово Антараса открывается в'
                          ' понедельник и среду c 18:00 до полуночи.\n'
                          )
@@ -116,16 +129,39 @@ async def about_kuka(message: types.Message):
 
 
 @dp.callback_query_handler(filters.Text(contains='setloa'))
-async def set_kuka(callback_query: types.CallbackQuery):
+async def set_loa(callback_query: types.CallbackQuery):
     user_settings['loa'] = True
     await callback_query.message.answer('Оповещение об открытии Логова Антараса установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removeloa'))
-async def remove_soloraidboss(callback_query: types.CallbackQuery):
+async def remove_loa(callback_query: types.CallbackQuery):
     user_settings['loa'] = False
     await callback_query.message.answer('Оповещение об открытии Логова Антараса убрано')
+    await callback_query.answer()
+
+
+# FROST LORD`S CASTLE SETTINGS
+@dp.message_handler(commands=['frost'])
+async def about_frost(message: types.Message):
+    await message.answer('Всемирная зона Замок Монарха Льда открывается во'
+                         ' вторник и четверг c 18:00 до полуночи.\n'
+                         )
+    await message.answer('Выберите команду:', reply_markup=inline_frost_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setfrost'))
+async def set_frost(callback_query: types.CallbackQuery):
+    user_settings['frost'] = True
+    await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removefrost'))
+async def remove_frost(callback_query: types.CallbackQuery):
+    user_settings['frost'] = False
+    await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда убрано')
     await callback_query.answer()
 
 
@@ -139,7 +175,7 @@ async def return_menu(callback_query: types.CallbackQuery):
         '/frost - Замок Монарха Льда\n'
         '/fortress - Крепость Орков\n'
         '/balok - Битва с Валлоком\n'
-        '/olimpiad - Всемирная Олимпиада\n'
+        '/olympiad - Всемирная Олимпиада\n'
         '/hellbound - Остров Ада\n'
         '/siege - Осада Гирана\n'
         '\n'
@@ -166,7 +202,7 @@ async def get_settings(message: types.Message):
         f"Битва с Валлоком - "
         f"{user_settings['balok']}\n"
         f"Всемирная Олимпиада - "
-        f"{user_settings['olimpiad']}\n"
+        f"{user_settings['olympiad']}\n"
         f"Остров Ада - "
         f"{user_settings['hellbound']}\n"
         f"Осада Гирана - "
@@ -214,7 +250,7 @@ async def helped(message: types.Message):
                          '/frost - Замок Монарха Льда\n'
                          '/fortress - Крепость Орков\n'
                          '/balok - Битва с Валлоком\n'
-                         '/olimpiad - Всемирная Олимпиада\n'
+                         '/olympiad - Всемирная Олимпиада\n'
                          '/hellbound - Остров Ада\n'
                          '/siege - Осада Гирана\n'
                          '\n'
