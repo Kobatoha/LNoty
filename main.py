@@ -108,6 +108,15 @@ b19 = types.InlineKeyboardButton(text='Убрать оповещение', callb
 inline_siege_buttons.add(b18, b19)
 inline_siege_buttons.row(b0)
 
+# prime time buttons
+inline_primetime_buttons = types.InlineKeyboardMarkup()
+
+b20 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setprimetime')
+b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeprimetime')
+
+inline_primetime_buttons.add(b20, b21)
+inline_primetime_buttons.row(b0)
+
 
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
@@ -315,6 +324,30 @@ async def set_siege(callback_query: types.CallbackQuery):
 async def remove_siege(callback_query: types.CallbackQuery):
     user_settings['siege'] = False
     await callback_query.message.answer('Оповещение о начале Осады Гирана убрано')
+    await callback_query.answer()
+
+
+# PRIME TIME SETTINGS
+@dp.message_handler(commands=['primetime'])
+async def about_primetime(message: types.Message):
+    await message.answer('Ежедневно в прайм-тайм получаемые очки зачистки удваиваются:\n'
+                         '- с 12:00 до 14:00\n'
+                         '- с 19:00 до 23:00'
+                         )
+    await message.answer('Выберите команду:', reply_markup=inline_primetime_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setprimetime'))
+async def set_primetime(callback_query: types.CallbackQuery):
+    user_settings['primetime'] = True
+    await callback_query.message.answer('Оповещение о начале прайм-тайма установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removeprimetime'))
+async def remove_primetime(callback_query: types.CallbackQuery):
+    user_settings['primetime'] = False
+    await callback_query.message.answer('Оповещение о начале прайм-тайма убрано')
     await callback_query.answer()
 
 
