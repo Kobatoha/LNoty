@@ -72,6 +72,16 @@ b11 = types.InlineKeyboardButton(text='Убрать оповещение', callb
 inline_fortress_buttons.add(b10, b11)
 inline_fortress_buttons.row(b0)
 
+# battle with balok buttons
+inline_balok_buttons = types.InlineKeyboardMarkup()
+
+b12 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setbalok')
+b13 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removebalok')
+
+inline_balok_buttons.add(b12, b13)
+inline_balok_buttons.row(b0)
+
+
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
 async def about_soloraidboss(message: types.Message):
@@ -191,6 +201,27 @@ async def set_fortress(callback_query: types.CallbackQuery):
 async def remove_fortress(callback_query: types.CallbackQuery):
     user_settings['fortress'] = False
     await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков убрано')
+    await callback_query.answer()
+
+
+# BATTLE WITH BALOK SETTINGS
+@dp.message_handler(commands=['balok'])
+async def about_balok(message: types.Message):
+    await message.answer('Битва с Валлоком проводится ежедневно, кроме воскресенья в 20:30')
+    await message.answer('Выберите команду:', reply_markup=inline_balok_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setbalok'))
+async def set_balok(callback_query: types.CallbackQuery):
+    user_settings['balok'] = True
+    await callback_query.message.answer('Оповещение о начале Битвы с Валлоком установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removebalok'))
+async def remove_balok(callback_query: types.CallbackQuery):
+    user_settings['balok'] = False
+    await callback_query.message.answer('Оповещение о начале Битвы с Валлоком убрано')
     await callback_query.answer()
 
 
