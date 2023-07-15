@@ -81,6 +81,15 @@ b13 = types.InlineKeyboardButton(text='Убрать оповещение', callb
 inline_balok_buttons.add(b12, b13)
 inline_balok_buttons.row(b0)
 
+# olympiad buttons
+inline_olympiad_buttons = types.InlineKeyboardMarkup()
+
+b14 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setolympiad')
+b15 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeolympiad')
+
+inline_olympiad_buttons.add(b14, b15)
+inline_olympiad_buttons.row(b0)
+
 
 # SOLO RAID BOSS SETTINGS
 @dp.message_handler(commands=['soloraidboss'])
@@ -222,6 +231,28 @@ async def set_balok(callback_query: types.CallbackQuery):
 async def remove_balok(callback_query: types.CallbackQuery):
     user_settings['balok'] = False
     await callback_query.message.answer('Оповещение о начале Битвы с Валлоком убрано')
+    await callback_query.answer()
+
+
+# OLYMPIAD SETTINGS
+@dp.message_handler(commands=['olympiad'])
+async def about_olympiad(message: types.Message):
+    await message.answer('Всемирная Олимпиада проводится с понедельника'
+                         ' по пятницу с 21:30 до 22:00.')
+    await message.answer('Выберите команду:', reply_markup=inline_olympiad_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setolympiad'))
+async def set_olympiad(callback_query: types.CallbackQuery):
+    user_settings['olympiad'] = True
+    await callback_query.message.answer('Оповещение о начале Олимпиады установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removeolympiad'))
+async def remove_olympiad(callback_query: types.CallbackQuery):
+    user_settings['olympiad'] = False
+    await callback_query.message.answer('Оповещение о начале Олимпиады убрано')
     await callback_query.answer()
 
 
