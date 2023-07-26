@@ -1,5 +1,9 @@
 from aiogram import Bot, Dispatcher, executor, types, filters
-from config import TOKEN
+from config import TOKEN, DB_URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Base, Setting, User
+import psycopg2
 
 # /start, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
@@ -8,6 +12,11 @@ from config import TOKEN
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
 
+engine = create_engine(DB_URL)
+
+Session = sessionmaker(bind=engine)
+
+Base.metadata.create_all(engine)
 
 user_settings = {
     'soloraidboss': False,
@@ -142,14 +151,30 @@ async def about_soloraidboss(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setsolorb'))
 async def set_soloraidboss(callback_query: types.CallbackQuery):
-    user_settings['soloraidboss'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.soloraidboss = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removesolorb'))
 async def remove_soloraidboss(callback_query: types.CallbackQuery):
-    user_settings['soloraidboss'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.soloraidboss = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов убрано')
     await callback_query.answer()
 
@@ -170,14 +195,30 @@ async def about_kuka(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setkuka'))
 async def set_kuka(callback_query: types.CallbackQuery):
-    user_settings['kuka'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.kuka = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о респе Куки установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removekuka'))
 async def remove_kuka(callback_query: types.CallbackQuery):
-    user_settings['kuka'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.kuka = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о респе Куки убрано')
     await callback_query.answer()
 
@@ -193,14 +234,30 @@ async def about_loa(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setloa'))
 async def set_loa(callback_query: types.CallbackQuery):
-    user_settings['loa'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.loa = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение об открытии Логова Антараса установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removeloa'))
 async def remove_loa(callback_query: types.CallbackQuery):
-    user_settings['loa'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.loa = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение об открытии Логова Антараса убрано')
     await callback_query.answer()
 
@@ -216,14 +273,30 @@ async def about_frost(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setfrost'))
 async def set_frost(callback_query: types.CallbackQuery):
-    user_settings['frost'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.frost = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removefrost'))
 async def remove_frost(callback_query: types.CallbackQuery):
-    user_settings['frost'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.frost = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда убрано')
     await callback_query.answer()
 
@@ -237,14 +310,30 @@ async def about_fortress(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setfortress'))
 async def set_fortress(callback_query: types.CallbackQuery):
-    user_settings['fortress'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.fortress = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removefortress'))
 async def remove_fortress(callback_query: types.CallbackQuery):
-    user_settings['fortress'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.fortress = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков убрано')
     await callback_query.answer()
 
@@ -258,14 +347,30 @@ async def about_balok(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setbalok'))
 async def set_balok(callback_query: types.CallbackQuery):
-    user_settings['balok'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.balok = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Битвы с Валлоком установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removebalok'))
 async def remove_balok(callback_query: types.CallbackQuery):
-    user_settings['balok'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.balok = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Битвы с Валлоком убрано')
     await callback_query.answer()
 
@@ -280,14 +385,30 @@ async def about_olympiad(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setolympiad'))
 async def set_olympiad(callback_query: types.CallbackQuery):
-    user_settings['olympiad'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.olympiad = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Олимпиады установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removeolympiad'))
 async def remove_olympiad(callback_query: types.CallbackQuery):
-    user_settings['olympiad'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.olympiad = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Олимпиады убрано')
     await callback_query.answer()
 
@@ -302,14 +423,30 @@ async def about_hellbound(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='sethellbound'))
 async def set_hellbound(callback_query: types.CallbackQuery):
-    user_settings['hellbound'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.hellbound = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removehellbound'))
 async def remove_hellbound(callback_query: types.CallbackQuery):
-    user_settings['hellbound'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.hellbound = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада убрано')
     await callback_query.answer()
 
@@ -324,14 +461,30 @@ async def about_siege(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setsiege'))
 async def set_siege(callback_query: types.CallbackQuery):
-    user_settings['siege'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.siege = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Осады Гирана установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removesiege'))
 async def remove_siege(callback_query: types.CallbackQuery):
-    user_settings['siege'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.siege = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале Осады Гирана убрано')
     await callback_query.answer()
 
@@ -348,14 +501,30 @@ async def about_primetime(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setprimetime'))
 async def set_primetime(callback_query: types.CallbackQuery):
-    user_settings['primetime'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.primetime = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале прайм-тайма установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removeprimetime'))
 async def remove_primetime(callback_query: types.CallbackQuery):
-    user_settings['primetime'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.primetime = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о начале прайм-тайма убрано')
     await callback_query.answer()
 
@@ -369,14 +538,30 @@ async def about_purge(message: types.Message):
 
 @dp.callback_query_handler(filters.Text(contains='setpurge'))
 async def set_purge(callback_query: types.CallbackQuery):
-    user_settings['purge'] = True
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.purge = True
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о сборе зачистки установлено')
     await callback_query.answer()
 
 
 @dp.callback_query_handler(filters.Text(contains='removepurge'))
 async def remove_purge(callback_query: types.CallbackQuery):
-    user_settings['purge'] = False
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.purge = False
+
+    session.commit()
+    session.close()
+
     await callback_query.message.answer('Оповещение о сборе зачистки убрано')
     await callback_query.answer()
 
@@ -404,44 +589,71 @@ async def return_menu(callback_query: types.CallbackQuery):
 
 @dp.message_handler(commands=['mysettings'])
 async def get_settings(message: types.Message):
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+
     await message.answer(
         'Установленные настройки:\n'
         '\n'
-        f'Одиночные РБ - '
-        f"{user_settings['soloraidboss']}\n"
-        f"Кука и Джисра - "
-        f"{user_settings['kuka']}\n"
-        f"Логово Антараса - "
-        f"{user_settings['loa']}\n"
-        f"Замок Монарха Льда - "
-        f"{user_settings['frost']}\n"
-        f"Крепость Орков - "
-        f"{user_settings['fortress']}\n"
-        f"Битва с Валлоком - "
-        f"{user_settings['balok']}\n"
-        f"Всемирная Олимпиада - "
-        f"{user_settings['olympiad']}\n"
-        f"Остров Ада - "
-        f"{user_settings['hellbound']}\n"
-        f"Осада Гирана - "
-        f"{user_settings['siege']}\n"
-        f"Прайм Тайм Зачистки - "
-        f"{user_settings['primetime']}\n"
-        f"Зачистка - "
-        f"{user_settings['purge']}")
+        f'Одиночные РБ - {setting.soloraidboss}\n'
+        f"Кука и Джисра - {setting.kuka}\n"
+        f"Логово Антараса - {setting.loa}\n"
+        f"Замок Монарха Льда - {setting.frost}\n"
+        f"Крепость Орков - {setting.fortress}\n"
+        f"Битва с Валлоком - {setting.balok}\n"
+        f"Всемирная Олимпиада - {setting.olympiad}\n"
+        f"Остров Ада - {setting.hellbound}\n"
+        f"Осада Гирана - {setting.siege}\n"
+        f"Прайм Тайм Зачистки - {setting.primetime}\n"
+        f"Зачистка - {setting.purge}")
 
+    session.close()
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
+    session = Session()
+    user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    if not user:
+        user = User(telegram_id=message.from_user.id)
+        session.add(user)
+        session.commit()
+        setting = Setting(id_user=user.telegram_id)
+        session.add(setting)
+        session.commit()
+        session.close()
     await message.answer('Привет! Я - твой помощник, брат, сват, мать и питомец.\n'
                          'В Меню ты найдешь все доступные команды.\n'
                          'Так же этот список можно вызвать командой /help\n'
                          '\n'
-                         'Выбирай интересующую активность и нажми "Установить оповещение".'
+                         'Выбирай интересующую активность и жми "Установить оповещение".'
                          ' В таком случае тебе будут приходить уведомления за 10 минут'
                          ' до начала события.\n\nЗа это время ты успеешь налить чайку,'
                          ' закинуть в рот печеньку и удобно устроиться перед монитором.')
 
+
+@dp.message_handler(commands=['Stop'])
+async def start(message: types.Message):
+    session = Session()
+    user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    if user:
+        setting.soloraidboss = False
+        setting.kuka = False
+        setting.loa = False
+        setting.frost = False
+        setting.fortress = False
+        setting.balok = False
+        setting.olympiad = False
+        setting.hellbound = False
+        setting.siege = False
+        setting.primetime = False
+        setting.purge = False
+
+        session.commit()
+        session.close()
+    await message.answer('Отменяем все оповещения')
 
 @dp.message_handler(commands=['about'])
 async def about(message: types.Message):
@@ -461,6 +673,8 @@ async def helped(message: types.Message):
                          '/about - о боте\n'
                          '/mysettings - персональные настройки\n'
                          '/help - список команд\n'
+                         '\n'
+                         '/stop - отменить все оповещения\n'
                          '\n'
                          '/soloraidboss - Одиночные РБ\n'
                          '/kuka - Кука и Джисра\n'
