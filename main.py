@@ -19,9 +19,11 @@ from Events.siege import siege_notification_wrapper
 from Events.primetime import primetime_notification_wrapper
 from Events.purge import purge_notification_wrapper
 
+from Events.watermelon import about_event, set_event, remove_event, watermelon_notification_wrapper
+
 # /start, /stop, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
-# /hellbound, /antharas - skip, /siege, /primetime, /purge
+# /hellbound, /antharas - skip, /siege, /primetime, /purge, /event
 
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
@@ -32,6 +34,9 @@ Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
+dp.register_message_handler(about_event, commands=['event'])
+dp.register_callback_query_handler(set_event, text_contains='setevent')
+dp.register_callback_query_handler(remove_event, text_contains='removeevent')
 
 # general button
 b0 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
@@ -681,6 +686,7 @@ async def helped(message: types.Message):
                          '\n'
                          '/stop - отменить все оповещения\n'
                          '\n'
+                         '/event - Арбузный сезон (до 02.08)\n'
                          '/soloraidboss - Одиночные РБ\n'
                          '/kuka - Кука и Джисра\n'
                          '/loa - Логово Антараса\n'
@@ -744,12 +750,18 @@ async def crontab_notifications():
     crontab('55 22 * * *', func=primetime_notification_wrapper)
 
     # Запускаем purge в воскресенье в 23:30
-    crontab('30 23 * * *', func=purge_notification_wrapper)
+    crontab('30 23 * * 7', func=purge_notification_wrapper)
+
+    # Запускаем event в ежедневно в 10:55
+    crontab('55 10 * * *', func=watermelon_notification_wrapper)
+
+    # Запускаем event в ежедневно в 20:55
+    crontab('55 20 * * *', func=watermelon_notification_wrapper)
 
 
 if __name__ == '__main__':
-    now = datetime.now().strftime('%H:%M')
-    print(now, 'Запуск Lineage2Notifications')
+    now_start = datetime.now().strftime('%H:%M')
+    print(now_start, 'Запуск Lineage2Notifications')
     loop = asyncio.get_event_loop()
     loop.create_task(crontab_notifications())
     executor.start_polling(dp, skip_updates=True)

@@ -33,5 +33,7 @@ class Setting(Base):
     primetime = Column(Boolean, default=False)
     purge = Column(Boolean, default=False)
 
+    event = Column(Boolean, default=False)
+
     # telegram bot time work - 00:00 - 23:59 if True, else 9:00 - 23:00
     fulltime = Column(Boolean, default=False)
