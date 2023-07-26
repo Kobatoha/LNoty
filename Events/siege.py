@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
 
-
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
 
@@ -17,25 +16,23 @@ Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 
 
-async def fortress_notification_wrapper():
-
+async def siege_notification_wrapper():
     session = Session()
     users = session.query(User).all()
 
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-        if setting.fortress is True:
+        if setting.siege is True:
             now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Крепости Орков')
-            await fortress_notification(user)
-
+            print(now, user.telegram_id, 'подходит под условия оповещения Осады Гирана')
+            await siege_notification(user)
     session.close()
 
 
-async def fortress_notification(user: User):
+async def siege_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '19:55':
-        await mybot.send_message(user.telegram_id, 'Битва за Крепость Орков начнется через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Крепости Орков')
+    if now == '20:25':
+        await mybot.send_message(user.telegram_id, 'Осада Гирана начнется через 5 минут')
+        print(now, user.telegram_id, 'получил сообщение об Осаде Гирана')
     else:
-        print(now, 'Неподходящее время для Крепости Орков')
+        print(now, 'Неподходящее время для Осады Гирана')

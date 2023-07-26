@@ -12,6 +12,12 @@ from Events.kuka import kuka_notification_wrapper
 from Events.loa import loa_notification_wrapper
 from Events.fortress import fortress_notification_wrapper
 from Events.frost import frost_notification_wrapper
+from Events.olympiad import olympiad_notification_wrapper
+from Events.balok import balok_notification_wrapper
+from Events.hellbound import hellbound_notification_wrapper
+from Events.siege import siege_notification_wrapper
+from Events.primetime import primetime_notification_wrapper
+from Events.purge import purge_notification_wrapper
 
 # /start, /stop, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
@@ -697,14 +703,48 @@ async def echo(message: types.Message):
 async def crontab_notifications():
     # Запускаем soloraidboss каждый час в :55
     crontab('55 * * * *', func=soloraidboss_notification_wrapper)
+
     # Запускаем kuka каждый час в :45
     crontab('45 * * * *', func=kuka_notification_wrapper)
+
     # Запускаем loa каждый понедельник и среду в 17:55
     crontab('55 17 * * 1,3', func=loa_notification_wrapper)
-    # Запускаем fortress ежедневно в 19:55
-    crontab('55 19 * * *', func=fortress_notification_wrapper)
+
     # Запускаем frost каждый вторник и четверг в 19:55
     crontab('55 17 * * 2,4', func=frost_notification_wrapper)
+
+    # Запускаем fortress ежедневно в 19:55
+    crontab('55 19 * * *', func=fortress_notification_wrapper)
+
+    # Запускаем balok ежедневно, кроме воскресенья в 20:25
+    crontab('25 20 * * 1,2,3,4,5,6', func=balok_notification_wrapper)
+
+    # Запускаем olympiad по будням в 21:25
+    crontab('25 21 * * 1,2,3,4,5', func=olympiad_notification_wrapper)
+
+    # Запускаем hellbound открытие в субботу в 09:55
+    crontab('55 09 * * 6', func=hellbound_notification_wrapper)
+
+    # Запускаем hellbound закрытие в субботу в 23:55
+    crontab('55 23 * * 6', func=hellbound_notification_wrapper)
+
+    # Запускаем siege в воскресенье в 20:25
+    crontab('25 20 * * 7', func=siege_notification_wrapper)
+
+    # Запускаем primetime ежедневно в 11:55
+    crontab('55 11 * * *', func=primetime_notification_wrapper)
+
+    # Запускаем primetime ежедневно в 13:55
+    crontab('55 13 * * *', func=primetime_notification_wrapper)
+
+    # Запускаем primetime ежедневно в 18:55
+    crontab('55 18 * * *', func=primetime_notification_wrapper)
+
+    # Запускаем primetime ежедневно в 22:55
+    crontab('55 22 * * *', func=primetime_notification_wrapper)
+
+    # Запускаем purge в воскресенье в 23:30
+    crontab('30 23 * * *', func=purge_notification_wrapper)
 
 
 if __name__ == '__main__':

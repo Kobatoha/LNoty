@@ -17,25 +17,24 @@ Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 
 
-async def fortress_notification_wrapper():
+async def purge_notification_wrapper():
 
     session = Session()
     users = session.query(User).all()
 
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-        if setting.fortress is True:
+        if setting.purge is True:
             now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Крепости Орков')
-            await fortress_notification(user)
-
+            print(now, user.telegram_id, 'подходит под условия оповещения сбора Зачистки')
+            await purge_notification(user)
     session.close()
 
 
-async def fortress_notification(user: User):
+async def purge_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '19:55':
-        await mybot.send_message(user.telegram_id, 'Битва за Крепость Орков начнется через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Крепости Орков')
+    if now == '23:30':
+        await mybot.send_message(user.telegram_id, 'Скорее соберите Зачистку :)')
+        print(now, user.telegram_id, 'получил сообщение об сборе Зачистке')
     else:
-        print(now, 'Неподходящее время для Крепости Орков')
+        print(now, 'Неподходящее время для сбора Зачистки')
