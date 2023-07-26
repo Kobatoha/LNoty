@@ -3,9 +3,17 @@ from config import TOKEN, DB_URL
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Setting, User
-import psycopg2
+from aiocron import crontab
+import asyncio
+from datetime import datetime
 
-# /start, /about, /help, /mysettings
+from Events.soloraidboss import soloraidboss_notification_wrapper
+from Events.kuka import kuka_notification_wrapper
+from Events.loa import loa_notification_wrapper
+from Events.fortress import fortress_notification_wrapper
+from Events.frost import frost_notification_wrapper
+
+# /start, /stop, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
 # /hellbound, /antharas - skip, /siege, /primetime, /purge
 
@@ -18,20 +26,6 @@ Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
-user_settings = {
-    'soloraidboss': False,
-    'kuka': False,
-    'loa': False,
-    'frost': False,
-    'fortress': False,
-    'balok': False,
-    'olympiad': False,
-    'hellbound': False,
-    'siege': False,
-    'primetime': False,
-    'purge': False
-}
-
 
 # general button
 b0 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
@@ -43,7 +37,7 @@ b1 = types.InlineKeyboardButton(text='Установить оповещение'
 b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesolorb')
 
 inline_soloraidboss_buttons.add(b1, b2)
-inline_soloraidboss_buttons.row(b0)
+
 
 # kuka buttons
 inline_kuka_buttons = types.InlineKeyboardMarkup()
@@ -52,7 +46,7 @@ b4 = types.InlineKeyboardButton(text='Установить оповещение'
 b5 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removekuka')
 
 inline_kuka_buttons.add(b4, b5)
-inline_kuka_buttons.row(b0)
+
 
 # lair of antharas buttons
 inline_loa_buttons = types.InlineKeyboardMarkup()
@@ -61,7 +55,7 @@ b6 = types.InlineKeyboardButton(text='Установить оповещение'
 b7 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeloa')
 
 inline_loa_buttons.add(b6, b7)
-inline_loa_buttons.row(b0)
+
 
 # frost lord`s castle buttons
 inline_frost_buttons = types.InlineKeyboardMarkup()
@@ -70,7 +64,7 @@ b8 = types.InlineKeyboardButton(text='Установить оповещение'
 b9 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removefrost')
 
 inline_frost_buttons.add(b8, b9)
-inline_frost_buttons.row(b0)
+
 
 # orc fortress buttons
 inline_fortress_buttons = types.InlineKeyboardMarkup()
@@ -79,7 +73,7 @@ b10 = types.InlineKeyboardButton(text='Установить оповещение
 b11 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removefortress')
 
 inline_fortress_buttons.add(b10, b11)
-inline_fortress_buttons.row(b0)
+
 
 # battle with balok buttons
 inline_balok_buttons = types.InlineKeyboardMarkup()
@@ -88,7 +82,7 @@ b12 = types.InlineKeyboardButton(text='Установить оповещение
 b13 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removebalok')
 
 inline_balok_buttons.add(b12, b13)
-inline_balok_buttons.row(b0)
+
 
 # olympiad buttons
 inline_olympiad_buttons = types.InlineKeyboardMarkup()
@@ -97,7 +91,7 @@ b14 = types.InlineKeyboardButton(text='Установить оповещение
 b15 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeolympiad')
 
 inline_olympiad_buttons.add(b14, b15)
-inline_olympiad_buttons.row(b0)
+
 
 # hellbound buttons
 inline_hellbound_buttons = types.InlineKeyboardMarkup()
@@ -106,7 +100,7 @@ b16 = types.InlineKeyboardButton(text='Установить оповещение
 b17 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removehellbound')
 
 inline_hellbound_buttons.add(b16, b17)
-inline_hellbound_buttons.row(b0)
+
 
 # siege giran buttons
 inline_siege_buttons = types.InlineKeyboardMarkup()
@@ -115,7 +109,7 @@ b18 = types.InlineKeyboardButton(text='Установить оповещение
 b19 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesiege')
 
 inline_siege_buttons.add(b18, b19)
-inline_siege_buttons.row(b0)
+
 
 # prime time buttons
 inline_primetime_buttons = types.InlineKeyboardMarkup()
@@ -124,7 +118,7 @@ b20 = types.InlineKeyboardButton(text='Установить оповещение
 b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeprimetime')
 
 inline_primetime_buttons.add(b20, b21)
-inline_primetime_buttons.row(b0)
+
 
 # purge buttons
 inline_purge_buttons = types.InlineKeyboardMarkup()
@@ -133,7 +127,6 @@ b22 = types.InlineKeyboardButton(text='Установить оповещение
 b23 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removepurge')
 
 inline_purge_buttons.add(b22, b23)
-inline_purge_buttons.row(b0)
 
 
 # SOLO RAID BOSS SETTINGS
@@ -145,8 +138,7 @@ async def about_soloraidboss(message: types.Message):
                          '- Свитки модификации оружия и доспеха ранга В\n'
                          '- Камни зачарования оружия и доспеха\n'
                          '- Камни Эволюции\n'
-                         '- Кристаллы души Адена')
-    await message.answer('Выберите команду:', reply_markup=inline_soloraidboss_buttons)
+                         '- Кристаллы души Адена', reply_markup=inline_soloraidboss_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setsolorb'))
@@ -188,9 +180,7 @@ async def about_kuka(message: types.Message):
                          '- Свитки модификации оружия и доспеха ранга А\n'
                          '- Красящий порошок\n'
                          '- Камни зачарования оружия и доспеха\n'
-                         '- Камни Эволюции\n'
-                         )
-    await message.answer('Выберите команду:', reply_markup=inline_kuka_buttons)
+                         '- Камни Эволюции\n', reply_markup=inline_kuka_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setkuka'))
@@ -227,9 +217,8 @@ async def remove_kuka(callback_query: types.CallbackQuery):
 @dp.message_handler(commands=['loa'])
 async def about_loa(message: types.Message):
     await message.answer('Всемирная зона Логово Антараса открывается в'
-                         ' понедельник и среду c 18:00 до полуночи.\n'
-                         )
-    await message.answer('Выберите команду:', reply_markup=inline_loa_buttons)
+                         ' понедельник и среду c 18:00 до полуночи.\n',
+                         reply_markup=inline_loa_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setloa'))
@@ -266,9 +255,8 @@ async def remove_loa(callback_query: types.CallbackQuery):
 @dp.message_handler(commands=['frost'])
 async def about_frost(message: types.Message):
     await message.answer('Всемирная зона Замок Монарха Льда открывается во'
-                         ' вторник и четверг c 18:00 до полуночи.\n'
-                         )
-    await message.answer('Выберите команду:', reply_markup=inline_frost_buttons)
+                         ' вторник и четверг c 18:00 до полуночи.\n',
+                         reply_markup=inline_frost_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setfrost'))
@@ -304,8 +292,8 @@ async def remove_frost(callback_query: types.CallbackQuery):
 # ORC FORTRESS SETTINGS
 @dp.message_handler(commands=['fortress'])
 async def about_fortress(message: types.Message):
-    await message.answer('Битва за Крепость Орков проводится ежедневно в 20:00')
-    await message.answer('Выберите команду:', reply_markup=inline_fortress_buttons)
+    await message.answer('Битва за Крепость Орков проводится ежедневно в 20:00',
+                         reply_markup=inline_fortress_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setfortress'))
@@ -341,8 +329,8 @@ async def remove_fortress(callback_query: types.CallbackQuery):
 # BATTLE WITH BALOK SETTINGS
 @dp.message_handler(commands=['balok'])
 async def about_balok(message: types.Message):
-    await message.answer('Битва с Валлоком проводится ежедневно, кроме воскресенья в 20:30')
-    await message.answer('Выберите команду:', reply_markup=inline_balok_buttons)
+    await message.answer('Битва с Валлоком проводится ежедневно, кроме воскресенья в 20:30',
+                         reply_markup=inline_balok_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setbalok'))
@@ -379,8 +367,7 @@ async def remove_balok(callback_query: types.CallbackQuery):
 @dp.message_handler(commands=['olympiad'])
 async def about_olympiad(message: types.Message):
     await message.answer('Всемирная Олимпиада проводится с понедельника'
-                         ' по пятницу с 21:30 до 22:00.')
-    await message.answer('Выберите команду:', reply_markup=inline_olympiad_buttons)
+                         ' по пятницу с 21:30 до 22:00.', reply_markup=inline_olympiad_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setolympiad'))
@@ -417,8 +404,8 @@ async def remove_olympiad(callback_query: types.CallbackQuery):
 @dp.message_handler(commands=['hellbound'])
 async def about_hellbound(message: types.Message):
     await message.answer('Остров Ада — межсерверная зона охоты для персонажей 85+ и'
-                         ' доступен в субботу с 10:00 до 00:00. ')
-    await message.answer('Выберите команду:', reply_markup=inline_hellbound_buttons)
+                         ' доступна в субботу с 10:00 до 00:00.',
+                         reply_markup=inline_hellbound_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='sethellbound'))
@@ -454,9 +441,8 @@ async def remove_hellbound(callback_query: types.CallbackQuery):
 # GIRAN`S SIEGE SETTINGS
 @dp.message_handler(commands=['siege'])
 async def about_siege(message: types.Message):
-    await message.answer('Осада Замка Гиран приходит в '
-                         ' доступен в субботу с 10:00 до 00:00. ')
-    await message.answer('Выберите команду:', reply_markup=inline_siege_buttons)
+    await message.answer('Осада Замка Гиран приходит в воскресенье с 20:30 до 21:00.',
+                         reply_markup=inline_siege_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setsiege'))
@@ -494,9 +480,7 @@ async def remove_siege(callback_query: types.CallbackQuery):
 async def about_primetime(message: types.Message):
     await message.answer('Ежедневно в прайм-тайм получаемые очки зачистки удваиваются:\n'
                          '- с 12:00 до 14:00\n'
-                         '- с 19:00 до 23:00'
-                         )
-    await message.answer('Выберите команду:', reply_markup=inline_primetime_buttons)
+                         '- с 19:00 до 23:00', reply_markup=inline_primetime_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setprimetime'))
@@ -532,8 +516,7 @@ async def remove_primetime(callback_query: types.CallbackQuery):
 # PURGE SETTINGS
 @dp.message_handler(commands=['purge'])
 async def about_purge(message: types.Message):
-    await message.answer('Зачистка обнуляется в полночь в воскресенье')
-    await message.answer('Выберите команду:', reply_markup=inline_purge_buttons)
+    await message.answer('Зачистка обнуляется в полночь в воскресенье', reply_markup=inline_purge_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setpurge'))
@@ -611,25 +594,41 @@ async def get_settings(message: types.Message):
 
     session.close()
 
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
+    now = datetime.now().strftime('%H:%M')
     session = Session()
     user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
     if not user:
-        user = User(telegram_id=message.from_user.id)
+        print(now, 'Добавление нового пользователя...')
+        user = User(telegram_id=message.from_user.id, username=message.from_user.username)
         session.add(user)
         session.commit()
         setting = Setting(id_user=user.telegram_id)
         session.add(setting)
         session.commit()
-        session.close()
+        print(now, user.telegram_id, user.username, '- добавлен новый пользователь')
+
+    else:
+        user.upd_date = datetime.today()
+        session.commit()
+        if not user.username:  # если username еще не указан
+            user.username = message.from_user.username  # обновляем username
+            session.commit()
+            print(now, user.telegram_id, user.username, '- username добавлен')
+        else:
+            print(now, user.telegram_id, user.username, '- уже добавлен')
+    session.close()
     await message.answer('Привет! Я - твой помощник, брат, сват, мать и питомец.\n'
                          'В Меню ты найдешь все доступные команды.\n'
                          'Так же этот список можно вызвать командой /help\n'
                          '\n'
                          'Выбирай интересующую активность и жми "Установить оповещение".'
-                         ' В таком случае тебе будут приходить уведомления за 10 минут'
-                         ' до начала события.\n\nЗа это время ты успеешь налить чайку,'
+                         ' В таком случае тебе будут приходить уведомления за 5 минут'
+                         ' до начала события.\n'
+                         '\n'
+                         'За это время ты успеешь налить чайку,'
                          ' закинуть в рот печеньку и удобно устроиться перед монитором.')
 
 
@@ -655,14 +654,14 @@ async def start(message: types.Message):
         session.close()
     await message.answer('Отменяем все оповещения')
 
+
 @dp.message_handler(commands=['about'])
 async def about(message: types.Message):
-    await message.answer('Я - телеграм-бот, который поможет не пропустить игровые активности.\n\n'
-                         'Меня создали на добровольных началах, поэтому я свободен и независим.'
-                         ' И конечно я всегда открыт для новых идей и предложений.\n\n'
-                         'Мой мастер живет на сервере Lavender и у него везде глаза и уши.'
-                         ' И если у тебя есть идея или предложение, урони свою мысль в мировом чате,'
-                         ' и мастер обязательно её услышит.')
+    await message.answer('Братсво кольца приветствует тебя!'
+                         ' Я Kobatoha, и я создала этого бота для вас, мои маленькие любители l2essence!'
+                         ' Мы поможем не пропустить игровые активности.\n'
+                         'Бот создан на добровольных началах, поэтому он свободен и независим.'
+                         ' Есть идеи и предложения по улучшению бота? Велком - *почта*\n')
 
 
 @dp.message_handler(commands=['help'])
@@ -692,8 +691,25 @@ async def helped(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await message.answer('Kak dela?')
+    await message.answer('Бегите, глупцы!')
+
+
+async def crontab_notifications():
+    # Запускаем soloraidboss каждый час в :55
+    crontab('55 * * * *', func=soloraidboss_notification_wrapper)
+    # Запускаем kuka каждый час в :45
+    crontab('45 * * * *', func=kuka_notification_wrapper)
+    # Запускаем loa каждый понедельник и среду в 17:55
+    crontab('55 17 * * 1,3', func=loa_notification_wrapper)
+    # Запускаем fortress ежедневно в 19:55
+    crontab('55 19 * * *', func=fortress_notification_wrapper)
+    # Запускаем frost каждый вторник и четверг в 19:55
+    crontab('55 17 * * 2,4', func=frost_notification_wrapper)
 
 
 if __name__ == '__main__':
+    now = datetime.now().strftime('%H:%M')
+    print(now, 'Запуск Lineage2Notifications')
+    loop = asyncio.get_event_loop()
+    loop.create_task(crontab_notifications())
     executor.start_polling(dp, skip_updates=True)
