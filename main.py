@@ -20,6 +20,7 @@ from Events.primetime import primetime_notification_wrapper
 from Events.purge import purge_notification_wrapper
 
 from Events.watermelon import about_event, set_event, remove_event, watermelon_notification_wrapper
+from command_stop import stop, yes_stop, no_stop
 
 # /start, /stop, /about, /help, /mysettings
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
@@ -37,6 +38,10 @@ Base.metadata.create_all(engine)
 dp.register_message_handler(about_event, commands=['event'])
 dp.register_callback_query_handler(set_event, text_contains='setevent')
 dp.register_callback_query_handler(remove_event, text_contains='removeevent')
+
+dp.register_message_handler(stop, commands=['stop'])
+dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
+dp.register_callback_query_handler(no_stop, text_contains='no_stop')
 
 # general button
 b0 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
@@ -185,7 +190,7 @@ async def remove_soloraidboss(callback_query: types.CallbackQuery):
 # KUKA SETTINGS
 @dp.message_handler(commands=['kuka'])
 async def about_kuka(message: types.Message):
-    await message.answer('Одиночный босс Кука ресается каждый нечетный час в :50 минут\n'
+    await message.answer('Одиночный босс Кука ресается каждый четный час в :50 минут\n'
                          'После его убийства появляется босс Джисра\n'
                          'С них шансово могут упасть:\n'
                          '- Свитки модификации оружия и доспеха ранга А\n'
@@ -527,7 +532,8 @@ async def remove_primetime(callback_query: types.CallbackQuery):
 # PURGE SETTINGS
 @dp.message_handler(commands=['purge'])
 async def about_purge(message: types.Message):
-    await message.answer('Зачистка обнуляется в полночь в воскресенье', reply_markup=inline_purge_buttons)
+    await message.answer('Зачистка обнуляется в полночь в воскресенье, оповестим за 30 минут',
+                         reply_markup=inline_purge_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='setpurge'))
@@ -591,6 +597,7 @@ async def get_settings(message: types.Message):
     await message.answer(
         'Установленные настройки:\n'
         '\n'
+        f'Арбузный сезон (ивент) - {setting.event}\n'
         f'Одиночные РБ - {setting.soloraidboss}\n'
         f"Кука и Джисра - {setting.kuka}\n"
         f"Логово Антараса - {setting.loa}\n"
@@ -643,36 +650,13 @@ async def start(message: types.Message):
                          ' закинуть в рот печеньку и удобно устроиться перед монитором.')
 
 
-@dp.message_handler(commands=['Stop'])
-async def start(message: types.Message):
-    session = Session()
-    user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-    if user:
-        setting.soloraidboss = False
-        setting.kuka = False
-        setting.loa = False
-        setting.frost = False
-        setting.fortress = False
-        setting.balok = False
-        setting.olympiad = False
-        setting.hellbound = False
-        setting.siege = False
-        setting.primetime = False
-        setting.purge = False
-
-        session.commit()
-        session.close()
-    await message.answer('Отменяем все оповещения')
-
-
 @dp.message_handler(commands=['about'])
 async def about(message: types.Message):
     await message.answer('Братсво кольца приветствует тебя!'
-                         ' Я Kobatoha, и я создала этого бота для вас, мои маленькие любители l2essence!'
+                         ' Я - Kobatoha, и я создала этого бота для вас, мои маленькие любители l2essence!'
                          ' Мы поможем не пропустить игровые активности.\n'
                          'Бот создан на добровольных началах, поэтому он свободен и независим.'
-                         ' Есть идеи и предложения по улучшению бота? Велком - *почта*\n')
+                         ' Есть идеи и предложения по улучшению бота? Велком - kobatoha@yandex.ru\n')
 
 
 @dp.message_handler(commands=['help'])
