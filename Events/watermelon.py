@@ -87,8 +87,8 @@ async def watermelon_notification_wrapper():
 
 async def watermelon_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '10:55' or now == '20:55':
-        await mybot.send_message(user.telegram_id, 'Арбузный сезон откроется через 5 минут')
+    if now == '10:56' or now == '20:56':
+        await mybot.send_message(user.telegram_id, 'Арбузный сезон откроется через 4 минуты')
         print(now, user.telegram_id, 'получил сообщение об ивенте')
     else:
         print(now, 'Неподходящее время для ивента')

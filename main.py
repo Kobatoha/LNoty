@@ -692,10 +692,10 @@ async def echo(message: types.Message):
 
 async def crontab_notifications():
     # Запускаем soloraidboss каждый час в :55
-    crontab('55 * * * *', func=soloraidboss_notification_wrapper)
+    crontab('55 */2 * * *', func=soloraidboss_notification_wrapper)
 
     # Запускаем kuka каждый час в :45
-    crontab('45 * * * *', func=kuka_notification_wrapper)
+    crontab('45 */2 * * *', func=kuka_notification_wrapper)
 
     # Запускаем loa каждый понедельник и среду в 17:55
     crontab('55 17 * * 1,3', func=loa_notification_wrapper)
@@ -727,20 +727,20 @@ async def crontab_notifications():
     # Запускаем primetime ежедневно в 13:55
     crontab('55 13 * * *', func=primetime_notification_wrapper)
 
-    # Запускаем primetime ежедневно в 18:55
-    crontab('55 18 * * *', func=primetime_notification_wrapper)
+    # Запускаем primetime ежедневно в 18:56
+    crontab('56 18 * * *', func=primetime_notification_wrapper)
 
-    # Запускаем primetime ежедневно в 22:55
-    crontab('55 22 * * *', func=primetime_notification_wrapper)
+    # Запускаем primetime ежедневно в 22:56
+    crontab('56 22 * * *', func=primetime_notification_wrapper)
 
     # Запускаем purge в воскресенье в 23:30
     crontab('30 23 * * 7', func=purge_notification_wrapper)
 
     # Запускаем event в ежедневно в 10:55
-    crontab('55 10 * * *', func=watermelon_notification_wrapper)
+    crontab('56 10 * * *', func=watermelon_notification_wrapper)
 
-    # Запускаем event в ежедневно в 20:55
-    crontab('55 20 * * *', func=watermelon_notification_wrapper)
+    # Запускаем event в ежедневно в 20:56
+    crontab('56 20 * * *', func=watermelon_notification_wrapper)
 
 
 if __name__ == '__main__':
