@@ -32,7 +32,7 @@ async def siege_notification_wrapper():
 async def siege_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '20:25':
-        await mybot.send_message(user.telegram_id, 'Осада Гирана начнется через 5 минут')
+        await mybot.send_message(user.telegram_id, '🗡️🗡️ Осада Гирана начнется через 5 минут')
         print(now, user.telegram_id, 'получил сообщение об Осаде Гирана')
     else:
         print(now, 'Неподходящее время для Осады Гирана')

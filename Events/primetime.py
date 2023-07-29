@@ -31,11 +31,11 @@ async def primetime_notification_wrapper():
 
 async def primetime_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '11:55' or now == '18:56':
-        await mybot.send_message(user.telegram_id, 'Прайм-тайм зачистки начнется через 5 минут')
+    if now == '11:56' or now == '18:56':
+        await mybot.send_message(user.telegram_id, '☄️ Хот-тайм зачистки начнется через 4 минуты')
         print(now, user.telegram_id, 'получил сообщение о начале Прайм-тайма')
-    elif now == '13:55' or now == '22:56':
-        await mybot.send_message(user.telegram_id, 'Прайм-тайм зачистки закончится через 5 минут')
+    elif now == '13:56' or now == '22:56':
+        await mybot.send_message(user.telegram_id, '☄️ Хот-тайм зачистки закончится через 4 минуты')
         print(now, user.telegram_id, 'получил сообщение о конце Прайм-тайма')
     else:
         print(now, 'Неподходящее время для Прайм-тайма')

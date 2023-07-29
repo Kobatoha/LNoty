@@ -21,8 +21,9 @@ from Events.purge import purge_notification_wrapper
 
 from Events.watermelon import about_event, set_event, remove_event, watermelon_notification_wrapper
 from command_stop import stop, yes_stop, no_stop
+from Events.fulltime import about_time, fulltime, hardworker_time
 
-# /start, /stop, /about, /help, /mysettings
+# /start, /stop, /about, /help, /mysettings, /time
 # /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
 # /hellbound, /antharas - skip, /siege, /primetime, /purge, /event
 
@@ -42,6 +43,10 @@ dp.register_callback_query_handler(remove_event, text_contains='removeevent')
 dp.register_message_handler(stop, commands=['stop'])
 dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
 dp.register_callback_query_handler(no_stop, text_contains='no_stop')
+
+dp.register_message_handler(about_time, commands=['time'])
+dp.register_callback_query_handler(fulltime, text_contains='fulltime')
+dp.register_callback_query_handler(hardworker_time, text_contains='hardworkertime')
 
 # general button
 b0 = types.InlineKeyboardButton(text='Вернуться', callback_data='back')
@@ -494,7 +499,7 @@ async def remove_siege(callback_query: types.CallbackQuery):
 # PRIME TIME SETTINGS
 @dp.message_handler(commands=['primetime'])
 async def about_primetime(message: types.Message):
-    await message.answer('Ежедневно в прайм-тайм получаемые очки зачистки удваиваются:\n'
+    await message.answer('Ежедневно в хот-тайм получаемые очки зачистки удваиваются:\n'
                          '- с 12:00 до 14:00\n'
                          '- с 19:00 до 23:00', reply_markup=inline_primetime_buttons)
 
@@ -510,7 +515,7 @@ async def set_primetime(callback_query: types.CallbackQuery):
     session.commit()
     session.close()
 
-    await callback_query.message.answer('Оповещение о начале прайм-тайма установлено')
+    await callback_query.message.answer('Оповещение о начале хот-тайма установлено')
     await callback_query.answer()
 
 
@@ -525,14 +530,14 @@ async def remove_primetime(callback_query: types.CallbackQuery):
     session.commit()
     session.close()
 
-    await callback_query.message.answer('Оповещение о начале прайм-тайма убрано')
+    await callback_query.message.answer('Оповещение о начале хот-тайма убрано')
     await callback_query.answer()
 
 
 # PURGE SETTINGS
 @dp.message_handler(commands=['purge'])
 async def about_purge(message: types.Message):
-    await message.answer('Зачистка обнуляется в полночь в воскресенье, оповестим за 30 минут',
+    await message.answer('Зачистка обнуляется в полночь в воскресенье',
                          reply_markup=inline_purge_buttons)
 
 
@@ -582,7 +587,7 @@ async def return_menu(callback_query: types.CallbackQuery):
         '/hellbound - Остров Ада\n'
         '/siege - Осада Гирана\n'
         '\n'
-        '/primetime - Прайм Тайм Зачистки\n'
+        '/primetime - Хот-тайм Зачистки\n'
         '/purge - Зачистка\n')
     await callback_query.answer()
 
@@ -593,22 +598,25 @@ async def get_settings(message: types.Message):
 
     user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
     setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-
-    await message.answer(
-        'Установленные настройки:\n'
-        '\n'
-        f'Арбузный сезон (ивент) - {setting.event}\n'
-        f'Одиночные РБ - {setting.soloraidboss}\n'
-        f"Кука и Джисра - {setting.kuka}\n"
-        f"Логово Антараса - {setting.loa}\n"
-        f"Замок Монарха Льда - {setting.frost}\n"
-        f"Крепость Орков - {setting.fortress}\n"
-        f"Битва с Валлоком - {setting.balok}\n"
-        f"Всемирная Олимпиада - {setting.olympiad}\n"
-        f"Остров Ада - {setting.hellbound}\n"
-        f"Осада Гирана - {setting.siege}\n"
-        f"Прайм Тайм Зачистки - {setting.primetime}\n"
-        f"Зачистка - {setting.purge}")
+    if user:
+        await message.answer(
+            'Установленные настройки:\n'
+            '\n'
+            f'Круглосуточное оповещение - {setting.fulltime}\n'
+            f'Арбузный сезон (ивент) - {setting.event}\n'
+            f'Одиночные РБ - {setting.soloraidboss}\n'
+            f"Кука и Джисра - {setting.kuka}\n"
+            f"Логово Антараса - {setting.loa}\n"
+            f"Замок Монарха Льда - {setting.frost}\n"
+            f"Крепость Орков - {setting.fortress}\n"
+            f"Битва с Валлоком - {setting.balok}\n"
+            f"Всемирная Олимпиада - {setting.olympiad}\n"
+            f"Остров Ада - {setting.hellbound}\n"
+            f"Осада Гирана - {setting.siege}\n"
+            f"Хот-тайм Зачистки - {setting.primetime}\n"
+            f"Зачистка - {setting.purge}")
+    else:
+        await message.answer('Пожалуйста, вернитесь к /start')
 
     session.close()
 
@@ -640,7 +648,9 @@ async def start(message: types.Message):
     session.close()
     await message.answer('Привет! Я - твой помощник, брат, сват, мать и питомец.\n'
                          'В Меню ты найдешь все доступные команды.\n'
-                         'Так же этот список можно вызвать командой /help\n'
+                         'Так же этот список можно вызвать командой /help\n' 
+                         'Бот по-дефолту работает в работяжном режиме с 8:00 до 23:00,'
+                         ' изменить эту настройку можно по команде /time\n'
                          '\n'
                          'Выбирай интересующую активность и жми "Установить оповещение".'
                          ' В таком случае тебе будут приходить уведомления за 5 минут'
@@ -652,11 +662,12 @@ async def start(message: types.Message):
 
 @dp.message_handler(commands=['about'])
 async def about(message: types.Message):
-    await message.answer('Братсво кольца приветствует тебя!'
+    await message.answer('Приветствую :)'
                          ' Я - Kobatoha, и я создала этого бота для вас, мои маленькие любители l2essence!'
                          ' Мы поможем не пропустить игровые активности.\n'
                          'Бот создан на добровольных началах, поэтому он свободен и независим.'
-                         ' Есть идеи и предложения по улучшению бота? Велком - kobatoha@yandex.ru\n')
+                         ' Есть идеи и предложения по улучшению бота? Велком - kobatoha@yandex.ru\n'
+                         'Или ищите меня на Lavender под ником vsenaprasno')
 
 
 @dp.message_handler(commands=['help'])
@@ -669,6 +680,7 @@ async def helped(message: types.Message):
                          '/help - список команд\n'
                          '\n'
                          '/stop - отменить все оповещения\n'
+                         '/time - установить время работы оповещений\n'
                          '\n'
                          '/event - Арбузный сезон (до 02.08)\n'
                          '/soloraidboss - Одиночные РБ\n'
@@ -716,16 +728,16 @@ async def crontab_notifications():
     crontab('55 09 * * 6', func=hellbound_notification_wrapper)
 
     # Запускаем hellbound закрытие в субботу в 23:55
-    crontab('55 23 * * 6', func=hellbound_notification_wrapper)
+    crontab('59 22 * * 6', func=hellbound_notification_wrapper)
 
     # Запускаем siege в воскресенье в 20:25
     crontab('25 20 * * 7', func=siege_notification_wrapper)
 
     # Запускаем primetime ежедневно в 11:55
-    crontab('55 11 * * *', func=primetime_notification_wrapper)
+    crontab('56 11 * * *', func=primetime_notification_wrapper)
 
     # Запускаем primetime ежедневно в 13:55
-    crontab('55 13 * * *', func=primetime_notification_wrapper)
+    crontab('56 13 * * *', func=primetime_notification_wrapper)
 
     # Запускаем primetime ежедневно в 18:56
     crontab('56 18 * * *', func=primetime_notification_wrapper)
@@ -734,7 +746,7 @@ async def crontab_notifications():
     crontab('56 22 * * *', func=primetime_notification_wrapper)
 
     # Запускаем purge в воскресенье в 23:30
-    crontab('30 23 * * 7', func=purge_notification_wrapper)
+    crontab('50 22 * * 7', func=purge_notification_wrapper)
 
     # Запускаем event в ежедневно в 10:55
     crontab('56 10 * * *', func=watermelon_notification_wrapper)
