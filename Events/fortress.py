@@ -25,8 +25,6 @@ async def fortress_notification_wrapper():
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.fortress is True:
-            now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Крепости Орков')
             await fortress_notification(user)
 
     session.close()
@@ -36,6 +34,6 @@ async def fortress_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '19:55':
         await mybot.send_message(user.telegram_id, '🐸🐸 Битва за Крепость Орков начнется через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Крепости Орков')
+        print(now, user.telegram_id, user.username, 'получил сообщение о Крепости Орков')
     else:
         print(now, 'Неподходящее время для Крепости Орков')

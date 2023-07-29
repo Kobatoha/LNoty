@@ -24,8 +24,6 @@ async def frost_notification_wrapper():
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.frost is True:
-            now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Замка Монарха Льда')
             await frost_notification(user)
     session.close()
 
@@ -34,6 +32,6 @@ async def frost_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '17:55':
         await mybot.send_message(user.telegram_id, '❄️❄️ Замок Монарха Льда откроется через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Замке Монарха Льда')
+        print(now, user.telegram_id, user.username, 'получил сообщение о Замке Монарха Льда')
     else:
         print(now, 'Неподходящее время для Замка Монарха Льда')

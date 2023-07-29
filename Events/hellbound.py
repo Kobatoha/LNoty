@@ -23,8 +23,6 @@ async def hellbound_notification_wrapper():
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.hellbound is True:
-            now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Острова Ада')
             await hellbound_notification(user)
     session.close()
 
@@ -33,9 +31,9 @@ async def hellbound_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '09:55':
         await mybot.send_message(user.telegram_id, '🔥 Остров Ада откроется через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение об открытии Острова Ада')
+        print(now, user.telegram_id, user.username, 'получил сообщение об открытии Острова Ада')
     elif now == '22:59':
         await mybot.send_message(user.telegram_id, '🔥 До закрытия Острова Ада остался часик')
-        print(now, user.telegram_id, 'получил сообщение о закрытии Острова Ада')
+        print(now, user.telegram_id, user.username, 'получил сообщение о закрытии Острова Ада')
     else:
         print(now, 'Неподходящее время для Острова Ада')

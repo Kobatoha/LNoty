@@ -77,10 +77,8 @@ async def watermelon_notification_wrapper():
     session = Session()
     users = session.query(User).all()
     for user in users:
-        now = datetime.now().strftime('%H:%M')
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.event is True:
-            print(now, user.telegram_id, 'подходит под условия оповещения ивента')
             await watermelon_notification(user)
     session.close()
 
@@ -89,6 +87,6 @@ async def watermelon_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '10:56' or now == '20:56':
         await mybot.send_message(user.telegram_id, '🍉🍉 Арбузный сезон откроется через 4 минуты')
-        print(now, user.telegram_id, 'получил сообщение об ивенте')
+        print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
     else:
         print(now, 'Неподходящее время для ивента')

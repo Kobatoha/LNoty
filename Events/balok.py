@@ -25,8 +25,6 @@ async def balok_notification_wrapper():
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.balok is True:
-            now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Битвы с Валлоком')
             await balok_notification(user)
     session.close()
 
@@ -35,6 +33,6 @@ async def balok_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '20:25':
         await mybot.send_message(user.telegram_id, '🗡️🗡️ Битва с Валлоком начнется через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Битве с Валлоком')
+        print(now, user.telegram_id, user.username, 'получил сообщение о Битве с Валлоком')
     else:
         print(now, 'Неподходящее время для Битвы с Валлоком')

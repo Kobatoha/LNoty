@@ -24,12 +24,8 @@ async def kuka_notification_wrapper():
 
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.kuka is True and setting.fulltime is True:
-            now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Куки')
             await kuka_notification(user)
         elif setting.kuka is True and setting.fulltime is False:
-            now = datetime.now().strftime('%H:%M')
-            print(now, user.telegram_id, 'подходит под условия оповещения Соло РБ')
             await kuka_notification_hardwork(user)
     session.close()
 
@@ -41,7 +37,7 @@ async def kuka_notification(user: User):
 
     if now in kuka_time:
         await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Куке')
+        print(now, user.telegram_id, user.username, 'получил сообщение о Куке')
     else:
         print(now, 'Неподходящий час для Куки')
 
@@ -52,6 +48,6 @@ async def kuka_notification_hardwork(user: User):
 
     if now in kuka_hardwork:
         await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
-        print(now, user.telegram_id, 'получил сообщение о Куке')
+        print(now, user.telegram_id, user.username, 'получил сообщение о Куке')
     else:
         print(now, 'Неподходящий час для Куки')
