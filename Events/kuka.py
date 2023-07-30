@@ -37,9 +37,8 @@ async def kuka_notification(user: User):
 
     if now in kuka_time:
         await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Куке')
-    else:
-        print(now, 'Неподходящий час для Куки')
+        print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Куке')
+
 
 
 async def kuka_notification_hardwork(user: User):
