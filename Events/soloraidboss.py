@@ -36,9 +36,7 @@ async def soloraidboss_notification(user: User):
 
     if now in soloraidboss_time:
         await mybot.send_message(user.telegram_id, 'Одиночные Рейд Боссы появятся через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Соло РБ')
-    else:
-        print(now, 'Неподходящий час для Соло РБ')
+        print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Соло РБ')
 
 
 async def soloraidboss_notification_hardwork(user: User):
@@ -48,6 +46,5 @@ async def soloraidboss_notification_hardwork(user: User):
 
     if now in soloraidboss_hardwork:
         await mybot.send_message(user.telegram_id, 'Одиночные Рейд Боссы появятся через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Соло РБ')
-    else:
-        print(now, 'Неподходящий час для Соло РБ')
+        print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Соло РБ')
+
