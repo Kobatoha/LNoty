@@ -1,5 +1,5 @@
 import asyncio
-from aiogram import types, Bot, Dispatcher
+from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from models import User, Base, Setting
 from sqlalchemy import create_engine
@@ -14,6 +14,52 @@ engine = create_engine(DB_URL)
 Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
+
+# prime time buttons
+inline_primetime_buttons = types.InlineKeyboardMarkup()
+
+b20 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setprimetime')
+b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeprimetime')
+
+inline_primetime_buttons.add(b20, b21)
+
+
+# PRIME TIME SETTINGS
+@dp.message_handler(commands=['primetime'])
+async def about_primetime(message: types.Message):
+    await message.answer('Ежедневно в хот-тайм получаемые очки зачистки удваиваются:\n'
+                         '- с 12:00 до 14:00\n'
+                         '- с 19:00 до 23:00', reply_markup=inline_primetime_buttons)
+
+
+@dp.callback_query_handler(filters.Text(contains='setprimetime'))
+async def set_primetime(callback_query: types.CallbackQuery):
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.primetime = True
+
+    session.commit()
+    session.close()
+
+    await callback_query.message.answer('Оповещение о начале хот-тайма установлено')
+    await callback_query.answer()
+
+
+@dp.callback_query_handler(filters.Text(contains='removeprimetime'))
+async def remove_primetime(callback_query: types.CallbackQuery):
+    session = Session()
+
+    user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting.primetime = False
+
+    session.commit()
+    session.close()
+
+    await callback_query.message.answer('Оповещение о начале хот-тайма убрано')
+    await callback_query.answer()
 
 
 async def primetime_notification_wrapper():
