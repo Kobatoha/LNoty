@@ -32,6 +32,7 @@ async def stop(message: types.Message):
     await message.answer('Вы уверены, что хотите отменить все установленные оповещения?',
                          reply_markup=inline_stop_buttons)
 
+
 @dp.callback_query_handler(filters.Text(contains='yes_stop'))
 async def yes_stop(callback_query: types.CallbackQuery):
     session = Session()

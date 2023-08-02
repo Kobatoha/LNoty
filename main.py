@@ -19,7 +19,9 @@ from Events.siege import siege_notification_wrapper, about_siege, set_siege, rem
 from Events.primetime import primetime_notification_wrapper, about_primetime, set_primetime, remove_primetime
 from Events.purge import purge_notification_wrapper, about_purge, set_purge, remove_purge
 
-from Events.watermelon import watermelon_notification_wrapper, about_event, set_event, remove_event
+#from Events.watermelon import watermelon_notification_wrapper, about_event, set_event, remove_event
+from Events.event_pass import about_event, set_event, remove_event
+
 
 from command_stop import stop, yes_stop, no_stop
 from Events.fulltime import about_time, fulltime, hardworker_time
@@ -37,10 +39,12 @@ Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
+# CUSTOM EVENT SETTINGS
 dp.register_message_handler(about_event, commands=['event'])
 dp.register_callback_query_handler(set_event, text_contains='setevent')
 dp.register_callback_query_handler(remove_event, text_contains='removeevent')
 
+# REGULAR SETTINGS
 dp.register_message_handler(stop, commands=['stop'])
 dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
 dp.register_callback_query_handler(no_stop, text_contains='no_stop')
@@ -252,10 +256,10 @@ async def crontab_notifications():
     crontab('50 22 * * 7', func=purge_notification_wrapper)
 
     # Запускаем event в ежедневно в 10:55
-    crontab('56 10 * * *', func=watermelon_notification_wrapper)
+    #crontab('56 10 * * *', func=watermelon_notification_wrapper)
 
     # Запускаем event в ежедневно в 20:56
-    crontab('56 20 * * *', func=watermelon_notification_wrapper)
+    #crontab('56 20 * * *', func=watermelon_notification_wrapper)
 
 
 if __name__ == '__main__':
