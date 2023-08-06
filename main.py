@@ -234,6 +234,9 @@ async def crontab_notifications():
     # Запускаем hellbound открытие в субботу в 09:55
     crontab('55 09 * * 6', func=hellbound_notification_wrapper)
 
+    # Запускаем hellbound открытие в субботу в 09:55
+    crontab('55 17 * * 6', func=hellbound_notification_wrapper)
+
     # Запускаем hellbound закрытие в субботу в 23:55
     crontab('59 22 * * 6', func=hellbound_notification_wrapper)
 
