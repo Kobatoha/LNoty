@@ -49,57 +49,57 @@ dp.register_callback_query_handler(no_stop, text_contains='no_stop')
 
 # CUSTOM EVENT SETTINGS
 dp.register_message_handler(about_event, commands=['event'])
-dp.register_callback_query_handler(set_event, text_contains='setevent')
-dp.register_callback_query_handler(remove_event, text_contains='removeevent')
+dp.register_callback_query_handler(set_event, text_contains='ruoffsetevent')
+dp.register_callback_query_handler(remove_event, text_contains='ruoffremoveevent')
 
 # REGULAR RUOFF SETTINGS
 dp.register_message_handler(about_time, commands=['time'])
-dp.register_callback_query_handler(fulltime, text_contains='fulltime')
-dp.register_callback_query_handler(hardworker_time, text_contains='hardworkertime')
+dp.register_callback_query_handler(fulltime, text_contains='ruofffulltime')
+dp.register_callback_query_handler(hardworker_time, text_contains='ruoffhardworkertime')
 
 dp.register_message_handler(about_balok, commands=['balok'])
-dp.register_callback_query_handler(set_balok, text_contains='setbalok')
-dp.register_callback_query_handler(remove_balok, text_contains='removebalok')
+dp.register_callback_query_handler(set_balok, text_contains='ruoffsetbalok')
+dp.register_callback_query_handler(remove_balok, text_contains='ruoffremovebalok')
 
 dp.register_message_handler(about_fortress, commands=['fortress'])
-dp.register_callback_query_handler(set_fortress, text_contains='setfortress')
-dp.register_callback_query_handler(remove_fortress, text_contains='removefortress')
+dp.register_callback_query_handler(set_fortress, text_contains='ruoffsetfortress')
+dp.register_callback_query_handler(remove_fortress, text_contains='ruoffremovefortress')
 
 dp.register_message_handler(about_frost, commands=['frost'])
-dp.register_callback_query_handler(set_frost, text_contains='setfrost')
-dp.register_callback_query_handler(remove_frost, text_contains='removefrost')
+dp.register_callback_query_handler(set_frost, text_contains='ruoffsetfrost')
+dp.register_callback_query_handler(remove_frost, text_contains='ruoffremovefrost')
 
 dp.register_message_handler(about_hellbound, commands=['hellbound'])
-dp.register_callback_query_handler(set_hellbound, text_contains='sethellbound')
-dp.register_callback_query_handler(remove_hellbound, text_contains='removehellbound')
+dp.register_callback_query_handler(set_hellbound, text_contains='ruoffsethellbound')
+dp.register_callback_query_handler(remove_hellbound, text_contains='ruoffremovehellbound')
 
 dp.register_message_handler(about_kuka, commands=['kuka'])
-dp.register_callback_query_handler(set_kuka, text_contains='setkuka')
-dp.register_callback_query_handler(remove_kuka, text_contains='removekuka')
+dp.register_callback_query_handler(set_kuka, text_contains='ruoffsetkuka')
+dp.register_callback_query_handler(remove_kuka, text_contains='ruoffremovekuka')
 
 dp.register_message_handler(about_loa, commands=['loa'])
-dp.register_callback_query_handler(set_loa, text_contains='setloa')
-dp.register_callback_query_handler(remove_loa, text_contains='removeloa')
+dp.register_callback_query_handler(set_loa, text_contains='ruoffsetloa')
+dp.register_callback_query_handler(remove_loa, text_contains='ruoffremoveloa')
 
 dp.register_message_handler(about_olympiad, commands=['olympiad'])
-dp.register_callback_query_handler(set_olympiad, text_contains='setolympiad')
-dp.register_callback_query_handler(remove_olympiad, text_contains='removeolympiad')
+dp.register_callback_query_handler(set_olympiad, text_contains='ruoffsetolympiad')
+dp.register_callback_query_handler(remove_olympiad, text_contains='ruoffremoveolympiad')
 
 dp.register_message_handler(about_purge, commands=['purge'])
-dp.register_callback_query_handler(set_purge, text_contains='setpurge')
-dp.register_callback_query_handler(remove_purge, text_contains='removepurge')
+dp.register_callback_query_handler(set_purge, text_contains='ruoffsetpurge')
+dp.register_callback_query_handler(remove_purge, text_contains='ruoffremovepurge')
 
 dp.register_message_handler(about_primetime, commands=['primetime'])
-dp.register_callback_query_handler(set_primetime, text_contains='setprimetime')
-dp.register_callback_query_handler(remove_primetime, text_contains='removeprimetime')
+dp.register_callback_query_handler(set_primetime, text_contains='ruoffsetprimetime')
+dp.register_callback_query_handler(remove_primetime, text_contains='ruoffremoveprimetime')
 
 dp.register_message_handler(about_siege, commands=['siege'])
-dp.register_callback_query_handler(set_siege, text_contains='setsiege')
-dp.register_callback_query_handler(remove_siege, text_contains='removesiege')
+dp.register_callback_query_handler(set_siege, text_contains='ruoffsetsiege')
+dp.register_callback_query_handler(remove_siege, text_contains='ruoffremovesiege')
 
 dp.register_message_handler(about_soloraidboss, commands=['soloraidboss'])
-dp.register_callback_query_handler(set_soloraidboss, text_contains='setsolorb')
-dp.register_callback_query_handler(remove_soloraidboss, text_contains='removesolorb')
+dp.register_callback_query_handler(set_soloraidboss, text_contains='ruoffsetsolorb')
+dp.register_callback_query_handler(remove_soloraidboss, text_contains='ruoffremovesolorb')
 
 
 # GENERAL SETTINGS
