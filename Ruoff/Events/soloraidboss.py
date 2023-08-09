@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # solo raid boss buttons
 inline_soloraidboss_buttons = types.InlineKeyboardMarkup()
 
-b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setsolorb')
-b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesolorb')
+b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetsolorb')
+b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovesolorb')
 
 inline_soloraidboss_buttons.add(b1, b2)
 
@@ -39,7 +39,7 @@ async def about_soloraidboss(message: types.Message):
                          '- Кристаллы души Адена', reply_markup=inline_soloraidboss_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setsolorb'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetsolorb'))
 async def set_soloraidboss(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -54,7 +54,7 @@ async def set_soloraidboss(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removesolorb'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovesolorb'))
 async def remove_soloraidboss(callback_query: types.CallbackQuery):
     session = Session()
 

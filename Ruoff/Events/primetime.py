@@ -20,8 +20,8 @@ Base.metadata.create_all(engine)
 # prime time buttons
 inline_primetime_buttons = types.InlineKeyboardMarkup()
 
-b20 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setprimetime')
-b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeprimetime')
+b20 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetprimetime')
+b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremoveprimetime')
 
 inline_primetime_buttons.add(b20, b21)
 
@@ -34,7 +34,7 @@ async def about_primetime(message: types.Message):
                          '- с 19:00 до 23:00', reply_markup=inline_primetime_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setprimetime'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetprimetime'))
 async def set_primetime(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -49,7 +49,7 @@ async def set_primetime(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removeprimetime'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremoveprimetime'))
 async def remove_primetime(callback_query: types.CallbackQuery):
     session = Session()
 

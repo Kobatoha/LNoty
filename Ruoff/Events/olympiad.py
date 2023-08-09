@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # olympiad buttons
 inline_olympiad_buttons = types.InlineKeyboardMarkup()
 
-b14 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setolympiad')
-b15 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeolympiad')
+b14 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetolympiad')
+b15 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremoveolympiad')
 
 inline_olympiad_buttons.add(b14, b15)
 
@@ -34,7 +34,7 @@ async def about_olympiad(message: types.Message):
                          ' по пятницу с 21:30 до 22:00.', reply_markup=inline_olympiad_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setolympiad'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetolympiad'))
 async def set_olympiad(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -49,7 +49,7 @@ async def set_olympiad(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removeolympiad'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremoveolympiad'))
 async def remove_olympiad(callback_query: types.CallbackQuery):
     session = Session()
 

@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # balok buttons
 inline_balok_buttons = types.InlineKeyboardMarkup()
 
-b12 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setbalok')
-b13 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removebalok')
+b12 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetbalok')
+b13 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovebalok')
 
 inline_balok_buttons.add(b12, b13)
 
@@ -33,7 +33,7 @@ async def about_balok(message: types.Message):
                          reply_markup=inline_balok_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setbalok'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetbalok'))
 async def set_balok(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -48,7 +48,7 @@ async def set_balok(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removebalok'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovebalok'))
 async def remove_balok(callback_query: types.CallbackQuery):
     session = Session()
 

@@ -20,8 +20,8 @@ Base.metadata.create_all(engine)
 
 inline_time_buttons = types.InlineKeyboardMarkup()
 
-b1 = types.InlineKeyboardButton(text='Установить 24/7', callback_data='fulltime')
-b2 = types.InlineKeyboardButton(text='Установить с 8:00 до 23:00', callback_data='hardworkertime')
+b1 = types.InlineKeyboardButton(text='Установить 24/7', callback_data='ruofffulltime')
+b2 = types.InlineKeyboardButton(text='Установить с 8:00 до 23:00', callback_data='ruoffhardworkertime')
 
 inline_time_buttons.add(b1, b2)
 
@@ -33,7 +33,7 @@ async def about_time(message: types.Message):
                          , reply_markup=inline_time_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='fulltime'))
+@dp.callback_query_handler(filters.Text(contains='ruofffulltime'))
 async def fulltime(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -48,7 +48,7 @@ async def fulltime(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='hardworkertime'))
+@dp.callback_query_handler(filters.Text(contains='ruoffhardworkertime'))
 async def hardworker_time(callback_query: types.CallbackQuery):
     session = Session()
 

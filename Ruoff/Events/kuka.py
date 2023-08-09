@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # kuka buttons
 inline_kuka_buttons = types.InlineKeyboardMarkup()
 
-b4 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setkuka')
-b5 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removekuka')
+b4 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetkuka')
+b5 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovekuka')
 
 inline_kuka_buttons.add(b4, b5)
 
@@ -39,7 +39,7 @@ async def about_kuka(message: types.Message):
                          '- Камни Эволюции\n', reply_markup=inline_kuka_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setkuka'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetkuka'))
 async def set_kuka(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -54,7 +54,7 @@ async def set_kuka(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removekuka'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovekuka'))
 async def remove_kuka(callback_query: types.CallbackQuery):
     session = Session()
 

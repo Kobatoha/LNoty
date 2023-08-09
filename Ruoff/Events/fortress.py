@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # orc fortress buttons
 inline_fortress_buttons = types.InlineKeyboardMarkup()
 
-b10 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setfortress')
-b11 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removefortress')
+b10 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetfortress')
+b11 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovefortress')
 
 inline_fortress_buttons.add(b10, b11)
 
@@ -34,7 +34,7 @@ async def about_fortress(message: types.Message):
                          reply_markup=inline_fortress_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setfortress'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetfortress'))
 async def set_fortress(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -49,7 +49,7 @@ async def set_fortress(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removefortress'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovefortress'))
 async def remove_fortress(callback_query: types.CallbackQuery):
     session = Session()
 

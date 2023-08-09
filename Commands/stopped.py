@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
 from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -39,24 +40,38 @@ async def stop(message: types.Message):
 async def yes_stop(callback_query: types.CallbackQuery):
     session = Session()
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-    if user:
-        setting.soloraidboss = False
-        setting.kuka = False
-        setting.loa = False
-        setting.frost = False
-        setting.fortress = False
-        setting.balok = False
-        setting.olympiad = False
-        setting.hellbound = False
-        setting.siege = False
-        setting.primetime = False
-        setting.purge = False
-        setting.event = False
-        print(user.telegram_id, 'отменил все оповещения')
+    ruoff_setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    expanse_setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
 
+    if user and user.server == 'ruoff':
+        ruoff_setting.soloraidboss = False
+        ruoff_setting.kuka = False
+        ruoff_setting.loa = False
+        ruoff_setting.frost = False
+        ruoff_setting.fortress = False
+        ruoff_setting.balok = False
+        ruoff_setting.olympiad = False
+        ruoff_setting.hellbound = False
+        ruoff_setting.siege = False
+        ruoff_setting.primetime = False
+        ruoff_setting.purge = False
+        ruoff_setting.event = False
+        print(user.telegram_id, 'отменил все оповещения руоффа')
         session.commit()
-        session.close()
+
+    elif user and user.server == 'expanse':
+        expanse_setting.soloraidboss = False
+        expanse_setting.loa = False
+        expanse_setting.frost = False
+        expanse_setting.balok = False
+        expanse_setting.olympiad = False
+        expanse_setting.hellbound = False
+        expanse_setting.siege = False
+        expanse_setting.fulltime = False
+        print(user.telegram_id, 'отменил все оповещения expanse')
+        session.commit()
+
+    session.close()
 
     await callback_query.message.answer('Все оповещения отменены')
     await callback_query.answer()

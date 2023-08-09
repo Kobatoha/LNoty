@@ -20,8 +20,8 @@ Base.metadata.create_all(engine)
 
 inline_event_buttons = types.InlineKeyboardMarkup()
 
-b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setevent')
-b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeevent')
+b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetevent')
+b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremoveevent')
 
 inline_event_buttons.add(b1, b2)
 
@@ -31,7 +31,7 @@ async def about_event(message: types.Message):
     await message.answer('В настоящее время никаких ивентов не подвезли', reply_markup=inline_event_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setevent'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetevent'))
 async def set_event(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -46,7 +46,7 @@ async def set_event(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removeevent'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremoveevent'))
 async def remove_event(callback_query: types.CallbackQuery):
     session = Session()
 

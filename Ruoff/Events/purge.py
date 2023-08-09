@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # purge buttons
 inline_purge_buttons = types.InlineKeyboardMarkup()
 
-b22 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setpurge')
-b23 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removepurge')
+b22 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetpurge')
+b23 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovepurge')
 
 inline_purge_buttons.add(b22, b23)
 
@@ -34,7 +34,7 @@ async def about_purge(message: types.Message):
                          reply_markup=inline_purge_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setpurge'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetpurge'))
 async def set_purge(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -49,7 +49,7 @@ async def set_purge(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removepurge'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovepurge'))
 async def remove_purge(callback_query: types.CallbackQuery):
     session = Session()
 

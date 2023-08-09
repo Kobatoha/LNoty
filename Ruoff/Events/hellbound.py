@@ -20,8 +20,8 @@ Base.metadata.create_all(engine)
 # hellbound buttons
 inline_hellbound_buttons = types.InlineKeyboardMarkup()
 
-b16 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='sethellbound')
-b17 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removehellbound')
+b16 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsethellbound')
+b17 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovehellbound')
 
 inline_hellbound_buttons.add(b16, b17)
 
@@ -34,7 +34,7 @@ async def about_hellbound(message: types.Message):
                          reply_markup=inline_hellbound_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='sethellbound'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsethellbound'))
 async def set_hellbound(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -49,7 +49,7 @@ async def set_hellbound(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removehellbound'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovehellbound'))
 async def remove_hellbound(callback_query: types.CallbackQuery):
     session = Session()
 

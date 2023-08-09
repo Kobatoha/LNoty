@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # lair of antharas buttons
 inline_loa_buttons = types.InlineKeyboardMarkup()
 
-b6 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setloa')
-b7 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removeloa')
+b6 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetloa')
+b7 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremoveloa')
 
 inline_loa_buttons.add(b6, b7)
 
@@ -35,7 +35,7 @@ async def about_loa(message: types.Message):
                          reply_markup=inline_loa_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setloa'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetloa'))
 async def set_loa(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -50,7 +50,7 @@ async def set_loa(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removeloa'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremoveloa'))
 async def remove_loa(callback_query: types.CallbackQuery):
     session = Session()
 

@@ -21,8 +21,8 @@ Base.metadata.create_all(engine)
 # frost lord`s castle buttons
 inline_frost_buttons = types.InlineKeyboardMarkup()
 
-b8 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setfrost')
-b9 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removefrost')
+b8 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetfrost')
+b9 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovefrost')
 
 inline_frost_buttons.add(b8, b9)
 
@@ -31,11 +31,11 @@ inline_frost_buttons.add(b8, b9)
 @dp.message_handler(commands=['frost'])
 async def about_frost(message: types.Message):
     await message.answer('Всемирная зона Замок Монарха Льда открывается во'
-                         ' вторник и четверг c 18:00 до полуночи.\n',
+                         ' вторник и четверг c 18:00 до полуночи для персонажей 85+\n',
                          reply_markup=inline_frost_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setfrost'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetfrost'))
 async def set_frost(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -50,7 +50,7 @@ async def set_frost(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removefrost'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovefrost'))
 async def remove_frost(callback_query: types.CallbackQuery):
     session = Session()
 

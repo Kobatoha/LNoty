@@ -20,8 +20,8 @@ Base.metadata.create_all(engine)
 # siege giran buttons
 inline_siege_buttons = types.InlineKeyboardMarkup()
 
-b18 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='setsiege')
-b19 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='removesiege')
+b18 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoffsetsiege')
+b19 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoffremovesiege')
 
 inline_siege_buttons.add(b18, b19)
 
@@ -33,7 +33,7 @@ async def about_siege(message: types.Message):
                          reply_markup=inline_siege_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='setsiege'))
+@dp.callback_query_handler(filters.Text(contains='ruoffsetsiege'))
 async def set_siege(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -48,7 +48,7 @@ async def set_siege(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='removesiege'))
+@dp.callback_query_handler(filters.Text(contains='ruoffremovesiege'))
 async def remove_siege(callback_query: types.CallbackQuery):
     session = Session()
 
