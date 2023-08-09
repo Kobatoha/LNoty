@@ -1,7 +1,9 @@
 import asyncio
 from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
-from models import User, Base, Setting
+from DataBase.User import User
+from DataBase.Base import Base
+from DataBase.Ruoff import Setting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN

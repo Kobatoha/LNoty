@@ -2,7 +2,9 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from config import TOKEN, DB_URL
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Setting, User
+from DataBase.Base import Base
+from DataBase.User import User
+from DataBase.Ruoff import Setting
 from aiocron import crontab
 import asyncio
 from datetime import datetime

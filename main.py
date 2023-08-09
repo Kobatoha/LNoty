@@ -1,34 +1,27 @@
-from aiogram import Bot, Dispatcher, executor, types, filters
+from aiogram import Bot, Dispatcher, executor, types
 from config import TOKEN, DB_URL
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Setting, User
+from DataBase.Base import Base
+from DataBase.User import User
+from DataBase.Ruoff import Setting
 from aiocron import crontab
 import asyncio
 from datetime import datetime
 
-from Events.soloraidboss import soloraidboss_notification_wrapper, about_soloraidboss, set_soloraidboss, remove_soloraidboss
-from Events.kuka import kuka_notification_wrapper, about_kuka, set_kuka, remove_kuka
-from Events.loa import loa_notification_wrapper, about_loa, set_loa, remove_loa
-from Events.fortress import fortress_notification_wrapper, about_fortress, set_fortress, remove_fortress
-from Events.frost import frost_notification_wrapper, about_frost, set_frost, remove_frost
-from Events.olympiad import olympiad_notification_wrapper, about_olympiad, set_olympiad, remove_olympiad
-from Events.balok import balok_notification_wrapper, about_balok, set_balok, remove_balok
-from Events.hellbound import hellbound_notification_wrapper, about_hellbound, set_hellbound, remove_hellbound
-from Events.siege import siege_notification_wrapper, about_siege, set_siege, remove_siege
-from Events.primetime import primetime_notification_wrapper, about_primetime, set_primetime, remove_primetime
-from Events.purge import purge_notification_wrapper, about_purge, set_purge, remove_purge
+from Ruoff.events import *
 
-#from Events.watermelon import watermelon_notification_wrapper, about_event, set_event, remove_event
-from Events.event_pass import about_event, set_event, remove_event
+from Commands.server import choice_server, ruoff, expanse
+from Commands.stopped import stop, yes_stop, no_stop
+from Commands.mysettings import mysettings
+from Commands.started import start
+from Commands.about import about
 
-
-from command_stop import stop, yes_stop, no_stop
-from Events.fulltime import about_time, fulltime, hardworker_time
-
-# /start, /stop, /about, /help, /mysettings, /time
-# /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad
-# /hellbound, /antharas - skip, /siege, /primetime, /purge, /event
+# general settings: /start, /stop, /about, /time, /server
+# servers settings: /help, /mysettings
+# ruoff: /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad, /hellbound, /siege, /primetime, /purge,
+# /event
+# expanse:
 
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
@@ -39,16 +32,27 @@ Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
+# GENERAL SETTINGS
+dp.register_message_handler(choice_server, commands=['server'])
+dp.register_callback_query_handler(ruoff, text_contains='ruoff')
+dp.register_callback_query_handler(expanse, text_contains='expanse')
+
+dp.register_message_handler(mysettings, commands=['mysettings'])
+
+dp.register_message_handler(start, commands=['start'])
+
+dp.register_message_handler(about, commands=['about'])
+
+dp.register_message_handler(stop, commands=['stop'])
+dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
+dp.register_callback_query_handler(no_stop, text_contains='no_stop')
+
 # CUSTOM EVENT SETTINGS
 dp.register_message_handler(about_event, commands=['event'])
 dp.register_callback_query_handler(set_event, text_contains='setevent')
 dp.register_callback_query_handler(remove_event, text_contains='removeevent')
 
-# REGULAR SETTINGS
-dp.register_message_handler(stop, commands=['stop'])
-dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
-dp.register_callback_query_handler(no_stop, text_contains='no_stop')
-
+# REGULAR RUOFF SETTINGS
 dp.register_message_handler(about_time, commands=['time'])
 dp.register_callback_query_handler(fulltime, text_contains='fulltime')
 dp.register_callback_query_handler(hardworker_time, text_contains='hardworkertime')
@@ -99,84 +103,6 @@ dp.register_callback_query_handler(remove_soloraidboss, text_contains='removesol
 
 
 # GENERAL SETTINGS
-@dp.message_handler(commands=['mysettings'])
-async def get_settings(message: types.Message):
-    session = Session()
-
-    user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-    if user:
-        await message.answer(
-            'Установленные настройки:\n'
-            '\n'
-            f'Круглосуточное оповещение - {setting.fulltime}\n'
-            f'Арбузный сезон (ивент) - {setting.event}\n'
-            f'Одиночные РБ - {setting.soloraidboss}\n'
-            f"Кука и Джисра - {setting.kuka}\n"
-            f"Логово Антараса - {setting.loa}\n"
-            f"Замок Монарха Льда - {setting.frost}\n"
-            f"Крепость Орков - {setting.fortress}\n"
-            f"Битва с Валлоком - {setting.balok}\n"
-            f"Всемирная Олимпиада - {setting.olympiad}\n"
-            f"Остров Ада - {setting.hellbound}\n"
-            f"Осада Гирана - {setting.siege}\n"
-            f"Хот-тайм Зачистки - {setting.primetime}\n"
-            f"Зачистка - {setting.purge}")
-    else:
-        await message.answer('Пожалуйста, вернитесь к /start')
-
-    session.close()
-
-
-@dp.message_handler(commands=['start'])
-async def start(message: types.Message):
-    now = datetime.now().strftime('%H:%M')
-    session = Session()
-    user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-    if not user:
-        print(now, 'Добавление нового пользователя...')
-        user = User(telegram_id=message.from_user.id, username=message.from_user.username)
-        session.add(user)
-        session.commit()
-        setting = Setting(id_user=user.telegram_id)
-        session.add(setting)
-        session.commit()
-        print(now, user.telegram_id, user.username, '- добавлен новый пользователь')
-
-    else:
-        user.upd_date = datetime.today()
-        session.commit()
-        if not user.username:  # если username еще не указан
-            user.username = message.from_user.username  # обновляем username
-            session.commit()
-            print(now, user.telegram_id, user.username, '- username добавлен')
-        else:
-            print(now, user.telegram_id, user.username, '- уже добавлен')
-    session.close()
-    await message.answer('Привет! Я - твой помощник, брат, сват, мать и питомец.\n'
-                         'В Меню ты найдешь все доступные команды.\n'
-                         'Так же этот список можно вызвать командой /help\n' 
-                         'Бот по-дефолту работает в работяжном режиме с 8:00 до 23:00,'
-                         ' изменить эту настройку можно по команде /time\n'
-                         '\n'
-                         'Выбирай интересующую активность и жми "Установить оповещение".'
-                         ' В таком случае тебе будут приходить уведомления за 5 минут'
-                         ' до начала события.\n'
-                         '\n'
-                         'За это время ты успеешь налить чайку,'
-                         ' закинуть в рот печеньку и удобно устроиться перед монитором.')
-
-
-@dp.message_handler(commands=['about'])
-async def about(message: types.Message):
-    await message.answer('Приветствую :)'
-                         ' Я - Kobatoha, и я создала этого бота для вас, мои маленькие любители l2essence!'
-                         ' Мы поможем не пропустить игровые активности.\n'
-                         'Бот создан на добровольных началах, поэтому он свободен и независим.'
-                         ' Есть идеи и предложения по улучшению бота? Велком - kobatoha@yandex.ru\n'
-                         'Или ищите меня на Lavender под ником vsenaprasno')
-
-
 @dp.message_handler(commands=['help'])
 async def helped(message: types.Message):
     await message.answer('Доступные команды:\n'
@@ -189,7 +115,7 @@ async def helped(message: types.Message):
                          '/stop - отменить все оповещения\n'
                          '/time - установить время работы оповещений\n'
                          '\n'
-                         '/event - Арбузный сезон (до 02.08)\n'
+                         '/event - в данный момент нет\n'
                          '/soloraidboss - Одиночные РБ\n'
                          '/kuka - Кука и Джисра\n'
                          '/loa - Логово Антараса\n'
@@ -257,12 +183,6 @@ async def crontab_notifications():
 
     # Запускаем purge в воскресенье в 23:30
     crontab('50 22 * * 7', func=purge_notification_wrapper)
-
-    # Запускаем event в ежедневно в 10:55
-    #crontab('56 10 * * *', func=watermelon_notification_wrapper)
-
-    # Запускаем event в ежедневно в 20:56
-    #crontab('56 20 * * *', func=watermelon_notification_wrapper)
 
 
 if __name__ == '__main__':
