@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -21,26 +21,26 @@ Base.metadata.create_all(engine)
 # frost lord`s castle buttons
 inline_frost_buttons = types.InlineKeyboardMarkup()
 
-b8 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setfrost')
-b9 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removefrost')
+b8 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_setfrost')
+b9 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removefrost')
 
 inline_frost_buttons.add(b8, b9)
 
 
 # FROST LORD`S CASTLE SETTINGS
-@dp.message_handler(commands=['frost'])
-async def about_frost(message: types.Message):
+@dp.message_handler(commands=['expanse_frost'])
+async def expanse_about_frost(message: types.Message):
     await message.answer('Всемирная зона Замок Монарха Льда открывается во'
                          ' вторник и четверг c 18:00 до полуночи для персонажей 85+\n',
                          reply_markup=inline_frost_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setfrost'))
-async def set_frost(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_setfrost'))
+async def expanse_set_frost(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.frost = True
 
     session.commit()
@@ -50,12 +50,12 @@ async def set_frost(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removefrost'))
-async def remove_frost(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_removefrost'))
+async def expanse_remove_frost(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.frost = False
 
     session.commit()
@@ -65,18 +65,18 @@ async def remove_frost(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def frost_notification_wrapper():
+async def expanse_frost_notification_wrapper():
 
     session = Session()
     users = session.query(User).all()
     for user in users:
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
         if setting.frost is True:
-            await frost_notification(user)
+            await expanse_frost_notification(user)
     session.close()
 
 
-async def frost_notification(user: User):
+async def expanse_frost_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '17:55':
         await mybot.send_message(user.telegram_id, '❄️❄️ Замок Монарха Льда откроется через 5 минут')

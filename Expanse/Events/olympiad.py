@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -21,25 +21,25 @@ Base.metadata.create_all(engine)
 # olympiad buttons
 inline_olympiad_buttons = types.InlineKeyboardMarkup()
 
-b14 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setolympiad')
-b15 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removeolympiad')
+b14 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_setolympiad')
+b15 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removeolympiad')
 
 inline_olympiad_buttons.add(b14, b15)
 
 
 # OLYMPIAD SETTINGS
-@dp.message_handler(commands=['olympiad'])
-async def about_olympiad(message: types.Message):
+@dp.message_handler(commands=['expanse_olympiad'])
+async def expanse_about_olympiad(message: types.Message):
     await message.answer('Всемирная Олимпиада проводится с понедельника'
                          ' по пятницу с 21:30 до 22:00.', reply_markup=inline_olympiad_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setolympiad'))
-async def set_olympiad(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_setolympiad'))
+async def expanse_set_olympiad(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.olympiad = True
 
     session.commit()
@@ -49,12 +49,12 @@ async def set_olympiad(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removeolympiad'))
-async def remove_olympiad(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_removeolympiad'))
+async def expanse_remove_olympiad(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.olympiad = False
 
     session.commit()
@@ -64,19 +64,19 @@ async def remove_olympiad(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def olympiad_notification_wrapper():
+async def expanse_olympiad_notification_wrapper():
 
     session = Session()
     users = session.query(User).all()
 
     for user in users:
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
         if setting.olympiad is True:
-            await olympiad_notification(user)
+            await expanse_olympiad_notification(user)
     session.close()
 
 
-async def olympiad_notification(user: User):
+async def expanse_olympiad_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '21:25':
         await mybot.send_message(user.telegram_id, '⚔️⚔️ Олимпиада начнется через 5 минут')

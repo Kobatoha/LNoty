@@ -24,7 +24,7 @@ Base.metadata.create_all(engine)
 # server buttons
 inline_server_buttons = types.InlineKeyboardMarkup()
 
-button_ruoff = types.InlineKeyboardButton(text='ru official', callback_data='ruoff')
+button_ruoff = types.InlineKeyboardButton(text='ru official', callback_data='ruoff_server')
 button_kroff = types.InlineKeyboardButton(text='ru official', callback_data='kroff')
 button_expanse = types.InlineKeyboardButton(text='expanse', callback_data='expanse')
 button_sog = types.InlineKeyboardButton(text='stageofglory', callback_data='stageofglory')
@@ -40,7 +40,7 @@ async def choice_server(message: types.Message):
                          reply_markup=inline_server_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff'))
+@dp.callback_query_handler(filters.Text(contains='ruoff_server'))
 async def ruoff(callback_query: types.CallbackQuery):
     session = Session()
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
@@ -49,7 +49,7 @@ async def ruoff(callback_query: types.CallbackQuery):
         print(user.telegram_id, user.username, 'выбрал оповещения с сервера', user.server)
         session.commit()
         session.close()
-    await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов')
+        await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов')
     await callback_query.answer()
 
 
@@ -57,13 +57,15 @@ async def ruoff(callback_query: types.CallbackQuery):
 async def expanse(callback_query: types.CallbackQuery):
     session = Session()
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    setting = session.query(Expanse).filter_by(telegram_id=callback_query.from_user.id).first()
     if user:
         user.server = 'expanse'
         print(user.telegram_id, user.username, 'выбрал оповещения с сервера', user.server)
         session.commit()
-        setting = Expanse(id_user=user.telegram_id)
-        session.add(setting)
-        session.commit()
-        session.close()
+        if not setting:
+            setting = Expanse(id_user=user.telegram_id)
+            session.add(setting)
+            session.commit()
+            session.close()
     await callback_query.message.answer('Вы выбрали получать оповещения с сервера Expanse')
     await callback_query.answer()

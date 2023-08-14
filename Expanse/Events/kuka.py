@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -21,15 +21,15 @@ Base.metadata.create_all(engine)
 # kuka buttons
 inline_kuka_buttons = types.InlineKeyboardMarkup()
 
-b4 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setkuka')
-b5 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removekuka')
+b4 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_setkuka')
+b5 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removekuka')
 
 inline_kuka_buttons.add(b4, b5)
 
 
 # KUKA SETTINGS
-@dp.message_handler(commands=['kuka'])
-async def about_kuka(message: types.Message):
+@dp.message_handler(commands=['expanse_kuka'])
+async def expanse_about_kuka(message: types.Message):
     await message.answer('Одиночный босс Кука ресается каждый четный час в :50 минут\n'
                          'После его убийства появляется босс Джисра\n'
                          'С них шансово могут упасть:\n'
@@ -39,12 +39,12 @@ async def about_kuka(message: types.Message):
                          '- Камни Эволюции\n', reply_markup=inline_kuka_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setkuka'))
-async def set_kuka(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_setkuka'))
+async def expanse_set_kuka(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.kuka = True
 
     session.commit()
@@ -54,12 +54,12 @@ async def set_kuka(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removekuka'))
-async def remove_kuka(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_removekuka'))
+async def expanse_remove_kuka(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.kuka = False
 
     session.commit()
@@ -69,20 +69,20 @@ async def remove_kuka(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def kuka_notification_wrapper():
+async def expanse_kuka_notification_wrapper():
     session = Session()
     users = session.query(User).all()
     for user in users:
 
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
         if setting.kuka is True and setting.fulltime is True:
-            await kuka_notification(user)
+            await expanse_kuka_notification(user)
         elif setting.kuka is True and setting.fulltime is False:
-            await kuka_notification_hardwork(user)
+            await expanse_kuka_notification_hardwork(user)
     session.close()
 
 
-async def kuka_notification(user: User):
+async def expanse_kuka_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     kuka_time = ['00:45', '02:45', '04:45', '06:45', '08:45', '10:45', '12:45', '14:45', '16:45', '18:45', '20:45',
                  '22:45']
@@ -92,8 +92,7 @@ async def kuka_notification(user: User):
         print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Куке')
 
 
-
-async def kuka_notification_hardwork(user: User):
+async def expanse_kuka_notification_hardwork(user: User):
     now = datetime.now().strftime('%H:%M')
     kuka_hardwork = ['08:45', '10:45', '12:45', '14:45', '16:45', '18:45', '20:45', '22:45']
 

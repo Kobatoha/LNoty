@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -20,23 +20,23 @@ Base.metadata.create_all(engine)
 
 inline_event_buttons = types.InlineKeyboardMarkup()
 
-b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setevent')
-b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removeevent')
+b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_setevent')
+b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removeevent')
 
 inline_event_buttons.add(b1, b2)
 
 
-@dp.message_handler(commands=['event'])
-async def about_event(message: types.Message):
+@dp.message_handler(commands=['expanse_event'])
+async def expanse_about_event(message: types.Message):
     await message.answer('В настоящее время никаких ивентов не подвезли', reply_markup=inline_event_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setevent'))
-async def set_event(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_setevent'))
+async def expanse_set_event(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.event = True
 
     session.commit()
@@ -46,12 +46,12 @@ async def set_event(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removeevent'))
-async def remove_event(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_removeevent'))
+async def expanse_remove_event(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.event = False
 
     session.commit()

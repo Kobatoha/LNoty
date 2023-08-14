@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -20,26 +20,26 @@ Base.metadata.create_all(engine)
 # prime time buttons
 inline_primetime_buttons = types.InlineKeyboardMarkup()
 
-b20 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setprimetime')
-b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removeprimetime')
+b20 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_setprimetime')
+b21 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removeprimetime')
 
 inline_primetime_buttons.add(b20, b21)
 
 
 # PRIME TIME SETTINGS
-@dp.message_handler(commands=['primetime'])
-async def about_primetime(message: types.Message):
+@dp.message_handler(commands=['expanse_primetime'])
+async def expanse_about_primetime(message: types.Message):
     await message.answer('Ежедневно в хот-тайм получаемые очки зачистки удваиваются:\n'
                          '- с 12:00 до 14:00\n'
                          '- с 19:00 до 23:00', reply_markup=inline_primetime_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setprimetime'))
-async def set_primetime(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_setprimetime'))
+async def expanse_set_primetime(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.primetime = True
 
     session.commit()
@@ -49,12 +49,12 @@ async def set_primetime(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removeprimetime'))
-async def remove_primetime(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expasne_removeprimetime'))
+async def expanse_remove_primetime(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.primetime = False
 
     session.commit()
@@ -64,18 +64,18 @@ async def remove_primetime(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def primetime_notification_wrapper():
+async def expanse_primetime_notification_wrapper():
     session = Session()
     users = session.query(User).all()
 
     for user in users:
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
         if setting.primetime is True:
-            await primetime_notification(user)
+            await expanse_primetime_notification(user)
     session.close()
 
 
-async def primetime_notification(user: User):
+async def expanse_primetime_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '11:56' or now == '18:56':
         await mybot.send_message(user.telegram_id, '☄️ Хот-тайм зачистки начнется через 4 минуты')

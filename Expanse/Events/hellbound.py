@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -20,26 +20,26 @@ Base.metadata.create_all(engine)
 # hellbound buttons
 inline_hellbound_buttons = types.InlineKeyboardMarkup()
 
-b16 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_sethellbound')
-b17 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removehellbound')
+b16 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_sethellbound')
+b17 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removehellbound')
 
 inline_hellbound_buttons.add(b16, b17)
 
 
 # HELLBOUND SETTINGS
-@dp.message_handler(commands=['hellbound'])
-async def about_hellbound(message: types.Message):
+@dp.message_handler(commands=['expanse_hellbound'])
+async def expanse_about_hellbound(message: types.Message):
     await message.answer('Остров Ада — межсерверная зона охоты для персонажей 85+ и'
                          ' доступна в субботу с 10:00 до 00:00.',
                          reply_markup=inline_hellbound_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_sethellbound'))
-async def set_hellbound(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_sethellbound'))
+async def expanse_set_hellbound(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.hellbound = True
 
     session.commit()
@@ -49,12 +49,12 @@ async def set_hellbound(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removehellbound'))
-async def remove_hellbound(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_removehellbound'))
+async def expanse_remove_hellbound(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.hellbound = False
 
     session.commit()
@@ -64,18 +64,18 @@ async def remove_hellbound(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def hellbound_notification_wrapper():
+async def expanse_hellbound_notification_wrapper():
     session = Session()
     users = session.query(User).all()
 
     for user in users:
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
         if setting.hellbound is True:
-            await hellbound_notification(user)
+            await expanse_hellbound_notification(user)
     session.close()
 
 
-async def hellbound_notification(user: User):
+async def expanse_hellbound_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '09:55':
         await mybot.send_message(user.telegram_id, '🔥 Остров Ада откроется через 5 минут')

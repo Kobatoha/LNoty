@@ -9,7 +9,7 @@ import asyncio
 from datetime import datetime
 
 
-mybot = Bot(token='6320741874:AAHN7k72MjvR8UeePR2gNzIR4VlNpcYJg2E')
+mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
 
 engine = create_engine(DB_URL)
@@ -63,9 +63,3 @@ async def donate_ethereum(callback_query: types.CallbackQuery):
 
     await callback_query.message.answer('0x8aed63048C527f09cE1960cDbA40c137412494e9')
     await callback_query.answer()
-
-
-if __name__ == '__main__':
-    now_start = datetime.now().strftime('%H:%M')
-    print(now_start, 'Запуск testLineage2Notifications')
-    executor.start_polling(dp, skip_updates=True)

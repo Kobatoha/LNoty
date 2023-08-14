@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Expanse import Expanse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -21,24 +21,24 @@ Base.metadata.create_all(engine)
 # balok buttons
 inline_balok_buttons = types.InlineKeyboardMarkup()
 
-b12 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setbalok')
-b13 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removebalok')
+b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='expanse_setbalok')
+b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='expanse_removebalok')
 
-inline_balok_buttons.add(b12, b13)
+inline_balok_buttons.add(b1, b1)
 
 
-@dp.message_handler(commands=['balok'])
-async def about_balok(message: types.Message):
+@dp.message_handler(commands=['expanse_balok'])
+async def expanse_about_balok(message: types.Message):
     await message.answer('Битва с Валлоком проводится ежедневно, кроме воскресенья в 20:30',
                          reply_markup=inline_balok_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setbalok'))
-async def set_balok(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_setbalok'))
+async def expanse_set_balok(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.balok = True
 
     session.commit()
@@ -48,12 +48,12 @@ async def set_balok(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removebalok'))
-async def remove_balok(callback_query: types.CallbackQuery):
+@dp.callback_query_handler(filters.Text(contains='expanse_removebalok'))
+async def expanse_remove_balok(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
     setting.balok = False
 
     session.commit()
@@ -63,19 +63,19 @@ async def remove_balok(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def balok_notification_wrapper():
+async def expanse_balok_notification_wrapper():
 
     session = Session()
     users = session.query(User).all()
 
     for user in users:
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
         if setting.balok is True:
-            await balok_notification(user)
+            await expanse_balok_notification(user)
     session.close()
 
 
-async def balok_notification(user: User):
+async def expanse_balok_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '20:25':
         await mybot.send_message(user.telegram_id, '🗡️🗡️ Битва с Валлоком начнется через 5 минут')
