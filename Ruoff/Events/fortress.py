@@ -79,8 +79,11 @@ async def fortress_notification_wrapper():
 
 async def fortress_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '19:55':
-        await mybot.send_message(user.telegram_id, '🐸🐸 Битва за Крепость Орков начнется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Крепости Орков')
-    else:
-        print(now, 'Неподходящее время для Крепости Орков')
+    try:
+        if now == '19:55':
+            await mybot.send_message(user.telegram_id, '🐸🐸 Битва за Крепость Орков начнется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение о Крепости Орков')
+        else:
+            print(now, 'Неподходящее время для Крепости Орков')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

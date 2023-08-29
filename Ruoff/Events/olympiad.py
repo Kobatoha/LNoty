@@ -78,8 +78,11 @@ async def olympiad_notification_wrapper():
 
 async def olympiad_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '21:25':
-        await mybot.send_message(user.telegram_id, '⚔️⚔️ Олимпиада начнется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение об Олимпиаде')
-    else:
-        print(now, 'Неподходящее время для Олимпиады')
+    try:
+        if now == '21:25':
+            await mybot.send_message(user.telegram_id, '⚔️⚔️ Олимпиада начнется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение об Олимпиаде')
+        else:
+            print(now, 'Неподходящее время для Олимпиады')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

@@ -78,8 +78,11 @@ async def frost_notification_wrapper():
 
 async def frost_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '17:55':
-        await mybot.send_message(user.telegram_id, '❄️❄️ Замок Монарха Льда откроется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Замке Монарха Льда')
-    else:
-        print(now, 'Неподходящее время для Замка Монарха Льда')
+    try:
+        if now == '17:55':
+            await mybot.send_message(user.telegram_id, '❄️❄️ Замок Монарха Льда откроется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение о Замке Монарха Льда')
+        else:
+            print(now, 'Неподходящее время для Замка Монарха Льда')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

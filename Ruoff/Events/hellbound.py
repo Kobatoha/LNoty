@@ -77,14 +77,17 @@ async def hellbound_notification_wrapper():
 
 async def hellbound_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '09:55':
-        await mybot.send_message(user.telegram_id, '🔥 Остров Ада откроется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение об открытии Острова Ада')
-    elif now == '17:55':
-        await mybot.send_message(user.telegram_id, '🔥 Цитадель на Острове Ада откроется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение об открытии Цитадели Острова Ада')
-    elif now == '22:59':
-        await mybot.send_message(user.telegram_id, '🔥 До закрытия Острова Ада остался часик')
-        print(now, user.telegram_id, user.username, 'получил сообщение о закрытии Острова Ада')
-    else:
-        print(now, 'Неподходящее время для Острова Ада')
+    try:
+        if now == '09:55':
+            await mybot.send_message(user.telegram_id, '🔥 Остров Ада откроется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение об открытии Острова Ада')
+        elif now == '17:55':
+            await mybot.send_message(user.telegram_id, '🔥 Цитадель на Острове Ада откроется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение об открытии Цитадели Острова Ада')
+        elif now == '22:59':
+            await mybot.send_message(user.telegram_id, '🔥 До закрытия Острова Ада остался часик')
+            print(now, user.telegram_id, user.username, 'получил сообщение о закрытии Острова Ада')
+        else:
+            print(now, 'Неподходящее время для Острова Ада')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

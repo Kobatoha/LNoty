@@ -86,17 +86,21 @@ async def kuka_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     kuka_time = ['00:45', '02:45', '04:45', '06:45', '08:45', '10:45', '12:45', '14:45', '16:45', '18:45', '20:45',
                  '22:45']
-
-    if now in kuka_time:
-        await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
-        print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Куке')
-
+    try:
+        if now in kuka_time:
+            await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
+            print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Куке')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
 
 
 async def kuka_notification_hardwork(user: User):
     now = datetime.now().strftime('%H:%M')
     kuka_hardwork = ['08:45', '10:45', '12:45', '14:45', '16:45', '18:45', '20:45', '22:45']
 
-    if now in kuka_hardwork:
-        await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
-        print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Куке')
+    try:
+        if now in kuka_hardwork:
+            await mybot.send_message(user.telegram_id, 'Кука появится через 5 минут')
+            print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Куке')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

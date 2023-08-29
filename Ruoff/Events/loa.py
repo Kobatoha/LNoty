@@ -78,8 +78,11 @@ async def loa_notification_wrapper():
 
 async def loa_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '17:55':
-        await mybot.send_message(user.telegram_id, '🔥🔥 Логово Антараса откроется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Логове Антараса')
-    else:
-        print(now, 'Неподходящее время для Логова Антараса')
+    try:
+        if now == '17:55':
+            await mybot.send_message(user.telegram_id, '🔥🔥 Логово Антараса откроется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение о Логове Антараса')
+        else:
+            print(now, 'Неподходящее время для Логова Антараса')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

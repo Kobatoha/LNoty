@@ -85,18 +85,21 @@ async def soloraidboss_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     soloraidboss_time = ['00:55', '02:55', '04:55', '06:55', '08:55', '10:55', '12:55', '14:55', '16:55', '18:55',
                          '20:55', '22:55']
-
-    if now in soloraidboss_time:
-        await mybot.send_message(user.telegram_id, 'Одиночные Рейд Боссы появятся через 5 минут')
-        print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Соло РБ')
+    try:
+        if now in soloraidboss_time:
+            await mybot.send_message(user.telegram_id, 'Одиночные Рейд Боссы появятся через 5 минут')
+            print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Соло РБ')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
 
 
 async def soloraidboss_notification_hardwork(user: User):
     now = datetime.now().strftime('%H:%M')
     soloraidboss_hardwork = ['08:55', '10:55', '12:55', '14:55', '16:55', '18:55',
                              '20:55', '22:55']
-
-    if now in soloraidboss_hardwork:
-        await mybot.send_message(user.telegram_id, 'Одиночные Рейд Боссы появятся через 5 минут')
-        print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Соло РБ')
-
+    try:
+        if now in soloraidboss_hardwork:
+            await mybot.send_message(user.telegram_id, 'Одиночные Рейд Боссы появятся через 5 минут')
+            print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Соло РБ')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

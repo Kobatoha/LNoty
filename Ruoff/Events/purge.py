@@ -78,8 +78,11 @@ async def purge_notification_wrapper():
 
 async def purge_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '22:50':
-        await mybot.send_message(user.telegram_id, '🍾 Скорее соберите Зачистку :)')
-        print(now, user.telegram_id, user.username, 'получил сообщение об сборе Зачистке')
-    else:
-        print(now, 'Неподходящее время для сбора Зачистки')
+    try:
+        if now == '22:50':
+            await mybot.send_message(user.telegram_id, '🍾 Скорее соберите Зачистку :)')
+            print(now, user.telegram_id, user.username, 'получил сообщение об сборе Зачистке')
+        else:
+            print(now, 'Неподходящее время для сбора Зачистки')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
