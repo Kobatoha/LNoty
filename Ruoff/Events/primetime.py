@@ -7,6 +7,7 @@ from DataBase.Ruoff import Setting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
+from aiogram.utils.exceptions import BotBlocked
 
 mybot = Bot(token=TOKEN)
 dp = Dispatcher(mybot)
