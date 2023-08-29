@@ -77,8 +77,11 @@ async def balok_notification_wrapper():
 
 async def balok_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '20:25':
-        await mybot.send_message(user.telegram_id, '🗡️🗡️ Битва с Валлоком начнется через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Битве с Валлоком')
-    else:
-        print(now, 'Неподходящее время для Битвы с Валлоком')
+    try:
+        if now == '20:25':
+            await mybot.send_message(user.telegram_id, '🗡️🗡️ Битва с Валлоком начнется через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение о Битве с Валлоком')
+        else:
+            print(now, 'Неподходящее время для Битвы с Валлоком')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
