@@ -49,6 +49,10 @@ async def set_soloraidboss(callback_query: types.CallbackQuery):
     setting.soloraidboss = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов установлено')
@@ -64,6 +68,10 @@ async def remove_soloraidboss(callback_query: types.CallbackQuery):
     setting.soloraidboss = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о респе одиночных рейд боссов убрано')

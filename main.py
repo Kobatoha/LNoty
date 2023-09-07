@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting
+from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -168,10 +168,10 @@ async def crontab_notifications():
     crontab('50 22 * * 7', func=purge_notification_wrapper)
 
     # Запускаем event ежедневно в 10:56
-    crontab('56 10 * * *', func=rescue_notification_wrapper)
+    #crontab('56 10 * * *', func=rescue_notification_wrapper)
 
     # Запускаем event ежедневно в 20:56
-    crontab('56 20 * * *', func=rescue_notification_wrapper)
+    #crontab('56 20 * * *', func=rescue_notification_wrapper)
 
 
 if __name__ == '__main__':

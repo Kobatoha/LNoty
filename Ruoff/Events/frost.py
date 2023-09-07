@@ -45,6 +45,10 @@ async def set_frost(callback_query: types.CallbackQuery):
     setting.frost = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда установлено')
@@ -60,6 +64,10 @@ async def remove_frost(callback_query: types.CallbackQuery):
     setting.frost = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об открытии Замка Монарха Льда убрано')

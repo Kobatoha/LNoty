@@ -45,6 +45,10 @@ async def set_loa(callback_query: types.CallbackQuery):
     setting.loa = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об открытии Логова Антараса установлено')
@@ -60,6 +64,10 @@ async def remove_loa(callback_query: types.CallbackQuery):
     setting.loa = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об открытии Логова Антараса убрано')

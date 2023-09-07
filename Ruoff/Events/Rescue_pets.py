@@ -49,6 +49,10 @@ async def set_event(callback_query: types.CallbackQuery):
     setting.event = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об ивенте установлено')
@@ -64,6 +68,10 @@ async def remove_event(callback_query: types.CallbackQuery):
     setting.event = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об ивенте убрано')

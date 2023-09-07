@@ -44,6 +44,10 @@ async def set_hellbound(callback_query: types.CallbackQuery):
     setting.hellbound = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада установлено')
@@ -59,6 +63,10 @@ async def remove_hellbound(callback_query: types.CallbackQuery):
     setting.hellbound = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об открытии и закрытии Острова Ада убрано')

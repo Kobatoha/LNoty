@@ -49,6 +49,10 @@ async def set_kuka(callback_query: types.CallbackQuery):
     setting.kuka = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о респе Куки установлено')
@@ -64,6 +68,10 @@ async def remove_kuka(callback_query: types.CallbackQuery):
     setting.kuka = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о респе Куки убрано')

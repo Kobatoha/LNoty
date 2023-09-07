@@ -44,6 +44,10 @@ async def set_primetime(callback_query: types.CallbackQuery):
     setting.primetime = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале хот-тайма установлено')
@@ -59,6 +63,10 @@ async def remove_primetime(callback_query: types.CallbackQuery):
     setting.primetime = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале хот-тайма убрано')

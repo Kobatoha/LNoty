@@ -43,6 +43,10 @@ async def set_balok(callback_query: types.CallbackQuery):
     setting.balok = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Битвы с Валлоком установлено')
@@ -58,6 +62,10 @@ async def remove_balok(callback_query: types.CallbackQuery):
     setting.balok = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Битвы с Валлоком убрано')

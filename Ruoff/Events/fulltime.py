@@ -42,6 +42,10 @@ async def fulltime(callback_query: types.CallbackQuery):
     setting.fulltime = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Круглосуточное оповещение установлено')
@@ -57,6 +61,10 @@ async def hardworker_time(callback_query: types.CallbackQuery):
     setting.fulltime = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение установлено с 8:00 до 23:00')

@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting
+from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -33,6 +33,9 @@ async def start(message: types.Message):
         setting = Setting(id_user=user.telegram_id)
         session.add(setting)
         session.commit()
+        custom = RuoffCustomSetting(id_user=user.telegram_id)
+        session.add(custom)
+        session.commit()
         print(now, user.telegram_id, user.username, '- добавлен новый пользователь')
 
     else:
@@ -51,7 +54,7 @@ async def start(message: types.Message):
                          'Бот по-дефолту работает в работяжном режиме с 8:00 до 23:00,'
                          ' изменить эту настройку можно по команде /time\n'
                          '\n'
-                         'Выбирай интересующую активность и жми "Установить оповещение".'
+                         'Выбирай интересующую активность и жми [Установить оповещение].'
                          ' В таком случае тебе будут приходить уведомления за 5 минут'
                          ' до начала события.\n'
                          '\n'

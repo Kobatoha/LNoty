@@ -43,6 +43,10 @@ async def set_siege(callback_query: types.CallbackQuery):
     setting.siege = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Осады Гирана установлено')
@@ -58,6 +62,10 @@ async def remove_siege(callback_query: types.CallbackQuery):
     setting.siege = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Осады Гирана убрано')

@@ -44,6 +44,10 @@ async def set_purge(callback_query: types.CallbackQuery):
     setting.purge = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о сборе зачистки установлено')
@@ -59,6 +63,10 @@ async def remove_purge(callback_query: types.CallbackQuery):
     setting.purge = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о сборе зачистки убрано')

@@ -44,6 +44,10 @@ async def set_olympiad(callback_query: types.CallbackQuery):
     setting.olympiad = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Олимпиады установлено')
@@ -59,6 +63,10 @@ async def remove_olympiad(callback_query: types.CallbackQuery):
     setting.olympiad = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Олимпиады убрано')

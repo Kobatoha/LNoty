@@ -44,6 +44,10 @@ async def set_fortress(callback_query: types.CallbackQuery):
     setting.fortress = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков установлено')
@@ -59,6 +63,10 @@ async def remove_fortress(callback_query: types.CallbackQuery):
     setting.fortress = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение о начале Битвы за Крепость Орков убрано')
