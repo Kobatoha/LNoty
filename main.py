@@ -10,14 +10,16 @@ import asyncio
 from datetime import datetime
 
 from Ruoff.events import *
+#from Ruoff.options import *
 
-from Commands.server import choice_server, ruoff, expanse
-from Commands.stopped import stop, yes_stop, no_stop
-from Commands.mysettings import mysettings
-from Commands.started import start
 from Commands.about import about
-from Commands.help import help
 from Commands.donate import donate, donate_sberbank, donate_ethereum, donate_bitcoin, donate_tinkoff
+from Commands.help import help
+from Commands.mysettings import mysettings
+from Commands.options import options_menu
+from Commands.server import choice_server, ruoff, expanse
+from Commands.started import start
+from Commands.stopped import stop, yes_stop, no_stop
 
 # general settings: /start, /stop, /about, /time, /server
 # servers settings: /help, /mysettings
@@ -46,6 +48,8 @@ dp.register_message_handler(start, commands=['start'])
 dp.register_message_handler(about, commands=['about'])
 
 dp.register_message_handler(help, commands=['help'])
+
+dp.register_message_handler(options_menu, commands=['options'])
 
 dp.register_message_handler(donate, commands=['donate'])
 dp.register_callback_query_handler(donate_sberbank, text_contains='sberbank')
