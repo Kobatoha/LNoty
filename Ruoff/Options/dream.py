@@ -370,19 +370,3 @@ async def dream_notification(user: User):
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции dream_notification: {e}')
-
-
-functions_to_crontab = [dream_notification_wrapper]
-
-
-async def crontab_notifications():
-
-    crontab('* * * * *', func=dream_notification_wrapper)
-
-
-if __name__ == '__main__':
-    now_start = datetime.now().strftime('%H:%M')
-    print(now_start, 'Запуск test dream')
-    loop = asyncio.get_event_loop()
-    loop.create_task(crontab_notifications())
-    executor.start_polling(dp, skip_updates=True)
