@@ -343,7 +343,6 @@ async def dream_notification(user: User):
     try:
         now = datetime.now().strftime('%H:%M')
         today = datetime.now().strftime('%A').lower()
-        print(f'[{user.telegram_id}] {user.username} - day: {today} and time: {now}')
 
         session = Session()
         option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
