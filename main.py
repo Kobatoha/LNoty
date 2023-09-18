@@ -8,9 +8,11 @@ from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
 from aiocron import crontab
 import asyncio
 from datetime import datetime
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from Ruoff.events import *
-#from Ruoff.options import *
+from Ruoff.options import *
 
 from Commands.about import about
 from Commands.donate import donate, donate_sberbank, donate_ethereum, donate_bitcoin, donate_tinkoff
@@ -28,7 +30,7 @@ from Commands.stopped import stop, yes_stop, no_stop
 # expanse:
 
 mybot = Bot(token=TOKEN)
-dp = Dispatcher(mybot)
+dp = Dispatcher(mybot, storage=MemoryStorage())
 
 engine = create_engine(DB_URL)
 
@@ -115,11 +117,32 @@ dp.register_message_handler(about_soloraidboss, commands=['soloraidboss'])
 dp.register_callback_query_handler(set_soloraidboss, text_contains='ruoff_setsolorb')
 dp.register_callback_query_handler(remove_soloraidboss, text_contains='ruoff_removesolorb')
 
+dp.register_message_handler(about_dream, commands=['dream'])
+dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
+dp.register_callback_query_handler(cancel_to_set_dream, text_contains='ruoff_option_cancel_to_set_dream')
+
+dp.register_callback_query_handler(set_dream_day, text_contains='ruoff_option_set_day_dream')
+dp.register_message_handler(save_dream_day, state=DreamDay.waiting_for_dream_day)
+dp.register_callback_query_handler(cancel_to_set_dream_day, text_contains='ruoff_option_cancel_to_set_dream',
+                                   state=DreamDay.waiting_for_dream_day)
+
+dp.register_callback_query_handler(set_dream_time, text_contains='ruoff_option_set_time_dream')
+dp.register_message_handler(save_dream_time, state=DreamTime.waiting_for_dream_time)
+dp.register_callback_query_handler(cancel_to_set_dream_time, text_contains='ruoff_option_cancel_to_set_dream',
+                                   state=DreamTime.waiting_for_dream_time)
+
+dp.register_callback_query_handler(remove_dream, text_contains='ruoff_option_remove_dream')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
 async def echo(message: types.Message):
     await message.answer('Бегите, гoлубцы!')
+
+
+functions_to_crontab = [
+    dream_notification_wrapper
+    ]
 
 
 async def crontab_notifications():
@@ -170,6 +193,9 @@ async def crontab_notifications():
 
     # Запускаем purge в воскресенье в 23:30
     crontab('50 22 * * 7', func=purge_notification_wrapper)
+
+    for func in functions_to_crontab:
+        crontab('* * * * *', func=func)
 
     # Запускаем event ежедневно в 10:56
     #crontab('56 10 * * *', func=rescue_notification_wrapper)
