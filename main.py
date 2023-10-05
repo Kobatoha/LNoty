@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
 from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
+from DataBase.Feedback import Feedback
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -22,11 +23,12 @@ from Commands.options import options_menu
 from Commands.server import choice_server, ruoff, expanse
 from Commands.started import start
 from Commands.stopped import stop, yes_stop, no_stop
+from Commands.feedback import feedback
 
 # general settings: /start, /stop, /about, /time, /server
 # servers settings: /help, /mysettings
 # ruoff: /soloraidboss, /kuka, /loa, /frost, /fortress, /balok, /olympiad, /hellbound, /siege, /primetime, /purge,
-# /event
+# /event, /calendar
 # expanse:
 
 mybot = Bot(token=TOKEN)
@@ -63,10 +65,16 @@ dp.register_message_handler(stop, commands=['stop'])
 dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
 dp.register_callback_query_handler(no_stop, text_contains='no_stop')
 
+dp.register_message_handler(feedback, commands=['feedback'])
+
 # CUSTOM EVENT SETTINGS
 dp.register_message_handler(about_event, commands=['event'])
-dp.register_callback_query_handler(set_event, text_contains='ruoff_setevent')
-dp.register_callback_query_handler(remove_event, text_contains='ruoff_removeevent')
+dp.register_callback_query_handler(set_event, text_contains='ruoff_set_event')
+dp.register_callback_query_handler(remove_event, text_contains='ruoff_remove_event')
+
+dp.register_message_handler(about_calendar, commands=['calendar'])
+dp.register_callback_query_handler(set_calendar, text_contains='ruoff_set_calendar')
+dp.register_callback_query_handler(remove_calendar, text_contains='ruoff_remove_calendar')
 
 # REGULAR RUOFF SETTINGS
 dp.register_message_handler(about_time, commands=['time'])
@@ -194,14 +202,17 @@ async def crontab_notifications():
     # Запускаем purge в воскресенье в 23:30
     crontab('50 22 * * 7', func=purge_notification_wrapper)
 
+    # Запускаем calendar ежедневно в 21:10
+    crontab('10 21 * * *', func=calendar_notification_wrapper)
+
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
 
     # Запускаем event ежедневно в 10:56
     #crontab('56 10 * * *', func=rescue_notification_wrapper)
 
-    # Запускаем event ежедневно в 20:56
-    #crontab('56 20 * * *', func=rescue_notification_wrapper)
+    # Запускаем event ежедневно в 21:00
+    crontab('0 21 * * *', func=tomb_notification_wrapper)
 
 
 if __name__ == '__main__':

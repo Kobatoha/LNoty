@@ -208,28 +208,28 @@ async def cancel_to_set_valakas_time(callback_query: types.CallbackQuery, state:
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции cancel_to_set_dream_time: {e}')
+        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции cancel_to_set_valakas_time: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции cancel_to_set_dream_time: {e}')
+                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции cancel_to_set_valakas_time: {e}')
 
 
-# INPUT DREAM DAY
-@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_dream'))
-async def set_dream_day(callback_query: types.CallbackQuery):
+# INPUT VALAKAS DAY
+@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_valakas'))
+async def set_valakas_day(callback_query: types.CallbackQuery):
     try:
         keyboard = types.InlineKeyboardMarkup().add(button_back)
-        await callback_query.message.edit_text('Введите день недели оповещения для Поздемелья Грёз:\n '
+        await callback_query.message.edit_text('Введите день недели оповещения для Храма Валакаса:\n '
                                                '[ понедельник | вторник | среда | четверг | пятница | суббота | '
                                                'воскресенье ]',
                                                reply_markup=keyboard)
-        await DreamDay.waiting_for_dream_day.set()
+        await ValakasDay.waiting_for_valakas_day.set()
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции set_dream_day: {e}')
+        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции set__day: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {callback_query.from_user.id} - '
+                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_dream_day: {e}')
 
 

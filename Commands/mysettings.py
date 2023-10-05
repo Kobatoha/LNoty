@@ -34,6 +34,7 @@ async def mysettings(message: types.Message):
                               f'\n' \
                               f'Круглосуточное оповещение - {setting_ruoff.fulltime}\n' \
                               f'Ивент - {setting_ruoff.event}\n' \
+                              f'Календарь - {setting_ruoff.calendar}\n' \
                               f'Одиночные РБ - {setting_ruoff.soloraidboss}\n' \
                               f'Кука и Джисра - {setting_ruoff.kuka}\n' \
                               f'Логово Антараса - {setting_ruoff.loa}\n' \
@@ -44,7 +45,8 @@ async def mysettings(message: types.Message):
                               f'Остров Ада - {setting_ruoff.hellbound}\n' \
                               f'Осада Гирана - {setting_ruoff.siege}\n' \
                               f'Прайм-тайм Зачистки - {setting_ruoff.primetime}\n' \
-                              f'Зачистка - {setting_ruoff.purge}\n'
+                              f'Зачистка - {setting_ruoff.purge}\n' \
+
 
         if not setting_option:
             await message.answer(f'{ruoff_settings_text}')

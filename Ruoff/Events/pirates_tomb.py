@@ -19,28 +19,29 @@ Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
-inline_rescue_buttons = types.InlineKeyboardMarkup()
+inline_event_buttons = types.InlineKeyboardMarkup()
 
-b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_setevent')
-b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_removeevent')
+b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_set_event')
+b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_remove_event')
 
-inline_rescue_buttons.add(b1, b2)
-
+inline_event_buttons.add(b1, b2)
 
 
 @dp.message_handler(commands=['event'])
 async def about_event(message: types.Message):
-    await message.answer('Спасение питомцев - временное событие, которое проводится с 23 августа до 6 сентября.'
-                         ' Дважды в день в Загоне Диких Зверей проводоится рейд на Главных Инструкторов'
-                         ' в 11:00 и 21:00.\n'
-                         'В награду за последний удар можно получить:\n'
-                         '- Шкатулка с самоцветом 5ур\n'
-                         '- Сундук с приколюхами для персонажа и его питомца\n'
-                         'Так же можно будет словить питомца с некоторым шансом и расходку на него.',
-                         reply_markup=inline_rescue_buttons)
+    await message.answer('Зов Гробницы - временное событие, которое проводится с 27 сентября до 18 октября.'
+                         ' Попасть в Гробницу Древних Пиратов можно ежедневно в любое время персонажами'
+                         ' 80+ уровня в составе пати.\n'
+                         'Время оповещения - 21:05 (между валлоком и олимпом)\n'
+                         '\n'
+                         'За 20 минут в Гробнице вы получите:\n'
+                         '- Хороший опыт, можно стоять и качаться\n'
+                         '- Древние монеты (100шт дропом, 200шт за награды)\n'
+                         'За древние монеты можно слегка закрыть коллекцию, рекомендую',
+                         reply_markup=inline_event_buttons)
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_setevent'))
+@dp.callback_query_handler(filters.Text(contains='ruoff_set_event'))
 async def set_event(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -59,7 +60,7 @@ async def set_event(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-@dp.callback_query_handler(filters.Text(contains='ruoff_removeevent'))
+@dp.callback_query_handler(filters.Text(contains='ruoff_remove_event'))
 async def remove_event(callback_query: types.CallbackQuery):
     session = Session()
 
@@ -78,21 +79,21 @@ async def remove_event(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 
-async def rescue_notification_wrapper():
+async def tomb_notification_wrapper():
     session = Session()
     users = session.query(User).all()
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.event is True:
-            await rescue_notification(user)
+            await tomb_notification(user)
     session.close()
 
 
-async def rescue_notification(user: User):
+async def tomb_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     try:
-        if now == '10:56' or now == '20:56':
-            await mybot.send_message(user.telegram_id, '🦊🦊 Спасать питомцев отправляемся через 4 минуты')
+        if now == '21:00':
+            await mybot.send_message(user.telegram_id, '🏴‍☠️🏴‍☠️ Вперед, на битву с пиратами! Вход у НПС Деллос')
             print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
         else:
             print(now, 'Неподходящее время для ивента')

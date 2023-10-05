@@ -49,7 +49,8 @@ async def ruoff(callback_query: types.CallbackQuery):
         print(user.telegram_id, user.username, 'выбрал оповещения с сервера', user.server)
         session.commit()
         session.close()
-        await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов')
+        await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов:\n'
+                                            '[ Lavender | Plum | Coral | Indigo | Ivory | Aqua ]')
     await callback_query.answer()
 
 
