@@ -133,7 +133,7 @@ async def cancel_to_set_dream(callback_query: types.CallbackQuery):
 async def set_dream_time(callback_query: types.CallbackQuery):
     try:
         keyboard = types.InlineKeyboardMarkup().add(button_back)
-        text = f'Введите время оповещения для Поздемелья Грёз в формате час:минута (например, 10:21): '
+        text = f'НАПИШИТЕ время оповещения для Поздемелья Грёз в формате час:минута (например, 10:21): '
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
                                       text=text,
@@ -216,12 +216,18 @@ async def cancel_to_set_dream_time(callback_query: types.CallbackQuery, state: F
 @dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_dream'))
 async def set_dream_day(callback_query: types.CallbackQuery):
     try:
-        keyboard = types.InlineKeyboardMarkup().add(button_back)
-        await callback_query.message.edit_text('Введите день недели оповещения для Поздемелья Грёз:\n '
-                                               '[ понедельник | вторник | среда | четверг | пятница | суббота | '
-                                               'воскресенье ]',
+        button_mon = types.InlineKeyboardButton(text='понедельник', callback_data='add_dream_monday')
+        button_tue = types.InlineKeyboardButton(text='вторник', callback_data='add_dream_tuesday')
+        button_wed = types.InlineKeyboardButton(text='среда', callback_data='add_dream_wednesday')
+        button_thu = types.InlineKeyboardButton(text='четверг', callback_data='add_dream_thursday')
+        button_fri = types.InlineKeyboardButton(text='пятница', callback_data='add_dream_friday')
+        button_sat = types.InlineKeyboardButton(text='суббота', callback_data='add_dream_saturday')
+        button_sun = types.InlineKeyboardButton(text='воскресенье', callback_data='add_dream_sunday')
+        keyboard = types.InlineKeyboardMarkup(row_width=4).add(button_mon, button_tue, button_wed,
+                                                               button_thu, button_fri, button_sat,
+                                                               button_sun).row(button_back)
+        await callback_query.message.edit_text('Выберите день недели оповещения для Поздемелья Грёз:\n ',
                                                reply_markup=keyboard)
-        await DreamDay.waiting_for_dream_day.set()
         await callback_query.answer()
 
     except Exception as e:
@@ -235,35 +241,25 @@ async def set_dream_day(callback_query: types.CallbackQuery):
 @dp.message_handler(state=DreamDay.waiting_for_dream_day)
 async def save_dream_day(message: types.Message, state: FSMContext):
     try:
-        dream_day = message.text
-        days = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
+        session = Session()
 
-        if dream_day.lower() in days:
-            session = Session()
+        user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
 
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.dream_day = dream_day
-            session.commit()
+        option_setting.dream_day = dream_day
+        session.commit()
 
-            user.upd_date = datetime.today()
-            session.commit()
+        user.upd_date = datetime.today()
+        session.commit()
 
-            session.close()
+        session.close()
 
-            keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
+        keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
-            await mybot.send_message(chat_id=message.from_user.id,
-                                     text=f'Вы установили день для оповещений Подземелье Грёз - {dream_day}',
-                                     reply_markup=keyboard)
-
-        else:
-            await mybot.send_message(chat_id=message.from_user.id,
-                                     text='Неправильный формат времени, пожалуйста, попробуйте еще раз.')
-            return
-
-        await state.finish()
+        await mybot.send_message(chat_id=message.from_user.id,
+                                 text=f'Вы установили день для оповещений Подземелье Грёз - {dream_day}',
+                                 reply_markup=keyboard)
 
     except Exception as e:
         logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции save_dream_day: {e}')
@@ -273,15 +269,13 @@ async def save_dream_day(message: types.Message, state: FSMContext):
 
 
 # CANCEL SET DREAM DAY
-@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream',
-                           state=DreamDay.waiting_for_dream_day)
+@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream')
 async def cancel_to_set_dream_day(callback_query: types.CallbackQuery, state: FSMContext):
     try:
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
                                       text=options_menu_text)
-        await state.finish()
 
     except Exception as e:
         logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции cancel_to_set_dream_day: {e}')

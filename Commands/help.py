@@ -33,6 +33,7 @@ async def help(message: types.Message):
                              '/mysettings - персональные настройки\n'
                              '/help - список команд\n'
                              '/donate - разработчику на мармелад\n'
+                             '/feedback - оставить предложение\n'
                              '\n'
                              '/stop - отменить все оповещения\n'
                              '\n'

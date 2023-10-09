@@ -23,7 +23,7 @@ from Commands.options import options_menu
 from Commands.server import choice_server, ruoff, expanse
 from Commands.started import start
 from Commands.stopped import stop, yes_stop, no_stop
-from Commands.feedback import feedback
+from Commands.feedback import feedback, add_feedback, cancel_add_feedback, cancel_feedback, save_feedback, FeedbackState
 
 # general settings: /start, /stop, /about, /time, /server
 # servers settings: /help, /mysettings
@@ -65,7 +65,14 @@ dp.register_message_handler(stop, commands=['stop'])
 dp.register_callback_query_handler(yes_stop, text_contains='yes_stop')
 dp.register_callback_query_handler(no_stop, text_contains='no_stop')
 
-dp.register_message_handler(feedback, commands=['feedback'])
+dp.register_message_handler(feedback, commands=['feedback'])                                    # [FEEDBACK]
+dp.register_callback_query_handler(cancel_feedback, text_contains='back_feedback')              # [CANCEL FEEDBACK]
+dp.register_callback_query_handler(add_feedback, text_contains='add_feedback')                  # [ADD FEEDBACK]
+dp.register_message_handler(save_feedback, state=FeedbackState.waiting_for_feedback)            # [SAVE FEEDBACK]
+dp.register_callback_query_handler(
+    cancel_add_feedback,
+    lambda callback_query: callback_query.data == 'cancel_add_feedback',
+    state=FeedbackState.waiting_for_feedback)                                                   # [CANCEL ADD FEEDBACK]
 
 # CUSTOM EVENT SETTINGS
 dp.register_message_handler(about_event, commands=['event'])

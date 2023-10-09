@@ -7,9 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Expanse import Expanse
-from DataBase.Ruoff import Setting, RuoffCustomSetting
-from aiocron import crontab
+from DataBase.Feedback import Feedback
 import asyncio
 from datetime import datetime
 
@@ -24,22 +22,27 @@ Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 
 
-class Feedback(StatesGroup):
+class FeedbackState(StatesGroup):
     waiting_for_feedback = State()
 
 
 button_back = types.InlineKeyboardButton(text='Передумать, бот - збс!',
-                                         callback_data='cancel_feedback')
-button_add = types.InlineKeyboardButton(text='Оставить обратную связь',
+                                         callback_data='back_feedback')
+button_add = types.InlineKeyboardButton(text='Оставить послание',
                                         callback_data='add_feedback')
+button_cancel = types.InlineKeyboardButton(text='Я стесняюсь! А бот збс.',
+                                           callback_data='cancel_add_feedback')
 
 inline_feedback_buttons = types.InlineKeyboardMarkup().add(button_back, button_add)
 
 
-# [FEEDBACK] @dp.message_handler(commands=['feedback'])
+# [FEEDBACK]
 async def feedback(message: types.Message):
     try:
-        await message.answer('Вы можете оставить обратную связь - вопросы, предложения или пожелания',
+        await message.answer('Вы обратились в службу доставки отзывов и предложений!\n'
+                             '\n'
+                             'Мы не Почта России, мы не теряем посылки и не предлагаем лотерейные билеты.'
+                             ' Обращайтесь к нам и ваше послание всенепременно дойдет до разработчика!',
                              reply_markup=inline_feedback_buttons)
 
     except Exception as e:
@@ -48,10 +51,36 @@ async def feedback(message: types.Message):
                                       f'Произошла ошибка в функции feedback: {e}')
 
 
-# [CANCEL FEEDBACK] @dp.callback_query_handler(filters.Text(contains='cancel_feedback'))
+# [CANCEL FEEDBACK]
 async def cancel_feedback(callback_query: types.CallbackQuery):
     try:
-        text = ''
+        text = 'Доступные команды:\n'\
+               '\n'\
+               '/start - запуск бота\n'\
+               '/about - о боте\n'\
+               '/mysettings - персональные настройки\n'\
+               '/help - список команд\n'\
+               '/donate - разработчику на мармелад\n' \
+               '/feedback - оставить предложение\n'\
+               '\n'\
+               '/stop - отменить все оповещения\n'\
+               '\n'\
+               '/time - установить время работы оповещений\n'\
+               '/event - пока не подвезли\n'\
+               '/calendar - Календарь до 25.10.23\n'\
+               '/soloraidboss - Одиночные РБ\n'\
+               '/kuka - Кука и Джисра\n'\
+               '/loa - Логово Антараса\n'\
+               '/frost - Замок Монарха Льда\n'\
+               '/fortress - Крепость Орков\n'\
+               '/balok - Битва с Валлоком\n'\
+               '/olympiad - Всемирная Олимпиада\n'\
+               '/hellbound - Остров Ада\n'\
+               '/siege - Осада Гирана\n'\
+               '\n'\
+               '/primetime - Прайм Тайм Зачистки\n'\
+               '/purge - Зачистка\n'
+
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
@@ -63,86 +92,82 @@ async def cancel_feedback(callback_query: types.CallbackQuery):
                                       f'Произошла ошибка в функции cancel_feedback: {e}')
 
 
-# INPUT VALAKAS TIME
-@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_time_valakas'))
-async def set_valakas_time(callback_query: types.CallbackQuery):
+# [ADD FEEDBACK]
+async def add_feedback(callback_query: types.CallbackQuery):
     try:
-        keyboard = types.InlineKeyboardMarkup().add(button_back)
-        text = f'Введите время оповещения для Храма Валакаса в формате час:минута (например, 10:21): '
+        keyboard = types.InlineKeyboardMarkup().add(button_cancel)
+        text = f'Напишите отзыв, пожелание или конкретное предложение (ограничение 300 cимволов): '
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
                                       text=text,
                                       reply_markup=keyboard)
 
-        await ValakasTime.waiting_for_valakas_time.set()
+        await FeedbackState.waiting_for_feedback.set()
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции set_valakas_time: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции set_valakas_time: {e}')
+                                 text=f'[ADD FEEDBACK] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции add_feedback: {e}')
 
 
-# SAVE VALAKAS TIME
-@dp.message_handler(state=ValakasTime.waiting_for_valakas_time)
-async def save_valakas_time(message: types.Message, state: FSMContext):
+# [SAVE FEEDBACK]
+async def save_feedback(message: types.Message, state: FSMContext):
     try:
-        valakas_time = message.text
-        hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
-                 '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
-        minutes = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09']
-        for h in range(10, 61):
-            minutes.append(str(h))
+        feedback_ = message.text
 
-        if len(valakas_time) == 5 and valakas_time[:2] in hours and valakas_time[2] == ':' \
-                and valakas_time[3:5] in minutes:
-            session = Session()
-
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.valakas_time = valakas_time
-            session.commit()
-
-            user.upd_date = datetime.today()
-            session.commit()
-
-            session.close()
-
-            keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_day, button_menu)
-
+        if len(feedback_) > 300:
             await mybot.send_message(chat_id=message.from_user.id,
-                                     text=f'Вы установили время для оповещений Храм Валакаса - {valakas_time}',
-                                     reply_markup=keyboard)
+                                     text='Слишком длинный текст, попробуйте еще раз (не более 300 символов).')
+            return
+
+        elif not feedback_ or len(feedback_) < 3:
+            await mybot.send_message(chat_id=message.from_user.id,
+                                     text='Если не хотите оставлять оставлять отзыв или предложение, '
+                                          'так и скажите, я же не заставляю ))')
+            await state.finish()
+            return
 
         else:
+            session = Session()
+            user = Feedback(telegram_id=message.from_user.id,
+                            username=message.from_user.username,
+                            text=feedback_)
+            session.add(user)
+            session.commit()
+            session.close()
+
             await mybot.send_message(chat_id=message.from_user.id,
-                                     text='Неправильный формат времени, пожалуйста, попробуйте еще раз.')
-            return
+                                     text=f'Вы успешно оставили свое послание. Спасибо, Добби свободен!\n'
+                                          f'\n'
+                                          f'Можете продолжить устанавливать оповещения или отменять их - /help')
 
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {message.from_user.id} - ошибка в функции save_valakas_time: {e}')
+        logging.error(f' [SAVE FEEDBACK] {message.from_user.id} - ошибка в функции save_feedback: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[VALAKAS] {message.from_user.id} - '
-                                      f'Произошла ошибка в функции save_valakas_time: {e}')
+                                 text=f'[SAVE FEEDBACK] {message.from_user.id} - '
+                                      f'Произошла ошибка в функции save_feedback: {e}')
 
 
-# CANCEL SET VALAKAS TIME
-@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_valakas',
-                           state=ValakasTime.waiting_for_valakas_time)
-async def cancel_to_set_valakas_time(callback_query: types.CallbackQuery, state: FSMContext):
+# [CANCEL ADD FEEDBACK]
+async def cancel_add_feedback(callback_query: types.CallbackQuery, state: FSMContext):
     try:
+        text = 'Вы обратились в службу доставки отзывов и предложений!\n'\
+               '\n'\
+               'И передумали.. понимаю, бывает ))\n' \
+               'В таком случае могу предложить погулять по настройкам /help или убедиться,' \
+               ' что все включено - /mysettings'
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
-                                      text=options_menu_text)
+                                      text=text)
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции cancel_to_set_valakas_time: {e}')
+        logging.error(f' [CANCEL ADD FEEDBACK] {callback_query.from_user.id} - '
+                      f'ошибка в функции cancel_add_feedback: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции cancel_to_set_valakas_time: {e}')
+                                 text=f'[CANCEL ADD FEEDBACK] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции cancel_add_feedback: {e}')
