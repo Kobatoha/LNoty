@@ -28,12 +28,12 @@ class FeedbackState(StatesGroup):
 
 button_back = types.InlineKeyboardButton(text='Передумать, бот - збс!',
                                          callback_data='back_feedback')
-button_add = types.InlineKeyboardButton(text='Оставить послание',
+button_add = types.InlineKeyboardButton(text='Написать отзыв',
                                         callback_data='add_feedback')
-button_cancel = types.InlineKeyboardButton(text='Я стесняюсь! А бот збс.',
+button_cancel = types.InlineKeyboardButton(text='Я стесняюсь! Вернемся назад!',
                                            callback_data='cancel_add_feedback')
 
-inline_feedback_buttons = types.InlineKeyboardMarkup().add(button_back, button_add)
+inline_feedback_buttons = types.InlineKeyboardMarkup().add(button_add, button_back)
 
 
 # [FEEDBACK]

@@ -50,7 +50,7 @@ async def ruoff(callback_query: types.CallbackQuery):
         session.commit()
         session.close()
         await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов:\n'
-                                            '[ Lavender | Plum | Coral | Indigo | Ivory | Aqua ]')
+                                            '[ Magenta | Coral | Skyblue | Aqua ]')
     await callback_query.answer()
 
 

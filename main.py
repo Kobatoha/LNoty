@@ -69,10 +69,9 @@ dp.register_message_handler(feedback, commands=['feedback'])                    
 dp.register_callback_query_handler(cancel_feedback, text_contains='back_feedback')              # [CANCEL FEEDBACK]
 dp.register_callback_query_handler(add_feedback, text_contains='add_feedback')                  # [ADD FEEDBACK]
 dp.register_message_handler(save_feedback, state=FeedbackState.waiting_for_feedback)            # [SAVE FEEDBACK]
-dp.register_callback_query_handler(
-    cancel_add_feedback,
-    lambda callback_query: callback_query.data == 'cancel_add_feedback',
-    state=FeedbackState.waiting_for_feedback)                                                   # [CANCEL ADD FEEDBACK]
+dp.register_callback_query_handler(cancel_add_feedback,
+                                   text_contains='cancel_add_feedback',
+                                   state=FeedbackState.waiting_for_feedback)                    # [CANCEL ADD FEEDBACK]
 
 # CUSTOM EVENT SETTINGS
 dp.register_message_handler(about_event, commands=['event'])
@@ -216,10 +215,10 @@ async def crontab_notifications():
         crontab('* * * * *', func=func)
 
     # Запускаем event ежедневно в 10:56
-    #crontab('56 10 * * *', func=rescue_notification_wrapper)
+    # crontab('56 10 * * *', func=rescue_notification_wrapper)
 
     # Запускаем event ежедневно в 21:00
-    crontab('0 21 * * *', func=tomb_notification_wrapper)
+    # crontab('0 21 * * *', func=tomb_notification_wrapper)
 
 
 if __name__ == '__main__':

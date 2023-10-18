@@ -38,7 +38,7 @@ async def help(message: types.Message):
                              '/stop - отменить все оповещения\n'
                              '\n'
                              '/time - установить время работы оповещений\n'
-                             '/event - пока не подвезли\n'
+                             '/event - не подвезли\n'
                              '/calendar - Календарь до 25.10.23\n'
                              '/soloraidboss - Одиночные РБ\n'
                              '/kuka - Кука и Джисра\n'
