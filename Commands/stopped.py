@@ -56,6 +56,7 @@ async def yes_stop(callback_query: types.CallbackQuery):
         ruoff_setting.primetime = False
         ruoff_setting.purge = False
         ruoff_setting.event = False
+        ruoff_setting.calendar = False
         print(user.telegram_id, 'отменил все оповещения руоффа')
         session.commit()
 
