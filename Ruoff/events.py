@@ -1,5 +1,5 @@
-from Ruoff.Events.soloraidboss import soloraidboss_notification_wrapper, about_soloraidboss, set_soloraidboss, \
-    remove_soloraidboss
+# from Ruoff.Events.soloraidboss import soloraidboss_notification_wrapper, about_soloraidboss, set_soloraidboss, \
+#    remove_soloraidboss
 from Ruoff.Events.kuka import kuka_notification_wrapper, about_kuka, set_kuka, remove_kuka
 from Ruoff.Events.loa import loa_notification_wrapper, about_loa, set_loa, remove_loa
 from Ruoff.Events.fortress import fortress_notification_wrapper, about_fortress, set_fortress, remove_fortress

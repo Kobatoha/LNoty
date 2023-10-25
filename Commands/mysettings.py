@@ -35,7 +35,6 @@ async def mysettings(message: types.Message):
                               f'Круглосуточное оповещение - {setting_ruoff.fulltime}\n' \
                               f'Ивент - {setting_ruoff.event}\n' \
                               f'Календарь - {setting_ruoff.calendar}\n' \
-                              f'Одиночные РБ - {setting_ruoff.soloraidboss}\n' \
                               f'Кука и Джисра - {setting_ruoff.kuka}\n' \
                               f'Логово Антараса - {setting_ruoff.loa}\n' \
                               f'Замок Монарха Льда - {setting_ruoff.frost}\n' \

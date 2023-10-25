@@ -127,9 +127,9 @@ dp.register_message_handler(about_siege, commands=['siege'])
 dp.register_callback_query_handler(set_siege, text_contains='ruoff_setsiege')
 dp.register_callback_query_handler(remove_siege, text_contains='ruoff_removesiege')
 
-dp.register_message_handler(about_soloraidboss, commands=['soloraidboss'])
-dp.register_callback_query_handler(set_soloraidboss, text_contains='ruoff_setsolorb')
-dp.register_callback_query_handler(remove_soloraidboss, text_contains='ruoff_removesolorb')
+# dp.register_message_handler(about_soloraidboss, commands=['soloraidboss'])
+# dp.register_callback_query_handler(set_soloraidboss, text_contains='ruoff_setsolorb')
+# dp.register_callback_query_handler(remove_soloraidboss, text_contains='ruoff_removesolorb')
 
 dp.register_message_handler(about_dream, commands=['dream'])
 dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
@@ -161,7 +161,7 @@ functions_to_crontab = [
 
 async def crontab_notifications():
     # Запускаем soloraidboss каждый час в :55
-    crontab('55 */2 * * *', func=soloraidboss_notification_wrapper)
+    # crontab('55 */2 * * *', func=soloraidboss_notification_wrapper)
 
     # Запускаем kuka каждый час в :45
     crontab('45 */2 * * *', func=kuka_notification_wrapper)
@@ -209,7 +209,7 @@ async def crontab_notifications():
     crontab('50 22 * * 7', func=purge_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
-    crontab('10 21 * * *', func=calendar_notification_wrapper)
+    # crontab('10 21 * * *', func=calendar_notification_wrapper)
 
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)

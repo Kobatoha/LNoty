@@ -67,8 +67,7 @@ async def cancel_feedback(callback_query: types.CallbackQuery):
                '\n'\
                '/time - установить время работы оповещений\n'\
                '/event - пока не подвезли\n'\
-               '/calendar - Календарь до 25.10.23\n'\
-               '/soloraidboss - Одиночные РБ\n'\
+               '/calendar - закончился\n'\
                '/kuka - Кука и Джисра\n'\
                '/loa - Логово Антараса\n'\
                '/frost - Замок Монарха Льда\n'\
