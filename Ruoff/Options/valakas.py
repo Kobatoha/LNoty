@@ -9,15 +9,13 @@ from DataBase.Base import Base
 from DataBase.Ruoff import RuoffCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from config import DB_URL, TOKEN
+from config import DB_URL, TOKEN, test_token
 from aiogram.utils.exceptions import BotBlocked
 from aiocron import crontab
 from Commands.options import options_menu_text
 import locale
-import logging
 
 locale.setlocale(locale.LC_ALL, 'ru_RU')
-logging.basicConfig(filename='Lineage2Notification.log', level=logging.INFO)
 
 
 mybot = Bot(token=TOKEN)
@@ -30,15 +28,11 @@ Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 
 
-class ValakasDay(StatesGroup):
-    waiting_for_valakas_day = State()
-
-
 class ValakasTime(StatesGroup):
     waiting_for_valakas_time = State()
 
 
-# dream buttons
+# valakas buttons
 inline_valakas_buttons = types.InlineKeyboardMarkup()
 
 button_set = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_option_set_valakas')
@@ -54,12 +48,10 @@ button_menu = types.InlineKeyboardButton(text='Вернуться к списк�
 inline_valakas_buttons.add(button_set, button_remove)
 
 
-# VALAKAS TEMPLE SETTINGS
+# VALAKAS TEMP SETTINGS
 @dp.message_handler(commands=['valakas'])
 async def about_valakas(message: types.Message):
     try:
-        now = datetime.now().strftime('%H:%M:%S')
-        logging.info(f' [VALAKAS] {now}: {message.from_user.id} - {message.from_user.username} used /valakas')
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
@@ -68,28 +60,25 @@ async def about_valakas(message: types.Message):
             option = RuoffCustomSetting(id_user=user.telegram_id)
             session.add(option)
             session.commit()
-            logging.info(f' [VALAKAS] {now}: {message.from_user.id} - {message.from_user.username} add custom_settings')
         session.close()
 
         text = 'Храм Валакаса — временная зона охоты для 15+ персонажей'\
-               ' от 76 уровня и выше. За время входа в Храм Валакаса'\
-               ' персонажам предстоит убить трех боссов: Ифрит, Ифрин и Иф.\n'\
+               ' от 76 уровня и выше. Доступна раз в неделю, откат зоны в среду в 6:30 по МСК.\n' \
+               '\n' \
+               'В зоне вас ждут мобы и парочка боссов, которые дропают:\n' \
+               '- Магические таблички\n' \
+               '- Камни зачарования\n' \
+               '- Свитки благословения\n' \
+               '- Топ А шмот и веапон\n' \
+               '- Точки А веапон и армор\n' \
                '\n'\
-               'Из дропа возможно выпадение:\n'\
-               '- Свитки Благословения на доспех и оружие\n'\
-               '- Улучшенные и проклятые свитки на оружие и доспехи\n'\
-               '- Камни зачарования на оружие/доспех/аксессуар'\
-               '- Таблички\n'\
-               '- ТОП А доспехи и оружие\n'\
-               '\n'\
-               'А в конце с шансом может появиться Пылающий Дракон, с которого падают книги (и даже 4****)'
+               'В конце зоны ждет Босс, который может отсыпать дропа в виде книги 4*'
 
         await mybot.send_message(chat_id=message.from_user.id,
                                  text=text,
                                  reply_markup=inline_valakas_buttons)
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {message.from_user.id} - ошибка в функции about_valakas: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[VALAKAS] {message.from_user.id} - '
                                       f'Произошла ошибка в функции about_valakas: {e}')
@@ -107,7 +96,6 @@ async def set_valakas(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции set_valakas: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[VALAKAS] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_valakas: {e}')
@@ -123,7 +111,6 @@ async def cancel_to_set_valakas(callback_query: types.CallbackQuery):
                                       text=options_menu_text)
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции cancel_to_set_valakas: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[VALAKAS] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции cancel_to_set_valakas: {e}')
@@ -134,7 +121,7 @@ async def cancel_to_set_valakas(callback_query: types.CallbackQuery):
 async def set_valakas_time(callback_query: types.CallbackQuery):
     try:
         keyboard = types.InlineKeyboardMarkup().add(button_back)
-        text = f'Введите время оповещения для Храма Валакаса в формате час:минута (например, 10:21): '
+        text = f'НАПИШИТЕ время оповещения для Храма Валакаса в формате час:минута (например, 10:21 или 01:42): '
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
                                       text=text,
@@ -144,7 +131,6 @@ async def set_valakas_time(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции set_valakas_time: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[VALAKAS] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_valakas_time: {e}')
@@ -161,8 +147,8 @@ async def save_valakas_time(message: types.Message, state: FSMContext):
         for h in range(10, 61):
             minutes.append(str(h))
 
-        if len(valakas_time) == 5 and valakas_time[:2] in hours and valakas_time[2] == ':' \
-                and valakas_time[3:5] in minutes:
+        if len(valakas_time) == 5 and valakas_time[:2] in hours\
+                and valakas_time[2] == ':' and valakas_time[3:5] in minutes:
             session = Session()
 
             user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
@@ -179,7 +165,7 @@ async def save_valakas_time(message: types.Message, state: FSMContext):
             keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_day, button_menu)
 
             await mybot.send_message(chat_id=message.from_user.id,
-                                     text=f'Вы установили время для оповещений Храм Валакаса - {valakas_time}',
+                                     text=f'Вы установили время для оповещений Храма Валакаса - {valakas_time}',
                                      reply_markup=keyboard)
 
         else:
@@ -190,16 +176,15 @@ async def save_valakas_time(message: types.Message, state: FSMContext):
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {message.from_user.id} - ошибка в функции save_valakas_time: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[VALAKAS] {message.from_user.id} - '
                                       f'Произошла ошибка в функции save_valakas_time: {e}')
 
 
-# CANCEL SET VALAKAS TIME
-@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_valakas',
-                           state=ValakasTime.waiting_for_valakas_time)
-async def cancel_to_set_valakas_time(callback_query: types.CallbackQuery, state: FSMContext):
+# CANCEL SET DREAM TIME
+@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream',
+                           state=DreamTime.waiting_for_dream_time)
+async def cancel_to_set_dream_time(callback_query: types.CallbackQuery, state: FSMContext):
     try:
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
@@ -208,87 +193,103 @@ async def cancel_to_set_valakas_time(callback_query: types.CallbackQuery, state:
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции cancel_to_set_valakas_time: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции cancel_to_set_valakas_time: {e}')
+                                 text=f'[DREAM] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции cancel_to_set_dream_time: {e}')
 
 
-# INPUT VALAKAS DAY
-@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_valakas'))
-async def set_valakas_day(callback_query: types.CallbackQuery):
+# INPUT DREAM DAY
+@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_dream'))
+async def set_dream_day(callback_query: types.CallbackQuery):
     try:
-        keyboard = types.InlineKeyboardMarkup().add(button_back)
-        await callback_query.message.edit_text('Введите день недели оповещения для Храма Валакаса:\n '
-                                               '[ понедельник | вторник | среда | четверг | пятница | суббота | '
-                                               'воскресенье ]',
+        button_mon = types.InlineKeyboardButton(text='понедельник', callback_data='add_dream_monday')
+        button_tue = types.InlineKeyboardButton(text='вторник', callback_data='add_dream_tuesday')
+        button_wed = types.InlineKeyboardButton(text='среда', callback_data='add_dream_wednesday')
+        button_thu = types.InlineKeyboardButton(text='четверг', callback_data='add_dream_thursday')
+        button_fri = types.InlineKeyboardButton(text='пятница', callback_data='add_dream_friday')
+        button_sat = types.InlineKeyboardButton(text='суббота', callback_data='add_dream_saturday')
+        button_sun = types.InlineKeyboardButton(text='воскресенье', callback_data='add_dream_sunday')
+        keyboard = types.InlineKeyboardMarkup(row_width=3).add(button_mon, button_tue, button_wed,
+                                                               button_thu, button_fri, button_sat,
+                                                               button_sun).row(button_back)
+        await callback_query.message.edit_text('Выберите день недели оповещения для Поздемелья Грёз:\n ',
                                                reply_markup=keyboard)
-        await ValakasDay.waiting_for_valakas_day.set()
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [VALAKAS] {callback_query.from_user.id} - ошибка в функции set__day: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
+                                 text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_dream_day: {e}')
 
 
 # SAVE DREAM DAY
-@dp.message_handler(state=DreamDay.waiting_for_dream_day)
-async def save_dream_day(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data.startswith('add_dream_'))
+async def save_dream_day(callback_query: types.CallbackQuery):
     try:
-        dream_day = message.text
-        days = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
+        day_dream = None
+        session = Session()
 
-        if dream_day.lower() in days:
-            session = Session()
+        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
 
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.dream_day = dream_day
+        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+        if callback_query.data == 'add_dream_monday':
+            option_setting.dream_day = 'понедельник'
             session.commit()
-
-            user.upd_date = datetime.today()
+            day_dream = 'понедельник'
+        elif callback_query.data == 'add_dream_tuesday':
+            option_setting.dream_day = 'вторник'
             session.commit()
+            day_dream = 'вторник'
+        elif callback_query.data == 'add_dream_wednesday':
+            option_setting.dream_day = 'среда'
+            session.commit()
+            day_dream = 'среда'
+        elif callback_query.data == 'add_dream_thursday':
+            option_setting.dream_day = 'четверг'
+            session.commit()
+            day_dream = 'четверг'
+        elif callback_query.data == 'add_dream_friday':
+            option_setting.dream_day = 'пятница'
+            session.commit()
+            day_dream = 'пятница'
+        elif callback_query.data == 'add_dream_saturday':
+            option_setting.dream_day = 'суббота'
+            session.commit()
+            day_dream = 'суббота'
+        elif callback_query.data == 'add_dream_sunday':
+            option_setting.dream_day = 'воскресенье'
+            session.commit()
+            day_dream = 'воскресенье'
 
-            session.close()
+        user.upd_date = datetime.today()
+        session.commit()
 
-            keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
+        session.close()
 
-            await mybot.send_message(chat_id=message.from_user.id,
-                                     text=f'Вы установили день для оповещений Подземелье Грёз - {dream_day}',
-                                     reply_markup=keyboard)
+        keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
-        else:
-            await mybot.send_message(chat_id=message.from_user.id,
-                                     text='Неправильный формат времени, пожалуйста, попробуйте еще раз.')
-            return
-
-        await state.finish()
+        await mybot.send_message(chat_id=callback_query.from_user.id,
+                                 text=f'Вы установили день для оповещений Подземелье Грёз - {day_dream}',
+                                 reply_markup=keyboard)
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции save_dream_day: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
+                                 text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции save_dream_day: {e}')
 
 
 # CANCEL SET DREAM DAY
-@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream',
-                           state=DreamDay.waiting_for_dream_day)
-async def cancel_to_set_dream_day(callback_query: types.CallbackQuery, state: FSMContext):
+@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream')
+async def cancel_to_set_dream_day(callback_query: types.CallbackQuery):
     try:
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
                                       text=options_menu_text)
-        await state.finish()
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции cancel_to_set_dream_day: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
+                                 text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции cancel_to_set_dream_day: {e}')
 
 
@@ -315,7 +316,6 @@ async def remove_dream(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции remove_dream: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции remove_dream: {e}')
@@ -334,7 +334,6 @@ async def dream_notification_wrapper():
         session.close()
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции dream_notification_wrapper: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции dream_notification_wrapper: {e}')
@@ -367,7 +366,6 @@ async def dream_notification(user: User):
             print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции dream_notification: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции dream_notification: {e}')
