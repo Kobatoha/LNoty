@@ -14,10 +14,8 @@ from aiogram.utils.exceptions import BotBlocked
 from aiocron import crontab
 from Commands.options import options_menu_text
 import locale
-import logging
 
 locale.setlocale(locale.LC_ALL, 'ru_RU')
-logging.basicConfig(filename='Lineage2Notification.log', level=logging.INFO)
 
 
 mybot = Bot(token=TOKEN)
@@ -28,10 +26,6 @@ engine = create_engine(DB_URL)
 Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
-
-
-class DreamDay(StatesGroup):
-    waiting_for_dream_day = State()
 
 
 class DreamTime(StatesGroup):
@@ -59,7 +53,6 @@ inline_dream_buttons.add(button_set, button_remove)
 async def about_dream(message: types.Message):
     try:
         now = datetime.now().strftime('%H:%M:%S')
-        logging.info(f' [DREAM] {now}: {message.from_user.id} - {message.from_user.username} used /dream')
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
@@ -68,7 +61,6 @@ async def about_dream(message: types.Message):
             option = RuoffCustomSetting(id_user=user.telegram_id)
             session.add(option)
             session.commit()
-            logging.info(f' [DREAM] {now}: {message.from_user.id} - {message.from_user.username} add custom_settings')
         session.close()
 
         text = 'Подземелье Грез — временная зона охоты для 2+ персонажей'\
@@ -89,7 +81,6 @@ async def about_dream(message: types.Message):
                                  reply_markup=inline_dream_buttons)
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции about_dream: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - Произошла ошибка в функции about_dream: {e}')
 
@@ -106,7 +97,6 @@ async def set_dream(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции set_dream: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_dream: {e}')
@@ -122,7 +112,6 @@ async def cancel_to_set_dream(callback_query: types.CallbackQuery):
                                       text=options_menu_text)
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции cancel_to_set_dream: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции cancel_to_set_dream: {e}')
@@ -143,7 +132,6 @@ async def set_dream_time(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции set_dream_time: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_dream_time: {e}')
@@ -188,7 +176,6 @@ async def save_dream_time(message: types.Message, state: FSMContext):
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции save_dream_time: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции save_dream_time: {e}')
@@ -206,7 +193,6 @@ async def cancel_to_set_dream_time(callback_query: types.CallbackQuery, state: F
         await state.finish()
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции cancel_to_set_dream_time: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции cancel_to_set_dream_time: {e}')
@@ -231,27 +217,49 @@ async def set_dream_day(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [DREAM] {callback_query.from_user.id} - ошибка в функции set_dream_day: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_dream_day: {e}')
 
-day_dream = ['add_dream_monday', 'add_dream_tuesday', 'add_dream_wednesday', 'add_dream_thursday',
-             'add_dream_friday', 'add_dream_saturday', 'add_dream_sunday']
-
 
 # SAVE DREAM DAY
-@dp.message_handler(filters.Text(contains=''))
+@dp.callback_query_handler(lambda c: c.data.startswith('add_dream_'))
 async def save_dream_day(callback_query: types.CallbackQuery):
     try:
+        day_dream = None
         session = Session()
 
-        user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
 
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-
-        option_setting.dream_day = dream_day
-        session.commit()
+        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+        if callback_query.data == 'add_dream_monday':
+            option_setting.dream_day = 'понедельник'
+            session.commit()
+            day_dream = 'понедельник'
+        elif callback_query.data == 'add_dream_tuesday':
+            option_setting.dream_day = 'вторник'
+            session.commit()
+            day_dream = 'вторник'
+        elif callback_query.data == 'add_dream_wednesday':
+            option_setting.dream_day = 'среда'
+            session.commit()
+            day_dream = 'среда'
+        elif callback_query.data == 'add_dream_thursday':
+            option_setting.dream_day = 'четверг'
+            session.commit()
+            day_dream = 'четверг'
+        elif callback_query.data == 'add_dream_friday':
+            option_setting.dream_day = 'пятница'
+            session.commit()
+            day_dream = 'пятница'
+        elif callback_query.data == 'add_dream_saturday':
+            option_setting.dream_day = 'суббота'
+            session.commit()
+            day_dream = 'суббота'
+        elif callback_query.data == 'add_dream_sunday':
+            option_setting.dream_day = 'воскресенье'
+            session.commit()
+            day_dream = 'воскресенье'
 
         user.upd_date = datetime.today()
         session.commit()
@@ -260,20 +268,19 @@ async def save_dream_day(callback_query: types.CallbackQuery):
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
-        await mybot.send_message(chat_id=message.from_user.id,
-                                 text=f'Вы установили день для оповещений Подземелье Грёз - {dream_day}',
+        await mybot.send_message(chat_id=callback_query.from_user.id,
+                                 text=f'Вы установили день для оповещений Подземелье Грёз - {day_dream}',
                                  reply_markup=keyboard)
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции save_dream_day: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
+                                 text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции save_dream_day: {e}')
 
 
 # CANCEL SET DREAM DAY
 @dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream')
-async def cancel_to_set_dream_day(callback_query: types.CallbackQuery, state: FSMContext):
+async def cancel_to_set_dream_day(callback_query: types.CallbackQuery):
     try:
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
@@ -281,9 +288,8 @@ async def cancel_to_set_dream_day(callback_query: types.CallbackQuery, state: FS
                                       text=options_menu_text)
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции cancel_to_set_dream_day: {e}')
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
+                                 text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции cancel_to_set_dream_day: {e}')
 
 
@@ -310,7 +316,6 @@ async def remove_dream(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции remove_dream: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции remove_dream: {e}')
@@ -329,7 +334,6 @@ async def dream_notification_wrapper():
         session.close()
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции dream_notification_wrapper: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции dream_notification_wrapper: {e}')
@@ -362,7 +366,6 @@ async def dream_notification(user: User):
             print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
 
     except Exception as e:
-        logging.error(f' [DREAM] {message.from_user.id} - ошибка в функции dream_notification: {e}')
         await mybot.send_message(chat_id='952604184',
                                  text=f'[DREAM] {message.from_user.id} - '
                                       f'Произошла ошибка в функции dream_notification: {e}')

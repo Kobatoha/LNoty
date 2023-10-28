@@ -136,9 +136,8 @@ dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dr
 dp.register_callback_query_handler(cancel_to_set_dream, text_contains='ruoff_option_cancel_to_set_dream')
 
 dp.register_callback_query_handler(set_dream_day, text_contains='ruoff_option_set_day_dream')
-dp.register_message_handler(save_dream_day, state=DreamDay.waiting_for_dream_day)
-dp.register_callback_query_handler(cancel_to_set_dream_day, text_contains='ruoff_option_cancel_to_set_dream',
-                                   state=DreamDay.waiting_for_dream_day)
+dp.register_callback_query_handler(save_dream_day, lambda c: c.data.startswith('add_dream_'))
+dp.register_callback_query_handler(cancel_to_set_dream_day, text_contains='ruoff_option_cancel_to_set_dream')
 
 dp.register_callback_query_handler(set_dream_time, text_contains='ruoff_option_set_time_dream')
 dp.register_message_handler(save_dream_time, state=DreamTime.waiting_for_dream_time)
