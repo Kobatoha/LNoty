@@ -146,6 +146,21 @@ dp.register_callback_query_handler(cancel_to_set_dream_time, text_contains='ruof
 
 dp.register_callback_query_handler(remove_dream, text_contains='ruoff_option_remove_dream')
 
+dp.register_message_handler(about_valakas, commands=['valakas'])
+dp.register_callback_query_handler(set_valakas, text_contains='ruoff_option_set_valakas')
+dp.register_callback_query_handler(cancel_to_set_valakas, text_contains='ruoff_option_cancel_to_set_valakas')
+
+dp.register_callback_query_handler(set_valakas_day, text_contains='ruoff_option_set_day_valakas')
+dp.register_callback_query_handler(save_valakas_day, lambda c: c.data.startswith('add_valakas_'))
+dp.register_callback_query_handler(cancel_to_set_valakas_day, text_contains='ruoff_option_cancel_to_set_valakas')
+
+dp.register_callback_query_handler(set_valakas_time, text_contains='ruoff_option_set_time_valakas')
+dp.register_message_handler(save_valakas_time, state=ValakasTime.waiting_for_valakas_time)
+dp.register_callback_query_handler(cancel_to_set_valakas_time, text_contains='ruoff_option_cancel_to_set_valakas',
+                                   state=ValakasTime.waiting_for_valakas_time)
+
+dp.register_callback_query_handler(remove_valakas, text_contains='ruoff_option_remove_valakas')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -154,7 +169,8 @@ async def echo(message: types.Message):
 
 
 functions_to_crontab = [
-    dream_notification_wrapper
+    dream_notification_wrapper,
+    valakas_notification_wrapper
     ]
 
 

@@ -33,13 +33,13 @@ class RuoffCustomSetting(Base):
     id = Column(Integer, primary_key=True)
     id_user = Column(Integer, ForeignKey('users.telegram_id'))
 
-    dream_day = Column(VARCHAR(2))          # Грезы [день]
+    dream_day = Column(VARCHAR)          # Грезы [день]
     dream_time = Column(VARCHAR(5))         # Грезы [время]
 
-    valakas_day = Column(VARCHAR(2))        # Храм Валакаса [день]
+    valakas_day = Column(VARCHAR)        # Храм Валакаса [день]
     valakas_time = Column(VARCHAR(5))       # Храм Валакаса [время]
 
-    frintezza_day = Column(VARCHAR(2))      # Битва с Фринтезой [день]
+    frintezza_day = Column(VARCHAR)      # Битва с Фринтезой [день]
     frintezza_time = Column(VARCHAR(5))     # Битва с Фринтезой [время]
 
     gardens = Column(VARCHAR(5))            # Забытые сады [ежедневно]

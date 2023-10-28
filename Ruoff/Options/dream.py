@@ -52,7 +52,6 @@ inline_dream_buttons.add(button_set, button_remove)
 @dp.message_handler(commands=['dream'])
 async def about_dream(message: types.Message):
     try:
-        now = datetime.now().strftime('%H:%M:%S')
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
