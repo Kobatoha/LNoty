@@ -181,10 +181,10 @@ async def save_valakas_time(message: types.Message, state: FSMContext):
                                       f'Произошла ошибка в функции save_valakas_time: {e}')
 
 
-# CANCEL SET DREAM TIME
-@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream',
-                           state=DreamTime.waiting_for_dream_time)
-async def cancel_to_set_dream_time(callback_query: types.CallbackQuery, state: FSMContext):
+# CANCEL SET VALAKAS TIME
+@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_valakas',
+                           state=ValakasTime.waiting_for_valakas_time)
+async def cancel_to_set_valakas_time(callback_query: types.CallbackQuery, state: FSMContext):
     try:
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
@@ -194,72 +194,72 @@ async def cancel_to_set_dream_time(callback_query: types.CallbackQuery, state: F
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции cancel_to_set_dream_time: {e}')
+                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции cancel_to_set_valakas_time: {e}')
 
 
-# INPUT DREAM DAY
-@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_dream'))
-async def set_dream_day(callback_query: types.CallbackQuery):
+# INPUT VALAKAS DAY
+@dp.callback_query_handler(filters.Text(contains='ruoff_option_set_day_valakas'))
+async def set_valakas_day(callback_query: types.CallbackQuery):
     try:
-        button_mon = types.InlineKeyboardButton(text='понедельник', callback_data='add_dream_monday')
-        button_tue = types.InlineKeyboardButton(text='вторник', callback_data='add_dream_tuesday')
-        button_wed = types.InlineKeyboardButton(text='среда', callback_data='add_dream_wednesday')
-        button_thu = types.InlineKeyboardButton(text='четверг', callback_data='add_dream_thursday')
-        button_fri = types.InlineKeyboardButton(text='пятница', callback_data='add_dream_friday')
-        button_sat = types.InlineKeyboardButton(text='суббота', callback_data='add_dream_saturday')
-        button_sun = types.InlineKeyboardButton(text='воскресенье', callback_data='add_dream_sunday')
+        button_mon = types.InlineKeyboardButton(text='понедельник', callback_data='add_valakas_monday')
+        button_tue = types.InlineKeyboardButton(text='вторник', callback_data='add_valakas_tuesday')
+        button_wed = types.InlineKeyboardButton(text='среда', callback_data='add_valakas_wednesday')
+        button_thu = types.InlineKeyboardButton(text='четверг', callback_data='add_valakas_thursday')
+        button_fri = types.InlineKeyboardButton(text='пятница', callback_data='add_valakas_friday')
+        button_sat = types.InlineKeyboardButton(text='суббота', callback_data='add_valakas_saturday')
+        button_sun = types.InlineKeyboardButton(text='воскресенье', callback_data='add_valakas_sunday')
         keyboard = types.InlineKeyboardMarkup(row_width=3).add(button_mon, button_tue, button_wed,
                                                                button_thu, button_fri, button_sat,
                                                                button_sun).row(button_back)
-        await callback_query.message.edit_text('Выберите день недели оповещения для Поздемелья Грёз:\n ',
+        await callback_query.message.edit_text('Выберите день недели оповещения для Храма Валакаса:\n ',
                                                reply_markup=keyboard)
         await callback_query.answer()
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции set_dream_day: {e}')
+                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции set_valakas_day: {e}')
 
 
-# SAVE DREAM DAY
-@dp.callback_query_handler(lambda c: c.data.startswith('add_dream_'))
-async def save_dream_day(callback_query: types.CallbackQuery):
+# SAVE VALAKAS DAY
+@dp.callback_query_handler(lambda c: c.data.startswith('add_valakas_'))
+async def save_valakas_day(callback_query: types.CallbackQuery):
     try:
-        day_dream = None
+        day_valakas = None
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
 
         option_setting = session.query(RuoffCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
-        if callback_query.data == 'add_dream_monday':
-            option_setting.dream_day = 'понедельник'
+        if callback_query.data == 'add_valakas_monday':
+            option_setting.valakas_day = 'понедельник'
             session.commit()
-            day_dream = 'понедельник'
-        elif callback_query.data == 'add_dream_tuesday':
-            option_setting.dream_day = 'вторник'
+            day_valakas = 'понедельник'
+        elif callback_query.data == 'add_valakas_tuesday':
+            option_setting.valakas_day = 'вторник'
             session.commit()
-            day_dream = 'вторник'
-        elif callback_query.data == 'add_dream_wednesday':
-            option_setting.dream_day = 'среда'
+            day_valakas = 'вторник'
+        elif callback_query.data == 'add_valakas_wednesday':
+            option_setting.valakas_day = 'среда'
             session.commit()
-            day_dream = 'среда'
-        elif callback_query.data == 'add_dream_thursday':
-            option_setting.dream_day = 'четверг'
+            day_valakas = 'среда'
+        elif callback_query.data == 'add_valakas_thursday':
+            option_setting.valakas_day = 'четверг'
             session.commit()
-            day_dream = 'четверг'
-        elif callback_query.data == 'add_dream_friday':
-            option_setting.dream_day = 'пятница'
+            day_valakas = 'четверг'
+        elif callback_query.data == 'add_valakas_friday':
+            option_setting.valakas_day = 'пятница'
             session.commit()
-            day_dream = 'пятница'
-        elif callback_query.data == 'add_dream_saturday':
-            option_setting.dream_day = 'суббота'
+            day_valakas = 'пятница'
+        elif callback_query.data == 'add_valakas_saturday':
+            option_setting.valakas_day = 'суббота'
             session.commit()
-            day_dream = 'суббота'
-        elif callback_query.data == 'add_dream_sunday':
-            option_setting.dream_day = 'воскресенье'
+            day_valakas = 'суббота'
+        elif callback_query.data == 'add_valakas_sunday':
+            option_setting.valakas_day = 'воскресенье'
             session.commit()
-            day_dream = 'воскресенье'
+            day_valakas = 'воскресенье'
 
         user.upd_date = datetime.today()
         session.commit()
@@ -269,18 +269,18 @@ async def save_dream_day(callback_query: types.CallbackQuery):
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
         await mybot.send_message(chat_id=callback_query.from_user.id,
-                                 text=f'Вы установили день для оповещений Подземелье Грёз - {day_dream}',
+                                 text=f'Вы установили день для оповещений Подземелье Грёз - {day_valakas}',
                                  reply_markup=keyboard)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции save_dream_day: {e}')
+                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции save_valakas_day: {e}')
 
 
-# CANCEL SET DREAM DAY
-@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_dream')
-async def cancel_to_set_dream_day(callback_query: types.CallbackQuery):
+# CANCEL SET VALAKAS DAY
+@dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_valakas')
+async def cancel_to_set_valakas_day(callback_query: types.CallbackQuery):
     try:
         await mybot.answer_callback_query(callback_query.id)
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
@@ -289,20 +289,20 @@ async def cancel_to_set_dream_day(callback_query: types.CallbackQuery):
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {callback_query.from_user.id} - '
-                                      f'Произошла ошибка в функции cancel_to_set_dream_day: {e}')
+                                 text=f'[VALAKAS] {callback_query.from_user.id} - '
+                                      f'Произошла ошибка в функции cancel_to_set_valakas_day: {e}')
 
 
-# REMOVE DREAM TIME AND DAY
-@dp.callback_query_handler(filters.Text(contains='ruoff_option_remove_dream'))
-async def remove_dream(callback_query: types.CallbackQuery):
+# REMOVE VALAKAS TIME AND DAY
+@dp.callback_query_handler(filters.Text(contains='ruoff_option_remove_valakas'))
+async def remove_valakas(callback_query: types.CallbackQuery):
     try:
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
         option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-        option_setting.dream_time = None
-        option_setting.dream_day = None
+        option_setting.valakas_time = None
+        option_setting.valakas_day = None
 
         session.commit()
         session.close()
@@ -311,36 +311,36 @@ async def remove_dream(callback_query: types.CallbackQuery):
 
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
-                                      text='Оповещение о Подземелье Грёз убрано',
+                                      text='Оповещение о Храме Валакаса убрано',
                                       reply_markup=keyboard)
         await callback_query.answer()
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
-                                      f'Произошла ошибка в функции remove_dream: {e}')
+                                 text=f'[VALAKAS] {message.from_user.id} - '
+                                      f'Произошла ошибка в функции remove_valakas: {e}')
 
 
 # SELECT USER WITH TRUE SETTING
-async def dream_notification_wrapper():
+async def valakas_notification_wrapper():
     try:
         session = Session()
         users = session.query(User).all()
 
         for user in users:
             option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-            if option and option.dream_time and option.dream_day:
-                await dream_notification(user)
+            if option and option.valakas_time and option.valakas_day:
+                await valakas_notification(user)
         session.close()
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
-                                      f'Произошла ошибка в функции dream_notification_wrapper: {e}')
+                                 text=f'[VALAKAS] {message.from_user.id} - '
+                                      f'Произошла ошибка в функции valakas_notification_wrapper: {e}')
 
 
-# SEND DREAM MESSAGE
-async def dream_notification(user: User):
+# SEND VALAKAS MESSAGE
+async def valakas_notification(user: User):
     try:
         now = datetime.now().strftime('%H:%M')
         today = datetime.now().strftime('%A').lower()
@@ -349,23 +349,23 @@ async def dream_notification(user: User):
         option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
         session.close()
 
-        dream_day = option.dream_day.lower() if option.dream_day else None
-        if dream_day and today != dream_day:
+        valakas_day = option.valakas_day.lower() if option.valakas_day else None
+        if valakas_day and today != valakas_day:
             return
 
-        dream_time = option.dream_time if option.dream_time else None
-        if dream_time and now != dream_time:
+        valakas_time = option.valakas_time if option.valakas_time else None
+        if valakas_time and now != valakas_time:
             return
 
         try:
             await mybot.send_message(user.telegram_id,
-                                     'Подземелье Грёз ждет своих героев. '
-                                     'Скорее собирай пати и отправляйся в Аден к Фонтану')
-            print(now, user.telegram_id, user.username, 'получил сообщение о Подземелье Грёз')
+                                     'Храм Валакаса ждет своих героев. '
+                                     'Скорее собирай ЦЦ и отправляйся в Аден к Фонтану.')
+            print(now, user.telegram_id, user.username, 'получил сообщение о Храме Валакаса')
         except BotBlocked:
             print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
-                                 text=f'[DREAM] {message.from_user.id} - '
-                                      f'Произошла ошибка в функции dream_notification: {e}')
+                                 text=f'[VALAKAS] {message.from_user.id} - '
+                                      f'Произошла ошибка в функции valakas_notification: {e}')
