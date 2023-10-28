@@ -223,7 +223,7 @@ async def set_dream_day(callback_query: types.CallbackQuery):
         button_fri = types.InlineKeyboardButton(text='пятница', callback_data='add_dream_friday')
         button_sat = types.InlineKeyboardButton(text='суббота', callback_data='add_dream_saturday')
         button_sun = types.InlineKeyboardButton(text='воскресенье', callback_data='add_dream_sunday')
-        keyboard = types.InlineKeyboardMarkup(row_width=4).add(button_mon, button_tue, button_wed,
+        keyboard = types.InlineKeyboardMarkup(row_width=3).add(button_mon, button_tue, button_wed,
                                                                button_thu, button_fri, button_sat,
                                                                button_sun).row(button_back)
         await callback_query.message.edit_text('Выберите день недели оповещения для Поздемелья Грёз:\n ',
@@ -236,10 +236,13 @@ async def set_dream_day(callback_query: types.CallbackQuery):
                                  text=f'[DREAM] {callback_query.from_user.id} - '
                                       f'Произошла ошибка в функции set_dream_day: {e}')
 
+day_dream = ['add_dream_monday', 'add_dream_tuesday', 'add_dream_wednesday', 'add_dream_thursday',
+             'add_dream_friday', 'add_dream_saturday', 'add_dream_sunday']
+
 
 # SAVE DREAM DAY
-@dp.message_handler(state=DreamDay.waiting_for_dream_day)
-async def save_dream_day(message: types.Message, state: FSMContext):
+@dp.message_handler(filters.Text(contains=''))
+async def save_dream_day(callback_query: types.CallbackQuery):
     try:
         session = Session()
 
