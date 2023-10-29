@@ -214,7 +214,7 @@ async def set_frintezza_day(callback_query: types.CallbackQuery):
         keyboard = types.InlineKeyboardMarkup(row_width=3).add(button_mon, button_tue, button_wed,
                                                                button_thu, button_fri, button_sat,
                                                                button_sun).row(button_back)
-        await callback_query.message.edit_text('Выберите день недели оповещения для Храма Валакаса:\n ',
+        await callback_query.message.edit_text('Выберите день недели оповещения для Похода на Фринтезу:\n ',
                                                reply_markup=keyboard)
         await callback_query.answer()
 
@@ -270,9 +270,10 @@ async def save_frintezza_day(callback_query: types.CallbackQuery):
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
-        await mybot.send_message(chat_id=callback_query.from_user.id,
-                                 text=f'Вы установили день для оповещений Похода на Фринтезу - {day_frintezza}',
-                                 reply_markup=keyboard)
+        await mybot.edit_message_text(chat_id=callback_query.from_user.id,
+                                      message_id=callback_query.message.message_id,
+                                      text=f'Вы установили день для оповещений Похода на Фринтезу - {day_frintezza}',
+                                      reply_markup=keyboard)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',

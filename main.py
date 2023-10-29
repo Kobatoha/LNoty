@@ -131,6 +131,7 @@ dp.register_callback_query_handler(remove_siege, text_contains='ruoff_removesieg
 # dp.register_callback_query_handler(set_soloraidboss, text_contains='ruoff_setsolorb')
 # dp.register_callback_query_handler(remove_soloraidboss, text_contains='ruoff_removesolorb')
 
+# [DREAM]
 dp.register_message_handler(about_dream, commands=['dream'])
 dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
 dp.register_callback_query_handler(cancel_to_set_dream, text_contains='ruoff_option_cancel_to_set_dream')
@@ -146,6 +147,7 @@ dp.register_callback_query_handler(cancel_to_set_dream_time, text_contains='ruof
 
 dp.register_callback_query_handler(remove_dream, text_contains='ruoff_option_remove_dream')
 
+# [VALAKAS]
 dp.register_message_handler(about_valakas, commands=['valakas'])
 dp.register_callback_query_handler(set_valakas, text_contains='ruoff_option_set_valakas')
 dp.register_callback_query_handler(cancel_to_set_valakas, text_contains='ruoff_option_cancel_to_set_valakas')
@@ -161,6 +163,22 @@ dp.register_callback_query_handler(cancel_to_set_valakas_time, text_contains='ru
 
 dp.register_callback_query_handler(remove_valakas, text_contains='ruoff_option_remove_valakas')
 
+# [FRINTEZZA]
+dp.register_message_handler(about_frintezza, commands=['frintezza'])
+dp.register_callback_query_handler(set_frintezza, text_contains='ruoff_option_set_frintezza')
+dp.register_callback_query_handler(cancel_to_set_frintezza, text_contains='ruoff_option_cancel_to_set_frintezza')
+
+dp.register_callback_query_handler(set_frintezza_day, text_contains='ruoff_option_set_day_frintezza')
+dp.register_callback_query_handler(save_frintezza_day, lambda c: c.data.startswith('add_frintezza_'))
+dp.register_callback_query_handler(cancel_to_set_frintezza_day, text_contains='ruoff_option_cancel_to_set_frintezza')
+
+dp.register_callback_query_handler(set_frintezza_time, text_contains='ruoff_option_set_time_frintezza')
+dp.register_message_handler(save_frintezza_time, state=FrintezzaTime.waiting_for_frintezza_time)
+dp.register_callback_query_handler(cancel_to_set_frintezza_time, text_contains='ruoff_option_cancel_to_set_frintezza',
+                                   state=FrintezzaTime.waiting_for_frintezza_time)
+
+dp.register_callback_query_handler(remove_frintezza, text_contains='ruoff_option_remove_frintezza')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -170,7 +188,8 @@ async def echo(message: types.Message):
 
 functions_to_crontab = [
     dream_notification_wrapper,
-    valakas_notification_wrapper
+    valakas_notification_wrapper,
+    frintezza_notification_wrapper
     ]
 
 
