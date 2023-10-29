@@ -121,7 +121,7 @@ async def cancel_to_set_dream(callback_query: types.CallbackQuery):
 async def set_dream_time(callback_query: types.CallbackQuery):
     try:
         keyboard = types.InlineKeyboardMarkup().add(button_back)
-        text = f'НАПИШИТЕ время оповещения для Поздемелья Грёз в формате час:минута (например, 10:21): '
+        text = f'НАПИШИТЕ время оповещения для Поздемелья Грёз в формате час:минута (например, 10:21 или 01:24): '
         await mybot.edit_message_text(chat_id=callback_query.from_user.id,
                                       message_id=callback_query.message.message_id,
                                       text=text,
@@ -267,9 +267,10 @@ async def save_dream_day(callback_query: types.CallbackQuery):
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
-        await mybot.send_message(chat_id=callback_query.from_user.id,
-                                 text=f'Вы установили день для оповещений Подземелье Грёз - {day_dream}',
-                                 reply_markup=keyboard)
+        await mybot.edit_message_text(chat_id=callback_query.from_user.id,
+                                      message_id=callback_query.message.message_id,
+                                      text=f'Вы установили день для оповещений Подземелье Грёз - {day_dream}',
+                                      reply_markup=keyboard)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
