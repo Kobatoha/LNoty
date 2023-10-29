@@ -32,19 +32,19 @@ async def mysettings(message: types.Message):
 
         ruoff_settings_text = f'Установленные настройки русских официальных серверов:\n' \
                               f'\n' \
-                              f'Круглосуточное оповещение - {setting_ruoff.fulltime}\n' \
-                              f'Ивент - {setting_ruoff.event}\n' \
-                              f'Календарь - {setting_ruoff.calendar}\n' \
-                              f'Кука и Джисра - {setting_ruoff.kuka}\n' \
-                              f'Логово Антараса - {setting_ruoff.loa}\n' \
-                              f'Замок Монарха Льда - {setting_ruoff.frost}\n' \
-                              f'Крепость Орков - {setting_ruoff.fortress}\n' \
-                              f'Битва с Валлоком - {setting_ruoff.balok}\n' \
-                              f'Всемирная Олимпиада - {setting_ruoff.olympiad}\n' \
-                              f'Остров Ада - {setting_ruoff.hellbound}\n' \
-                              f'Осада Гирана - {setting_ruoff.siege}\n' \
-                              f'Прайм-тайм Зачистки - {setting_ruoff.primetime}\n' \
-                              f'Зачистка - {setting_ruoff.purge}\n' \
+                              f'Круглосуточное оповещение - {"Да" if setting_ruoff.fulltime else "Нет"}\n' \
+                              f'Ивент - {"Да" if setting_ruoff.event else "Нет"}\n' \
+                              f'Календарь - {"Да" if setting_ruoff.calendar else "Нет"}\n' \
+                              f'Кука и Джисра - {"Да" if setting_ruoff.kuka else "Нет"}\n' \
+                              f'Логово Антараса - {"Да" if setting_ruoff.loa else "Нет"}\n' \
+                              f'Замок Монарха Льда - {"Да" if setting_ruoff.frost else "Нет"}\n' \
+                              f'Крепость Орков - {"Да" if setting_ruoff.fortress else "Нет"}\n' \
+                              f'Битва с Валлоком - {"Да" if setting_ruoff.balok else "Нет"}\n' \
+                              f'Всемирная Олимпиада - {"Да" if setting_ruoff.olympiad else "Нет"}\n' \
+                              f'Остров Ада - {"Да" if setting_ruoff.hellbound else "Нет"}\n' \
+                              f'Осада Гирана - {"Да" if setting_ruoff.siege else "Нет"}\n' \
+                              f'Прайм-тайм Зачистки - {"Да" if setting_ruoff.primetime else "Нет"}\n' \
+                              f'Зачистка - {"Да" if setting_ruoff.purge else "Нет"}\n' \
 
 
         if not setting_option:
@@ -53,7 +53,11 @@ async def mysettings(message: types.Message):
         elif setting_option:
             option_settings_text = f''
             if setting_option.dream_day and setting_option.dream_time:
-                option_settings_text = f'Подземелье Грёз - {setting_option.dream_day} в {setting_option.dream_time}'
+                option_settings_text = \
+                    f'Подземелье Грёз - {setting_option.dream_day} в {setting_option.dream_time}\n' \
+                    f'Храм Валакаса - {setting_option.valakas_day} в {setting_option.valakas_time}\n' \
+                    f'Поход на Фринтезу - {setting_option.frintezza_day} в {setting_option.frintezza_time}\n'
+
             await message.answer(f'{ruoff_settings_text}\n{option_settings_text}')
 
     elif user and user.server == 'expanse':
@@ -62,15 +66,15 @@ async def mysettings(message: types.Message):
         await message.answer(
             'Установленные настройки сервера Expanse:\n'
             '\n'
-            f'Круглосуточное оповещение - {setting_expanse.fulltime}\n'
-            f'Ивент - {setting_expanse.event}\n'
-            f'Одиночные РБ - {setting_expanse.soloraidboss}\n'
-            f"Логово Антараса - {setting_expanse.loa}\n"
-            f"Замок Монарха Льда - {setting_expanse.frost}\n"
-            f"Битва с Валлоком - {setting_expanse.balok}\n"
-            f"Всемирная Олимпиада - {setting_expanse.olympiad}\n"
-            f"Остров Ада - {setting_expanse.hellbound}\n"
-            f"Осада Гирана - {setting_expanse.siege}\n")
+            f'Круглосуточное оповещение - {"Да" if setting_expanse.fulltime else "Нет"}\n'
+            f'Ивент - {"Да" if setting_expanse.event else "Нет"}\n'
+            f'Одиночные РБ - {"Да" if setting_expanse.soloraidboss else "Нет"}\n'
+            f'Логово Антараса - {"Да" if setting_expanse.loa else "Нет"}\n'
+            f'Замок Монарха Льда - {"Да" if setting_expanse.frost else "Нет"}\n'
+            f'Битва с Валлоком - {"Да" if setting_expanse.balok else "Нет"}\n'
+            f'Всемирная Олимпиада - {"Да" if setting_expanse.olympiad else "Нет"}\n'
+            f'Остров Ада - {"Да" if setting_expanse.hellbound else "Нет"}\n'
+            f'Осада Гирана - {"Да" if setting_expanse.siege else "Нет"}\n')
     else:
         await message.answer('Пожалуйста, вернитесь к /start')
 
