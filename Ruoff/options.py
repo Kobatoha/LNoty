@@ -4,3 +4,6 @@ from Ruoff.Options.dream import dream_notification_wrapper, about_dream, set_dre
 from Ruoff.Options.valakas import valakas_notification_wrapper, about_valakas, set_valakas_day, set_valakas_time, \
     save_valakas_time, save_valakas_day, cancel_to_set_valakas, cancel_to_set_valakas_day, cancel_to_set_valakas_time, \
     remove_valakas, set_valakas, ValakasTime
+from Ruoff.Options.frintezza import frintezza_notification_wrapper, about_frintezza, set_frintezza_day, \
+    set_frintezza_time, save_frintezza_time, save_frintezza_day, cancel_to_set_frintezza, cancel_to_set_frintezza_day, \
+    cancel_to_set_frintezza_time, remove_frintezza, set_frintezza, FrintezzaTime

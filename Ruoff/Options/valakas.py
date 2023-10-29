@@ -72,7 +72,7 @@ async def about_valakas(message: types.Message):
                '- Топ А шмот и веапон\n' \
                '- Точки А веапон и армор\n' \
                '\n'\
-               'В конце зоны ждет Босс, который может отсыпать дропа в виде книги 4*'
+               '🔥 В конце зоны ждет Босс, который может отсыпать дропа в виде книги 4*'
 
         await mybot.send_message(chat_id=message.from_user.id,
                                  text=text,
@@ -269,7 +269,7 @@ async def save_valakas_day(callback_query: types.CallbackQuery):
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
         await mybot.send_message(chat_id=callback_query.from_user.id,
-                                 text=f'Вы установили день для оповещений Подземелье Грёз - {day_valakas}',
+                                 text=f'Вы установили день для оповещений Храма Валакаса - {day_valakas}',
                                  reply_markup=keyboard)
 
     except Exception as e:
