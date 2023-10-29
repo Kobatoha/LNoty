@@ -268,9 +268,10 @@ async def save_valakas_day(callback_query: types.CallbackQuery):
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
-        await mybot.send_message(chat_id=callback_query.from_user.id,
-                                 text=f'Вы установили день для оповещений Храма Валакаса - {day_valakas}',
-                                 reply_markup=keyboard)
+        await mybot.edit_message_text(chat_id=callback_query.from_user.id,
+                                      message_id=callback_query.message.message_id,
+                                      text=f'Вы установили день для оповещений Храма Валакаса - {day_valakas}',
+                                      reply_markup=keyboard)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
