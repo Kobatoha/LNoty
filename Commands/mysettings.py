@@ -28,7 +28,7 @@ async def mysettings(message: types.Message):
     user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
     if user and user.server == 'ruoff':
         setting_ruoff = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-        setting_option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        op = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
 
         ruoff_settings_text = f'Установленные настройки русских официальных серверов:\n' \
                               f'\n' \
@@ -46,35 +46,23 @@ async def mysettings(message: types.Message):
                               f'Прайм-тайм Зачистки - {"Да" if setting_ruoff.primetime else "Нет"}\n' \
                               f'Зачистка - {"Да" if setting_ruoff.purge else "Нет"}\n' \
 
+        v = " в "
+        no = "не установлено"
 
-        if not setting_option:
+        if not op:
             await message.answer(f'{ruoff_settings_text}')
 
-        elif setting_option:
-            option_settings_text = f''
-            if setting_option.dream_day and setting_option.dream_time:
-                option_settings_text = \
-                    f'Подземелье Грёз - {setting_option.dream_day} в {setting_option.dream_time}\n' \
-                    f'Храм Валакаса - {setting_option.valakas_day} в {setting_option.valakas_time}\n' \
-                    f'Поход на Фринтезу - {setting_option.frintezza_day} в {setting_option.frintezza_time}\n'
+        elif op:
+            option_settings_text = \
+                f'Подземелье Грёз - ' \
+                f'{op.dream_day + v + op.dream_time if op.dream_day and op.dream_time else no}\n'\
+                f'Храм Валакаса - ' \
+                f'{op.valakas_day + v + op.valakas_time if op.valakas_day and op.valakas_time else no}\n'\
+                f'Поход на Фринтезу - ' \
+                f'{op.frintezza_day  + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n'
 
             await message.answer(f'{ruoff_settings_text}\n{option_settings_text}')
 
-    elif user and user.server == 'expanse':
-        setting_expanse = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
-
-        await message.answer(
-            'Установленные настройки сервера Expanse:\n'
-            '\n'
-            f'Круглосуточное оповещение - {"Да" if setting_expanse.fulltime else "Нет"}\n'
-            f'Ивент - {"Да" if setting_expanse.event else "Нет"}\n'
-            f'Одиночные РБ - {"Да" if setting_expanse.soloraidboss else "Нет"}\n'
-            f'Логово Антараса - {"Да" if setting_expanse.loa else "Нет"}\n'
-            f'Замок Монарха Льда - {"Да" if setting_expanse.frost else "Нет"}\n'
-            f'Битва с Валлоком - {"Да" if setting_expanse.balok else "Нет"}\n'
-            f'Всемирная Олимпиада - {"Да" if setting_expanse.olympiad else "Нет"}\n'
-            f'Остров Ада - {"Да" if setting_expanse.hellbound else "Нет"}\n'
-            f'Осада Гирана - {"Да" if setting_expanse.siege else "Нет"}\n')
     else:
         await message.answer('Пожалуйста, вернитесь к /start')
 
