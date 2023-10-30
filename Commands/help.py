@@ -47,10 +47,12 @@ async def help(message: types.Message):
                              '/balok - Битва с Валлоком\n'
                              '/olympiad - Всемирная Олимпиада\n'
                              '/hellbound - Остров Ада\n'
-                             '/siege - Осада Гирана\n'
-                             '\n'
+                             '/siege - Осада Гирана\n'                             
                              '/primetime - Прайм Тайм Зачистки\n'
-                             '/purge - Зачистка\n')
+                             '/purge - Зачистка\n'
+                             '\n'
+                             '/options - раздел персональных настроек\n'
+                             '/bigwar - раздел для бигвара')
 
     elif user and user.server == 'expanse':
         await message.answer('Доступные команды:\n'

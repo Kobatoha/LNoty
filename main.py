@@ -14,6 +14,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from Ruoff.events import *
 from Ruoff.options import *
+from Ruoff.bigwars import *
 
 from Commands.about import about
 from Commands.donate import donate, donate_sberbank, donate_ethereum, donate_bitcoin, donate_tinkoff
@@ -179,6 +180,13 @@ dp.register_callback_query_handler(cancel_to_set_frintezza_time, text_contains='
 
 dp.register_callback_query_handler(remove_frintezza, text_contains='ruoff_option_remove_frintezza')
 
+# [BIGWAR]
+dp.register_message_handler(bigwar_menu, commands=['bigwar'])
+
+dp.register_message_handler(about_bigwar_toi, commands=['bigwar_toi'])
+dp.register_callback_query_handler(set_bigwar_toi, text_contains='ruoff_set_bigwar_toi')
+dp.register_callback_query_handler(remove_bigwar_toi, text_contains='ruoff_remove_bigwar_toi')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -189,7 +197,8 @@ async def echo(message: types.Message):
 functions_to_crontab = [
     dream_notification_wrapper,
     valakas_notification_wrapper,
-    frintezza_notification_wrapper
+    frintezza_notification_wrapper,
+    bigwar_toi_notification_wrapper
     ]
 
 
