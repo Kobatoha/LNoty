@@ -47,6 +47,13 @@ options_menu_text = 'Добро пожаловать в меню персона�
 @dp.message_handler(commands=['options'])
 async def options_menu(message: types.CallbackQuery):
     try:
+        session = Session()
+        user = session.query(RuoffCustomSetting).filter_by(id_user=message.from_user.id).first()
+        if not user:
+            user = RuoffCustomSetting(id_user=message.from_user.id)
+            session.add(user)
+            session.commit()
+        session.close()
         await message.answer(text=options_menu_text)
 
     except Exception as e:
