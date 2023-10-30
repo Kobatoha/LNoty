@@ -25,7 +25,7 @@ Base.metadata.create_all(engine)
 inline_server_buttons = types.InlineKeyboardMarkup()
 
 button_ruoff = types.InlineKeyboardButton(text='ru official', callback_data='ruoff_server')
-button_kroff = types.InlineKeyboardButton(text='ru official', callback_data='kroff')
+button_kroff = types.InlineKeyboardButton(text='kr official', callback_data='kroff')
 button_expanse = types.InlineKeyboardButton(text='expanse', callback_data='expanse')
 button_sog = types.InlineKeyboardButton(text='stageofglory', callback_data='stageofglory')
 button_imbadon = types.InlineKeyboardButton(text='imbadon', callback_data='imbadon')
