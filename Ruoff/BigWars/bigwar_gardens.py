@@ -35,7 +35,7 @@ inline_gardens_buttons.add(button_set, button_remove)
 # FORGOTTEN GARDENS SETTINGS
 @dp.message_handler(commands=['bigwar_gardens'])
 async def about_bigwar_gardens(message: types.Message):
-    await message.answer('[BIGWAR] Забытые Сады 23:00 [ежедневно]\n',
+    await message.answer('[BIGWAR] Забытые Сады 23:00 [ежедневно] за 15 мин\n',
                          reply_markup=inline_gardens_buttons)
 
 
