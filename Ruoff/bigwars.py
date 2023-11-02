@@ -15,3 +15,6 @@ from Ruoff.BigWars.bigwar_kelbim import about_bigwar_kelbim, set_bigwar_kelbim, 
 # [ANTHARAS]
 from Ruoff.BigWars.bigwar_antharas import about_bigwar_antharas, set_bigwar_antharas, remove_bigwar_antharas, \
     bigwar_antharas_notification_wrapper
+# [HELLBOUND]
+from Ruoff.BigWars.bigwar_hellbound import about_bigwar_hellbound, set_bigwar_hellbound, remove_bigwar_hellbound, \
+    bigwar_hellbound_notification_wrapper
