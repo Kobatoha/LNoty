@@ -81,7 +81,7 @@ async def bigwar_hellbound_notification(user: RuoffBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
         if now == '10:45' or now == '21:45' or now == '22:45':
-            await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Башня Дерзости через 20 минут')
+            await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Башня Дерзости через 15 минут')
             print(now, user.id_user, 'получил сообщение о [BIGWAR] Башня Дерзости')
 
     except BotBlocked:
