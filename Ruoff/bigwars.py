@@ -12,3 +12,6 @@ from Ruoff.BigWars.bigwar_pagan import about_bigwar_pagan, set_bigwar_pagan, rem
 # [KELBIM]
 from Ruoff.BigWars.bigwar_kelbim import about_bigwar_kelbim, set_bigwar_kelbim, remove_bigwar_kelbim, \
     bigwar_kelbim_notification_wrapper
+# [ANTHARAS]
+from Ruoff.BigWars.bigwar_antharas import about_bigwar_antharas, set_bigwar_antharas, remove_bigwar_antharas, \
+    bigwar_antharas_notification_wrapper
