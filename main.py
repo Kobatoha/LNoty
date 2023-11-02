@@ -199,6 +199,10 @@ dp.register_message_handler(about_bigwar_kelbim, commands=['bigwar_kelbim'])
 dp.register_callback_query_handler(set_bigwar_kelbim, text_contains='ruoff_set_bigwar_kelbim')
 dp.register_callback_query_handler(remove_bigwar_kelbim, text_contains='ruoff_remove_bigwar_kelbim')
 
+dp.register_message_handler(about_bigwar_antharas, commands=['bigwar_antharas'])
+dp.register_callback_query_handler(set_bigwar_antharas, text_contains='ruoff_set_bigwar_antharas')
+dp.register_callback_query_handler(remove_bigwar_antharas, text_contains='ruoff_remove_bigwar_antharas')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -269,6 +273,9 @@ async def crontab_notifications():
 
     # Запускаем bigwar_pagan в friday в 21:45
     crontab('45 21 * * 5', func=bigwar_kelbim_notification_wrapper)
+
+    # Запускаем antharas в воскресенье в 21:45
+    crontab('45 21 * * 7', func=bigwar_antharas_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
     # crontab('10 21 * * *', func=calendar_notification_wrapper)
