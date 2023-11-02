@@ -207,6 +207,10 @@ dp.register_message_handler(about_bigwar_hellbound, commands=['bigwar_hellbound'
 dp.register_callback_query_handler(set_bigwar_hellbound, text_contains='ruoff_set_bigwar_hellbound')
 dp.register_callback_query_handler(remove_bigwar_hellbound, text_contains='ruoff_remove_bigwar_hellbound')
 
+dp.register_message_handler(about_bigwar_chaotic, commands=['bigwar_chaotic'])
+dp.register_callback_query_handler(set_bigwar_chaotic, text_contains='ruoff_set_bigwar_chaotic')
+dp.register_callback_query_handler(remove_bigwar_chaotic, text_contains='ruoff_remove_bigwar_chaotic')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -219,7 +223,8 @@ functions_to_crontab = [
     valakas_notification_wrapper,
     frintezza_notification_wrapper,
     bigwar_toi_notification_wrapper,
-    bigwar_gardens_notification_wrapper
+    bigwar_gardens_notification_wrapper,
+    bigwar_chaotic_notification_wrapper
     ]
 
 
