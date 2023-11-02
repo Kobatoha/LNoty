@@ -9,3 +9,6 @@ from Ruoff.BigWars.bigwar_gardens import about_bigwar_gardens, set_bigwar_garden
 # [PAGAN]
 from Ruoff.BigWars.bigwar_pagan import about_bigwar_pagan, set_bigwar_pagan, remove_bigwar_pagan, \
     bigwar_pagan_notification_wrapper
+# [KELBIM]
+from Ruoff.BigWars.bigwar_kelbim import about_bigwar_kelbim, set_bigwar_kelbim, remove_bigwar_kelbim, \
+    bigwar_kelbim_notification_wrapper
