@@ -203,6 +203,10 @@ dp.register_message_handler(about_bigwar_antharas, commands=['bigwar_antharas'])
 dp.register_callback_query_handler(set_bigwar_antharas, text_contains='ruoff_set_bigwar_antharas')
 dp.register_callback_query_handler(remove_bigwar_antharas, text_contains='ruoff_remove_bigwar_antharas')
 
+dp.register_message_handler(about_bigwar_hellbound, commands=['bigwar_hellbound'])
+dp.register_callback_query_handler(set_bigwar_hellbound, text_contains='ruoff_set_bigwar_hellbound')
+dp.register_callback_query_handler(remove_bigwar_hellbound, text_contains='ruoff_remove_bigwar_hellbound')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -244,7 +248,7 @@ async def crontab_notifications():
     # Запускаем hellbound открытие в субботу в 09:55
     crontab('55 09 * * 6', func=hellbound_notification_wrapper)
 
-    # Запускаем hellbound открытие в субботу в 09:55
+    # Запускаем hellbound цитадель в субботу в 09:55
     crontab('55 17 * * 6', func=hellbound_notification_wrapper)
 
     # Запускаем hellbound закрытие в субботу в 23:55
@@ -274,8 +278,11 @@ async def crontab_notifications():
     # Запускаем bigwar_pagan в friday в 21:45
     crontab('45 21 * * 5', func=bigwar_kelbim_notification_wrapper)
 
-    # Запускаем antharas в воскресенье в 21:45
+    # Запускаем bigwar_antharas в воскресенье в 21:45
     crontab('45 21 * * 7', func=bigwar_antharas_notification_wrapper)
+
+    # Запускаем bigwar_hellbound в субботу
+    crontab('* * * * 6', func=bigwar_hellbound_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
     # crontab('10 21 * * *', func=calendar_notification_wrapper)
