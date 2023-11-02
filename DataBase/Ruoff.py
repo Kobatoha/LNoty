@@ -79,6 +79,7 @@ class RuoffBigWar(Base):
     toi = Column(Boolean, default=False)
     gardens = Column(Boolean, default=False)
     pagan = Column(Boolean, default=False)
+    kelbim = Column(Boolean, default=False)
     antharas = Column(Boolean, default=False)
     hellbound = Column(Boolean, default=False)
     chaotic = Column(Boolean, default=False)
