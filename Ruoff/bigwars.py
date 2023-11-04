@@ -24,3 +24,6 @@ from Ruoff.BigWars.bigwar_chaotic import about_bigwar_chaotic, set_bigwar_chaoti
 # [LILITH]
 from Ruoff.BigWars.bigwar_lilith import about_bigwar_lilith, set_bigwar_lilith, remove_bigwar_lilith, \
     bigwar_lilith_notification_wrapper
+# [ANAKIM]
+from Ruoff.BigWars.bigwar_anakim import about_bigwar_anakim, set_bigwar_anakim, remove_bigwar_anakim, \
+    bigwar_anakim_notification_wrapper
