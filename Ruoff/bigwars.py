@@ -18,6 +18,9 @@ from Ruoff.BigWars.bigwar_antharas import about_bigwar_antharas, set_bigwar_anth
 # [HELLBOUND]
 from Ruoff.BigWars.bigwar_hellbound import about_bigwar_hellbound, set_bigwar_hellbound, remove_bigwar_hellbound, \
     bigwar_hellbound_notification_wrapper
-# [HELLBOUND]
+# [CHAOTIC]
 from Ruoff.BigWars.bigwar_chaotic import about_bigwar_chaotic, set_bigwar_chaotic, remove_bigwar_chaotic, \
     bigwar_chaotic_notification_wrapper
+# [LILITH]
+from Ruoff.BigWars.bigwar_lilith import about_bigwar_lilith, set_bigwar_lilith, remove_bigwar_lilith, \
+    bigwar_lilith_notification_wrapper
