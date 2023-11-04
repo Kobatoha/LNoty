@@ -293,8 +293,8 @@ async def crontab_notifications():
     # Запускаем bigwar_hellbound в субботу
     crontab('* * * * 6', func=bigwar_hellbound_notification_wrapper)
 
-    # Запускаем bigwar_lilith в понедельник и четверг в 19:45
-    crontab('45 19 * * 1,4', func=bigwar_lilith_notification_wrapper)
+    # Запускаем bigwar_lilith в понедельник и четверг в 18:45
+    crontab('45 18 * * 1,4', func=bigwar_lilith_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
     crontab('10 21 * * *', func=calendar_notification_wrapper)
