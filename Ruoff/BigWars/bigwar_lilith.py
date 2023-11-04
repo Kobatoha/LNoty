@@ -30,7 +30,7 @@ inline_lilith_buttons.add(button_set, button_remove)
 # LILITH SETTINGS
 @dp.message_handler(commands=['bigwar_lilith'])
 async def about_bigwar_lilith(message: types.Message):
-    await message.answer('[BIGWAR] Лилит 20:00 [понедельник, четверг] за 15 минут\n',
+    await message.answer('[BIGWAR] Лилит 19:00 [понедельник, четверг] за 15 минут\n',
                          reply_markup=inline_lilith_buttons)
 
 

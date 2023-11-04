@@ -30,7 +30,7 @@ inline_anakim_buttons.add(button_set, button_remove)
 # ANAKIM SETTINGS
 @dp.message_handler(commands=['bigwar_anakim'])
 async def about_bigwar_anakim(message: types.Message):
-    await message.answer('[BIGWAR] Анаким 20:00 [вторник, пятница] за 15 минут\n',
+    await message.answer('[BIGWAR] Анаким 19:00 [вторник, пятница] за 15 минут\n',
                          reply_markup=inline_anakim_buttons)
 
 
