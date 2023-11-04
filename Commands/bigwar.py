@@ -1,15 +1,12 @@
 import asyncio
 from aiogram import Bot, Dispatcher, executor, types, filters
-from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.dispatcher import FSMContext
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
 from DataBase.Ruoff import RuoffBigWar
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from config import DB_URL, TOKEN, test_token
+from config import DB_URL, TOKEN
 from aiogram.utils.exceptions import BotBlocked
 
 mybot = Bot(token=TOKEN)
