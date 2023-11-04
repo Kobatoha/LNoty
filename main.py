@@ -215,6 +215,10 @@ dp.register_message_handler(about_bigwar_lilith, commands=['bigwar_lilith'])
 dp.register_callback_query_handler(set_bigwar_lilith, text_contains='ruoff_set_bigwar_lilith')
 dp.register_callback_query_handler(remove_bigwar_lilith, text_contains='ruoff_remove_bigwar_lilith')
 
+dp.register_message_handler(about_bigwar_anakim, commands=['bigwar_anakim'])
+dp.register_callback_query_handler(set_bigwar_anakim, text_contains='ruoff_set_bigwar_anakim')
+dp.register_callback_query_handler(remove_bigwar_anakim, text_contains='ruoff_remove_bigwar_anakim')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -295,6 +299,9 @@ async def crontab_notifications():
 
     # Запускаем bigwar_lilith в понедельник и четверг в 18:45
     crontab('45 18 * * 1,4', func=bigwar_lilith_notification_wrapper)
+
+    # Запускаем bigwar_anakim в вторник и пятница в 18:45
+    crontab('45 18 * * 2,5', func=bigwar_anakim_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
     crontab('10 21 * * *', func=calendar_notification_wrapper)
