@@ -211,6 +211,10 @@ dp.register_message_handler(about_bigwar_chaotic, commands=['bigwar_chaotic'])
 dp.register_callback_query_handler(set_bigwar_chaotic, text_contains='ruoff_set_bigwar_chaotic')
 dp.register_callback_query_handler(remove_bigwar_chaotic, text_contains='ruoff_remove_bigwar_chaotic')
 
+dp.register_message_handler(about_bigwar_lilith, commands=['bigwar_lilith'])
+dp.register_callback_query_handler(set_bigwar_lilith, text_contains='ruoff_set_bigwar_lilith')
+dp.register_callback_query_handler(remove_bigwar_lilith, text_contains='ruoff_remove_bigwar_lilith')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -289,8 +293,11 @@ async def crontab_notifications():
     # Запускаем bigwar_hellbound в субботу
     crontab('* * * * 6', func=bigwar_hellbound_notification_wrapper)
 
+    # Запускаем bigwar_lilith в понедельник и четверг в 19:45
+    crontab('45 19 * * 1,4', func=bigwar_lilith_notification_wrapper)
+
     # Запускаем calendar ежедневно в 21:10
-    # crontab('10 21 * * *', func=calendar_notification_wrapper)
+    crontab('10 21 * * *', func=calendar_notification_wrapper)
 
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
