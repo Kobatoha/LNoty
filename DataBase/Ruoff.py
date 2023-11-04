@@ -76,15 +76,15 @@ class RuoffBigWar(Base):
     id = Column(Integer, primary_key=True)
     id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
 
-    toi = Column(Boolean, default=False)
-    gardens = Column(Boolean, default=False)
-    pagan = Column(Boolean, default=False)
-    kelbim = Column(Boolean, default=False)
-    antharas = Column(Boolean, default=False)
-    hellbound = Column(Boolean, default=False)
-    chaotic = Column(Boolean, default=False)
-    lilith = Column(Boolean, default=False)
-    anakim = Column(Boolean, default=False)
-    gord = Column(Boolean, default=False)
-    frost = Column(Boolean, default=False)
-    loa = Column(Boolean, default=False)
+    toi = Column(Boolean, default=False)                # Башня Дерзости 15:00 | 21:00 [ежедневно]
+    gardens = Column(Boolean, default=False)            # Забытый Сад 23:00 [ежедневно]
+    pagan = Column(Boolean, default=False)              # Языческий Храм 22:00 [пятница]
+    kelbim = Column(Boolean, default=False)             # Крепость Кельбима 22:00 [пятница]
+    antharas = Column(Boolean, default=False)           # Битва с Антарасом 22:00 [воскресенье]
+    hellbound = Column(Boolean, default=False)          # Остров Ада 11:00 | 22:00 | 23:00 [суббота]
+    chaotic = Column(Boolean, default=False)            # Хаотический Босс 20:00 [ежедневно]
+    lilith = Column(Boolean, default=False)             # Лилит 19:00 [понедельник, четверг]
+    anakim = Column(Boolean, default=False)             # Анаким 19:00 [вторник, пятница]
+    gord = Column(Boolean, default=False)               # Горд 21:00 [ежедневно]
+    frost = Column(Boolean, default=False)              # Замок Монарха Льда 21:30 | 22:00 [вторник, четверг]
+    loa = Column(Boolean, default=False)                # Логово Антараса 22:00 [понедельник, среда]
