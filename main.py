@@ -219,6 +219,10 @@ dp.register_message_handler(about_bigwar_anakim, commands=['bigwar_anakim'])
 dp.register_callback_query_handler(set_bigwar_anakim, text_contains='ruoff_set_bigwar_anakim')
 dp.register_callback_query_handler(remove_bigwar_anakim, text_contains='ruoff_remove_bigwar_anakim')
 
+dp.register_message_handler(about_bigwar_gord, commands=['bigwar_gord'])
+dp.register_callback_query_handler(set_bigwar_gord, text_contains='ruoff_set_bigwar_gord')
+dp.register_callback_query_handler(remove_bigwar_gord, text_contains='ruoff_remove_bigwar_gord')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -232,7 +236,8 @@ functions_to_crontab = [
     frintezza_notification_wrapper,
     bigwar_toi_notification_wrapper,
     bigwar_gardens_notification_wrapper,
-    bigwar_chaotic_notification_wrapper
+    bigwar_chaotic_notification_wrapper,
+    bigwar_gord_notification_wrapper
     ]
 
 
