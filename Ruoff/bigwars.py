@@ -27,3 +27,6 @@ from Ruoff.BigWars.bigwar_lilith import about_bigwar_lilith, set_bigwar_lilith, 
 # [ANAKIM]
 from Ruoff.BigWars.bigwar_anakim import about_bigwar_anakim, set_bigwar_anakim, remove_bigwar_anakim, \
     bigwar_anakim_notification_wrapper
+# [GORD]
+from Ruoff.BigWars.bigwar_gord import about_bigwar_gord, set_bigwar_gord, remove_bigwar_gord, \
+    bigwar_gord_notification_wrapper
