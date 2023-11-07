@@ -44,7 +44,7 @@ async def set_bigwar_frost(callback_query: types.CallbackQuery):
 
     session.close()
 
-    await callback_query.message.answer('[BIGWAR] Оповещение о Замок монарха Льда установлено')
+    await callback_query.message.answer('[BIGWAR] Оповещение о Замок Монарха Льда установлено')
     await callback_query.answer()
 
 
@@ -58,7 +58,7 @@ async def remove_bigwar_frost(callback_query: types.CallbackQuery):
 
     session.close()
 
-    await callback_query.message.answer('[BIGWAR] Оповещения о Замок монарха Льда убраны')
+    await callback_query.message.answer('[BIGWAR] Оповещения о Замок Монарха Льда убраны')
     await callback_query.answer()
 
 
@@ -75,9 +75,9 @@ async def bigwar_frost_notification_wrapper():
 async def bigwar_frost_notification(user: RuoffBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
-        if now == '20:45':
-            await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Горд через 15 минут')
-            print(now, user.id_user, 'получил сообщение о [BIGWAR] Горд')
+        if now == '21:15' or now == '21:45':
+            await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Замок Монарха Льда через 15 минут')
+            print(now, user.id_user, 'получил сообщение о [BIGWAR] Замок Монарха Льда')
 
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.id_user)
