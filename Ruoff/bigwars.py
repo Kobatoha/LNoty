@@ -30,3 +30,6 @@ from Ruoff.BigWars.bigwar_anakim import about_bigwar_anakim, set_bigwar_anakim, 
 # [GORD]
 from Ruoff.BigWars.bigwar_gord import about_bigwar_gord, set_bigwar_gord, remove_bigwar_gord, \
     bigwar_gord_notification_wrapper
+# [FROST]
+from Ruoff.BigWars.bigwar_frost import about_bigwar_frost, set_bigwar_frost, remove_bigwar_frost, \
+    bigwar_frost_notification_wrapper
