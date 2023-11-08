@@ -223,6 +223,10 @@ dp.register_message_handler(about_bigwar_gord, commands=['bigwar_gord'])
 dp.register_callback_query_handler(set_bigwar_gord, text_contains='ruoff_set_bigwar_gord')
 dp.register_callback_query_handler(remove_bigwar_gord, text_contains='ruoff_remove_bigwar_gord')
 
+dp.register_message_handler(about_bigwar_frost, commands=['bigwar_frost'])
+dp.register_callback_query_handler(set_bigwar_frost, text_contains='ruoff_set_bigwar_frost')
+dp.register_callback_query_handler(remove_bigwar_frost, text_contains='ruoff_remove_bigwar_frost')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -307,6 +311,12 @@ async def crontab_notifications():
 
     # Запускаем bigwar_anakim в вторник и пятница в 18:45
     crontab('45 18 * * 2,5', func=bigwar_anakim_notification_wrapper)
+
+    # Запускаем bigwar_frost в вторник и четверг в 21:15
+    crontab('15 21 * * 2,4', func=bigwar_frost_notification_wrapper)
+
+    # Запускаем bigwar_frost в вторник и четверг в 21:45
+    crontab('45 21 * * 2,4', func=bigwar_frost_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
     crontab('10 21 * * *', func=calendar_notification_wrapper)
