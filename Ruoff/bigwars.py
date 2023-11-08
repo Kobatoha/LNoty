@@ -33,3 +33,6 @@ from Ruoff.BigWars.bigwar_gord import about_bigwar_gord, set_bigwar_gord, remove
 # [FROST]
 from Ruoff.BigWars.bigwar_frost import about_bigwar_frost, set_bigwar_frost, remove_bigwar_frost, \
     bigwar_frost_notification_wrapper
+# [LOA]
+from Ruoff.BigWars.bigwar_loa import about_bigwar_loa, set_bigwar_loa, remove_bigwar_loa, \
+    bigwar_loa_notification_wrapper
