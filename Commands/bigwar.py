@@ -10,7 +10,7 @@ from config import DB_URL, TOKEN
 from aiogram.utils.exceptions import BotBlocked
 
 mybot = Bot(token=TOKEN)
-dp = Dispatcher(mybot, storage=MemoryStorage())
+dp = Dispatcher(mybot)
 
 engine = create_engine(DB_URL)
 
@@ -24,7 +24,6 @@ bigwar_menu_text = 'Раздел для БигВара - уведомления 
                     '/bigwar_toi - Башня Дерзости 15:00 | 21:00 [ежедневно]\n' \
                     '/bigwar_gardens - Забытый Сад 23:00 [ежедневно]\n' \
                     '/bigwar_pagan - Языческий Храм 22:00 [пятница]\n' \
-                    '/bigwar_kelbim - Крепость Кельбима 22:00 [пятница]\n' \
                     '/bigwar_antharas - Битва с Антарасом 22:00 [воскресенье]\n' \
                     '/bigwar_hellbound - Остров Ада 11:00 | 22:00 | 23:00 [суббота]\n' \
                     '/bigwar_chaotic - Хаотический Босс 20:00 [ежедневно]\n' \

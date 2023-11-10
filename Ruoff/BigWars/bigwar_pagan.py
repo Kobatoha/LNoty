@@ -30,7 +30,7 @@ inline_pagan_buttons.add(button_set, button_remove)
 # PAGAN SETTINGS
 @dp.message_handler(commands=['bigwar_pagan'])
 async def about_bigwar_pagan(message: types.Message):
-    await message.answer('[BIGWAR] Языческий Храм 22:00 [пятница] за 15 мин\n',
+    await message.answer('[BIGWAR] Языческий Храм/Крепость Кельбима 22:00 [пятница] за 15 мин\n',
                          reply_markup=inline_pagan_buttons)
 
 
@@ -44,7 +44,7 @@ async def set_bigwar_pagan(callback_query: types.CallbackQuery):
 
     session.close()
 
-    await callback_query.message.answer('[BIGWAR] Оповещение о Языческом Храме установлено')
+    await callback_query.message.answer('[BIGWAR] Оповещение о Языческом Храме/Крепость Кельбима установлено')
     await callback_query.answer()
 
 
@@ -58,7 +58,7 @@ async def remove_bigwar_pagan(callback_query: types.CallbackQuery):
 
     session.close()
 
-    await callback_query.message.answer('[BIGWAR] Оповещение о Языческом Храме убрано')
+    await callback_query.message.answer('[BIGWAR] Оповещение о Языческом Храме/Крепость Кельбима убрано')
     await callback_query.answer()
 
 
@@ -76,8 +76,8 @@ async def bigwar_pagan_notification(user: RuoffBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
         if now == '21:45':
-            await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Языческий Храм через 15 минут')
-            print(now, '[BIGWAR]', user.id_user, 'получил сообщение о Языческом Храме')
+            await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Языческий Храм/Крепость Кельбима через 15 минут')
+            print(now, '[BIGWAR]', user.id_user, 'получил сообщение о Языческом Храме/Крепость Кельбима')
 
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.id_user)
