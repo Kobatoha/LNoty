@@ -30,7 +30,7 @@ inline_hellbound_buttons.add(button_set, button_remove)
 # HELLBOUND SETTINGS
 @dp.message_handler(commands=['bigwar_hellbound'])
 async def about_bigwar_hellbound(message: types.Message):
-    await message.answer('[BIGWAR] Остров Ада 11:00 | 22:00 | 23:00 [суббота] за 15 минут\n',
+    await message.answer('[BIGWAR] Остров Ада 11:00 | 21:00 | 22:00 [суббота] за 15 минут\n',
                          reply_markup=inline_hellbound_buttons)
 
 
@@ -75,7 +75,7 @@ async def bigwar_hellbound_notification_wrapper():
 async def bigwar_hellbound_notification(user: RuoffBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
-        if now == '10:45' or now == '21:45' or now == '22:45':
+        if now == '10:45' or now == '20:45' or now == '21:45':
             await mybot.send_message(user.id_user, '🌈🌈 [BIGWAR] Остров Ада через 15 минут')
             print(now, user.id_user, 'получил сообщение о [BIGWAR] Остров Ада')
 
