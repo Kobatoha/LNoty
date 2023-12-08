@@ -11,5 +11,5 @@ from Ruoff.Events.siege import siege_notification_wrapper, about_siege, set_sieg
 from Ruoff.Events.primetime import primetime_notification_wrapper, about_primetime, set_primetime, remove_primetime
 from Ruoff.Events.purge import purge_notification_wrapper, about_purge, set_purge, remove_purge
 from Ruoff.Events.fulltime import about_time, fulltime, hardworker_time
-from Ruoff.Events.event_pass import about_event, set_event, remove_event  # tomb_notification_wrapper
+from Ruoff.Events.fantasyisle import about_event, set_event, remove_event, fantasyisle_notification_wrapper
 from Ruoff.Events.calendar import calendar_notification_wrapper, about_calendar, set_calendar, remove_calendar

@@ -23,6 +23,7 @@ class Setting(Base):
 
     event = Column(Boolean, default=False)                  # Ивент [меняется]
     calendar = Column(Boolean, default=False)               # Календарь [меняется]
+    festival = Column(Boolean, default=False)               # Фестиваль [меняется]
 
     fulltime = Column(Boolean, default=False)               # '00:00 - 23:59' if True else '9:00 - 23:00'
 
