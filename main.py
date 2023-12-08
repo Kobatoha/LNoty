@@ -324,11 +324,11 @@ async def crontab_notifications():
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
 
-    # Запускаем event ежедневно в 10:56
-    # crontab('56 10 * * *', func=rescue_notification_wrapper)
+    # Запускаем event ежедневно в 11:26
+    crontab('26 11 * * *', func=fantasyisle_notification_wrapper)
 
-    # Запускаем event ежедневно в 21:00
-    # crontab('0 21 * * *', func=tomb_notification_wrapper)
+    # Запускаем event ежедневно в 21:26
+    crontab('26 21 * * *', func=fantasyisle_notification_wrapper)
 
 
 if __name__ == '__main__':
