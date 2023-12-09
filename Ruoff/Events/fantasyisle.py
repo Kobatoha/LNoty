@@ -83,7 +83,7 @@ async def fantasyisle_notification_wrapper():
 async def fantasyisle_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '11:26' or now == '21:26':
-        await mybot.send_message(user.telegram_id, '🎂🎂 Коробка Удачи начинается через 4 минуты')
+        await mybot.send_message(user.telegram_id, '🎂🎂 Коробка Удачи на острове Грёз начинается через 4 минуты')
         print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
     else:
         print(now, 'Неподходящее время для ивента')

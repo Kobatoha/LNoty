@@ -132,6 +132,10 @@ dp.register_callback_query_handler(remove_siege, text_contains='ruoff_removesieg
 # dp.register_callback_query_handler(set_soloraidboss, text_contains='ruoff_setsolorb')
 # dp.register_callback_query_handler(remove_soloraidboss, text_contains='ruoff_removesolorb')
 
+dp.register_message_handler(about_festival, commands=['festival'])
+dp.register_callback_query_handler(set_festival, text_contains='ruoff_set_festival')
+dp.register_callback_query_handler(remove_festival, text_contains='ruoff_remove_festival')
+
 # [DREAM]
 dp.register_message_handler(about_dream, commands=['dream'])
 dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
@@ -241,7 +245,8 @@ functions_to_crontab = [
     bigwar_toi_notification_wrapper,
     bigwar_gardens_notification_wrapper,
     bigwar_chaotic_notification_wrapper,
-    bigwar_gord_notification_wrapper
+    bigwar_gord_notification_wrapper,
+    festival_notification_wrapper
     ]
 
 
