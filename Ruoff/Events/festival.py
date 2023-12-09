@@ -75,7 +75,5 @@ async def festival_notification_wrapper():
 async def festival_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '11:57' or now == '19:57' or now == '21:57':
-        await mybot.send_message(user.telegram_id, 'Фестивалька начнется через 3 минуты')
+        await mybot.send_message(user.telegram_id, '🎁 Фестиваль начнется через 3 минуты')
         print(now, user.telegram_id, user.username, 'получил сообщение о Фестивале')
-    else:
-        print(now, 'Неподходящее время для фестиваля')
