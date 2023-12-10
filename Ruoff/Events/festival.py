@@ -28,7 +28,7 @@ inline_festival_buttons.add(b1, b2)
 
 @dp.message_handler(commands=['festival'])
 async def about_festival(message: types.Message):
-    await message.answer('Фестиваль Legacy 12:00 | 20:00 | 22:00',
+    await message.answer('Фестиваль на [Lineage2 Legacy] в 12:00 | 20:00 | 22:00',
                          reply_markup=inline_festival_buttons)
 
 

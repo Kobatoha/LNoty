@@ -36,7 +36,7 @@ async def about_event(message: types.Message):
                          ' А если нет - значит нет.\n'
                          '\n'
                          'В зависимости от количества удачно открытых сундуков вы получите соответсвующую награду -'
-                         'тортики и всякая всячина',
+                         ' тортики и всякая всячина',
                          reply_markup=inline_fantasyisle_buttons)
 
 
@@ -76,14 +76,15 @@ async def fantasyisle_notification_wrapper():
     for user in users:
         setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
         if setting.event is True:
+            print(user.telegram_id, user.username, 'подходит под оповещение для ивента')
             await fantasyisle_notification(user)
     session.close()
 
 
 async def fantasyisle_notification(user: User):
-    now = datetime.now().strftime('%H:%M')
-    if now == '11:26' or now == '21:26':
-        await mybot.send_message(user.telegram_id, '🎂🎂 Коробка Удачи на острове Грёз начинается через 4 минуты')
+    now = datetime.now().strftime('%H:%M:%S')
+    if now == '11:25' or now == '21:25':
+        await mybot.send_message(user.telegram_id, '🎂🎂 Коробка Удачи на острове Грёз начинается через 5 минут')
         print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
     else:
         print(now, 'Неподходящее время для ивента')

@@ -329,15 +329,15 @@ async def crontab_notifications():
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
 
-    # Запускаем event ежедневно в 11:26
-    crontab('26 11 * * *', func=fantasyisle_notification_wrapper)
+    # Запускаем event ежедневно в 11:25
+    crontab('25 11 * * *', func=fantasyisle_notification_wrapper)
 
-    # Запускаем event ежедневно в 21:26
-    crontab('26 21 * * *', func=fantasyisle_notification_wrapper)
+    # Запускаем event ежедневно в 21:25
+    crontab('25 21 * * *', func=fantasyisle_notification_wrapper)
 
 
 if __name__ == '__main__':
-    now_start = datetime.now().strftime('%H:%M')
+    now_start = datetime.now().strftime('%H:%M:%S')
     print(now_start, 'Запуск Lineage2Notifications')
     loop = asyncio.get_event_loop()
     loop.create_task(crontab_notifications())
