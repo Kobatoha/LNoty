@@ -323,17 +323,17 @@ async def crontab_notifications():
     # Запускаем bigwar_loa в понедельник и среда в 21:45
     crontab('45 21 * * 1,3', func=bigwar_loa_notification_wrapper)
 
-    ## Запускаем calendar ежедневно в 21:10
+    # Запускаем calendar ежедневно в 21:10
     crontab('10 21 * * *', func=calendar_notification_wrapper)
-
-    for func in functions_to_crontab:
-        crontab('* * * * *', func=func)
 
     # Запускаем event ежедневно в 11:25
     crontab('25 11 * * *', func=fantasyisle_notification_wrapper)
 
     # Запускаем event ежедневно в 21:25
     crontab('25 21 * * *', func=fantasyisle_notification_wrapper)
+
+    for func in functions_to_crontab:
+        crontab('* * * * *', func=func)
 
 
 if __name__ == '__main__':

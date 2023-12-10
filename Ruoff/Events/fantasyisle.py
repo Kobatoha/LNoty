@@ -7,6 +7,7 @@ from DataBase.Ruoff import Setting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
+from aiogram.utils.exceptions import BotBlocked
 
 
 mybot = Bot(token=TOKEN)
@@ -18,12 +19,12 @@ Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
-inline_fantasyisle_buttons = types.InlineKeyboardMarkup()
+inline_event_buttons = types.InlineKeyboardMarkup()
 
 b1 = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_set_event')
 b2 = types.InlineKeyboardButton(text='Убрать оповещение', callback_data='ruoff_remove_event')
 
-inline_fantasyisle_buttons.add(b1, b2)
+inline_event_buttons.add(b1, b2)
 
 
 @dp.message_handler(commands=['event'])
@@ -35,9 +36,9 @@ async def about_event(message: types.Message):
                          'Если повезёт, вы найдёте в сундуке звезду и пройдёте в следующий раунд.'
                          ' А если нет - значит нет.\n'
                          '\n'
-                         'В зависимости от количества удачно открытых сундуков вы получите соответсвующую награду -'
+                         'В зависимости от количества удачно открытых сундуков вы получите соответствующую награду -'
                          ' тортики и всякая всячина',
-                         reply_markup=inline_fantasyisle_buttons)
+                         reply_markup=inline_event_buttons)
 
 
 @dp.callback_query_handler(filters.Text(contains='ruoff_set_event'))
@@ -49,6 +50,10 @@ async def set_event(callback_query: types.CallbackQuery):
     setting.event = True
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об ивенте установлено')
@@ -64,6 +69,10 @@ async def remove_event(callback_query: types.CallbackQuery):
     setting.event = False
 
     session.commit()
+
+    user.upd_date = datetime.today()
+    session.commit()
+
     session.close()
 
     await callback_query.message.answer('Оповещение об ивенте убрано')
@@ -82,9 +91,12 @@ async def fantasyisle_notification_wrapper():
 
 
 async def fantasyisle_notification(user: User):
-    now = datetime.now().strftime('%H:%M:%S')
-    if now == '11:25' or now == '21:25':
-        await mybot.send_message(user.telegram_id, '🎂🎂 Коробка Удачи на острове Грёз начинается через 5 минут')
-        print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
-    else:
-        print(now, 'Неподходящее время для ивента')
+    now = datetime.now().strftime('%H:%M')
+    try:
+        if now == '11:25' or now == '21:25':
+            await mybot.send_message(user.telegram_id, '🎂🎂 Коробка Удачи на острове Грёз начинается через 5 минут')
+            print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
+        else:
+            print(now, 'Неподходящее время для ивента')
+    except BotBlocked:
+        print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
