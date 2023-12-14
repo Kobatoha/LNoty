@@ -4,8 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting
-from DataBase.Expanse import Expanse
+from DataBase.Ruoff import Setting, RuoffBigWar, RuoffCustomSetting
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -41,10 +40,10 @@ async def yes_stop(callback_query: types.CallbackQuery):
     session = Session()
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
     ruoff_setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-    expanse_setting = session.query(Expanse).filter_by(id_user=user.telegram_id).first()
+    bigwar_setting = session.query(RuoffBigWar).filter_by(id_user=user.telegram_id).first()
+    custom_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
 
     if user and user.server == 'ruoff':
-        ruoff_setting.soloraidboss = False
         ruoff_setting.kuka = False
         ruoff_setting.loa = False
         ruoff_setting.frost = False
@@ -57,19 +56,28 @@ async def yes_stop(callback_query: types.CallbackQuery):
         ruoff_setting.purge = False
         ruoff_setting.event = False
         ruoff_setting.calendar = False
-        print(user.telegram_id, 'отменил все оповещения руоффа')
-        session.commit()
+        ruoff_setting.festival = False
 
-    elif user and user.server == 'expanse':
-        expanse_setting.soloraidboss = False
-        expanse_setting.loa = False
-        expanse_setting.frost = False
-        expanse_setting.balok = False
-        expanse_setting.olympiad = False
-        expanse_setting.hellbound = False
-        expanse_setting.siege = False
-        expanse_setting.fulltime = False
-        print(user.telegram_id, 'отменил все оповещения expanse')
+        bigwar_setting.toi = False
+        bigwar_setting.gardens = False
+        bigwar_setting.pagan = False
+        bigwar_setting.antharas = False
+        bigwar_setting.hellbound = False
+        bigwar_setting.chaotic = False
+        bigwar_setting.lilith = False
+        bigwar_setting.anakim = False
+        bigwar_setting.gord = False
+        bigwar_setting.frost = False
+        bigwar_setting.loa = False
+
+        custom_setting.dream_day = None
+        custom_setting.dream_time = None
+        custom_setting.valakas_day = None
+        custom_setting.valakas_time = None
+        custom_setting.frintezza_day = None
+        custom_setting.frintezza_time = None
+
+        print(user.telegram_id, 'отменил все оповещения руоффа')
         session.commit()
 
     session.close()
