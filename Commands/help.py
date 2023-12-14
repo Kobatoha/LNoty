@@ -52,7 +52,9 @@ async def help(message: types.Message):
                              '/purge - Зачистка\n'
                              '\n'
                              '/options - раздел персональных настроек\n'
-                             '/bigwar - раздел для бигвара')
+                             '/bigwar - раздел для бигвара\n'
+                             '\n'
+                             '/festival - [LEGACY] ивент')
 
     elif user and user.server == 'expanse':
         await message.answer('Доступные команды:\n'
