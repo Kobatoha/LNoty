@@ -28,7 +28,7 @@ class DreamTime(StatesGroup):
 
 
 # dream buttons
-inline_dream_buttons = types.InlineKeyboardMarkup()
+inline_balok_buttons = types.InlineKeyboardMarkup()
 
 button_set = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_option_set_dream')
 button_set_day = types.InlineKeyboardButton(text='Установить день', callback_data='ruoff_option_set_day_dream')
