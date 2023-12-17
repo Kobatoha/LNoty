@@ -27,7 +27,7 @@ class DreamTime(StatesGroup):
     waiting_for_dream_time = State()
 
 
-# dream buttons
+# free time balok buttons
 inline_balok_buttons = types.InlineKeyboardMarkup()
 
 button_set = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_option_set_dream')

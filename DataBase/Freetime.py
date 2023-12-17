@@ -10,7 +10,8 @@ class Freetime(Base):
     id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
 
     kuka = Column(VARCHAR(5))                   # Кука и Джисра
-    loa = Column(VARCHAR(5))                    # Логово Антараса
+    loa_day = Column(VARCHAR(15))               # Логово Антараса [DAY]
+    loa_time = Column(VARCHAR(5))               # Логово Антараса [TIME]
     frost = Column(VARCHAR(5))                  # Замок Монарха Льда
     fortress = Column(VARCHAR(5))               # Крепость Орков
     balok = Column(VARCHAR(5))                  # Битва с Валлоком
