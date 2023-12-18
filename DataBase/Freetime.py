@@ -12,7 +12,8 @@ class Freetime(Base):
     kuka = Column(VARCHAR(5))                   # Кука и Джисра
     loa_day = Column(VARCHAR(15))               # Логово Антараса [DAY]
     loa_time = Column(VARCHAR(5))               # Логово Антараса [TIME]
-    frost = Column(VARCHAR(5))                  # Замок Монарха Льда
+    frost_day = Column(VARCHAR(15))              # Замок Монарха Льда [DAY]
+    frost_time = Column(VARCHAR(5))             # Замок Монарха Льда [TIME]
     fortress = Column(VARCHAR(5))               # Крепость Орков
     balok = Column(VARCHAR(5))                  # Битва с Валлоком
     olympiad = Column(VARCHAR(5))               # Всемирная Олимпиада
