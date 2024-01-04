@@ -246,7 +246,7 @@ functions_to_crontab = [
     bigwar_gardens_notification_wrapper,
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
-    festival_notification_wrapper
+    # festival_notification_wrapper
     ]
 
 
@@ -327,10 +327,10 @@ async def crontab_notifications():
     crontab('10 21 * * *', func=calendar_notification_wrapper)
 
     # Запускаем event ежедневно в 11:25
-    crontab('25 11 * * *', func=fantasyisle_notification_wrapper)
+    #crontab('25 11 * * *', func=fantasyisle_notification_wrapper)
 
     # Запускаем event ежедневно в 21:25
-    crontab('25 21 * * *', func=fantasyisle_notification_wrapper)
+    #crontab('25 21 * * *', func=fantasyisle_notification_wrapper)
 
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
