@@ -136,6 +136,10 @@ dp.register_message_handler(about_festival, commands=['festival'])
 dp.register_callback_query_handler(set_festival, text_contains='ruoff_set_festival')
 dp.register_callback_query_handler(remove_festival, text_contains='ruoff_remove_festival')
 
+dp.register_message_handler(about_keber, commands=['keber'])
+dp.register_callback_query_handler(set_keber, text_contains='ruoff_set_keber')
+dp.register_callback_query_handler(remove_keber, text_contains='ruoff_remove_keber')
+
 # [DREAM]
 dp.register_message_handler(about_dream, commands=['dream'])
 dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
@@ -331,6 +335,9 @@ async def crontab_notifications():
 
     # Запускаем event ежедневно в 21:25
     #crontab('25 21 * * *', func=fantasyisle_notification_wrapper)
+
+    # Запускаем keber каждый час в :58
+    crontab('58 * * * *', func=keber_notification_wrapper)
 
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)

@@ -11,6 +11,7 @@ class Setting(Base):
 
     soloraidboss = Column(Boolean, default=False)           # Соло Боссы
     kuka = Column(Boolean, default=False)                   # Кука и Джисра
+    keber = Column(Boolean, default=False)                  # Кебер
     loa = Column(Boolean, default=False)                    # Логово Антараса
     frost = Column(Boolean, default=False)                  # Замок Монарха Льда
     fortress = Column(Boolean, default=False)               # Крепость Орков
