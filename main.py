@@ -328,7 +328,7 @@ async def crontab_notifications():
     crontab('45 21 * * 1,3', func=bigwar_loa_notification_wrapper)
 
     # Запускаем calendar ежедневно в 21:10
-    crontab('10 21 * * *', func=calendar_notification_wrapper)
+    #crontab('10 21 * * *', func=calendar_notification_wrapper)
 
     # Запускаем event ежедневно в 11:25
     #crontab('25 11 * * *', func=fantasyisle_notification_wrapper)
