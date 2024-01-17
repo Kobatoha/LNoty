@@ -16,3 +16,4 @@ from Ruoff.Events.calendar import calendar_notification_wrapper, about_calendar,
 from Ruoff.Events.festival import festival_notification_wrapper, about_festival, set_festival, remove_festival
 from Ruoff.Events.event_pass import about_event, set_event, remove_event
 from Ruoff.Events.keber import keber_notification_wrapper, about_keber, set_keber, remove_keber
+from Ruoff.Events.invasion import invasion_notification_wrapper, about_invasion, set_invasion, remove_invasion
