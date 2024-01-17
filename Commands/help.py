@@ -41,6 +41,7 @@ async def help(message: types.Message):
                              '/event - не подвезли\n'
                              '/calendar - закончился\n'
                              '/kuka - Кука и Джисра\n'
+                             '/keber - Кебер\n'
                              '/loa - Логово Антараса\n'
                              '/frost - Замок Монарха Льда\n'
                              '/fortress - Крепость Орков\n'
@@ -55,25 +56,5 @@ async def help(message: types.Message):
                              '/bigwar - раздел для бигвара\n'
                              '\n'
                              '/festival - [LEGACY] ивент')
-
-    elif user and user.server == 'expanse':
-        await message.answer('Доступные команды:\n'
-                             '\n'
-                             '/start - запуск бота\n'
-                             '/about - о боте\n'
-                             '/mysettings - персональные настройки\n'
-                             '/help - список команд\n'
-                             '\n'
-                             '/stop - отменить все оповещения\n'
-                             '\n'
-                             '/expanse_time - установить время работы оповещений\n'
-                             '/expanse_event - в данный момент нет\n'
-                             '/expanse_soloraidboss - Одиночные РБ\n'
-                             '/expanse_loa - Логово Антараса\n'
-                             '/expanse_frost - Замок Монарха Льда\n'
-                             '/expanse_balok - Битва с Валлоком\n'
-                             '/expanse_olympiad - Всемирная Олимпиада\n'
-                             '/expanse_hellbound - Остров Ада\n'
-                             '/expanse_siege - Осада Гирана\n')
 
     session.close()
