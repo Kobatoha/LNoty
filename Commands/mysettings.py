@@ -49,7 +49,8 @@ async def mysettings(message: types.Message):
                               f'Осада Гирана - {"Да" if setting_ruoff.siege else no}\n' \
                               f'Прайм-тайм Зачистки - {"Да" if setting_ruoff.primetime else no}\n' \
                               f'Зачистка - {"Да" if setting_ruoff.purge else no}\n' \
-                              f'Кебер - {"Да" if setting_ruoff.keber else no}' \
+                              f'Кебер - {"Да" if setting_ruoff.keber else no}\n' \
+                              f'Вторжение - {"Да" if setting_ruoff.invasion else no}\n' \
 
         if not op and not bw:
             await message.answer(f'{ruoff_settings_text}')
