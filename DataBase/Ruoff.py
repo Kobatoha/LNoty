@@ -19,6 +19,7 @@ class Setting(Base):
     olympiad = Column(Boolean, default=False)               # Всемирная Олимпиада
     hellbound = Column(Boolean, default=False)              # Остров Ада
     siege = Column(Boolean, default=False)                  # Осада Гирана
+    invasion = Column(Boolean, default=False)               # Вторжение
     primetime = Column(Boolean, default=False)              # Хот-тайм зачистки
     purge = Column(Boolean, default=False)                  # Сбор зачистки
 
