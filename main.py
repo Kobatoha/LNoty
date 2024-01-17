@@ -140,6 +140,10 @@ dp.register_message_handler(about_keber, commands=['keber'])
 dp.register_callback_query_handler(set_keber, text_contains='ruoff_set_keber')
 dp.register_callback_query_handler(remove_keber, text_contains='ruoff_remove_keber')
 
+dp.register_message_handler(about_invasion, commands=['invasion'])
+dp.register_callback_query_handler(set_invasion, text_contains='ruoff_set_invasion')
+dp.register_callback_query_handler(remove_invasion, text_contains='ruoff_remove_invasion')
+
 # [DREAM]
 dp.register_message_handler(about_dream, commands=['dream'])
 dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
@@ -250,6 +254,7 @@ functions_to_crontab = [
     bigwar_gardens_notification_wrapper,
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
+    invasion_notification_wrapper,
     # festival_notification_wrapper
     ]
 
