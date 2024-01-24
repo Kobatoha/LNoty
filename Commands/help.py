@@ -51,6 +51,7 @@ async def help(message: types.Message):
                              '/siege - Осада Гирана\n'                             
                              '/primetime - Прайм Тайм Зачистки\n'
                              '/purge - Зачистка\n'
+                             '/invasion - Вторжение\n'
                              '\n'
                              '/options - раздел персональных настроек\n'
                              '/bigwar - раздел для бигвара\n'
