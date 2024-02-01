@@ -54,8 +54,6 @@ async def help(message: types.Message):
                              '/invasion - Вторжение\n'
                              '\n'
                              '/options - раздел персональных настроек\n'
-                             '/bigwar - раздел для бигвара\n'
-                             '\n'
-                             '/festival - [LEGACY] ивент')
+                             '/bigwar - раздел для бигвара\n')
 
     session.close()
