@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, VARCHAR, DATE, TIME, ForeignKey, BigInteger
+from sqlalchemy import Column, Integer, VARCHAR
 from DataBase.Base import Base
-import datetime
 
 
 class RaidBoss(Base):
