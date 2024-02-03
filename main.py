@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
 from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
+from DataBase.RaidBoss import RaidBoss
 from DataBase.Feedback import Feedback
 from aiocron import crontab
 import asyncio
@@ -239,6 +240,10 @@ dp.register_message_handler(about_bigwar_loa, commands=['bigwar_loa'])
 dp.register_callback_query_handler(set_bigwar_loa, text_contains='ruoff_set_bigwar_loa')
 dp.register_callback_query_handler(remove_bigwar_loa, text_contains='ruoff_remove_bigwar_loa')
 
+dp.register_message_handler(about_coral_raidboss, commands=['raidboss_coral'])
+dp.register_callback_query_handler(set_coral_raidbosses, text_contains='ruoff_set_coral_raidboss')
+dp.register_callback_query_handler(remove_coral_raidbosses, text_contains='ruoff_remove_coral_raidboss')
+
 
 # GENERAL SETTINGS
 @dp.message_handler()
@@ -255,6 +260,7 @@ functions_to_crontab = [
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
     invasion_notification_wrapper,
+    bigwar_coral_raidbosses_notification_wrapper,
     # festival_notification_wrapper
     ]
 
