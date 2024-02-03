@@ -91,3 +91,4 @@ class RuoffBigWar(Base):
     gord = Column(Boolean, default=False)               # Горд 21:00 [ежедневно]
     frost = Column(Boolean, default=False)              # Замок Монарха Льда 21:30 | 22:00 [вторник, четверг]
     loa = Column(Boolean, default=False)                # Логово Антараса 22:00 [понедельник, среда]
+    coral = Column(Boolean, default=False)              # Рейдовые Боссы 80-го, 85-го, 90-го уровней [22 часа]
