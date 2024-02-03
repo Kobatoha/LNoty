@@ -33,3 +33,6 @@ from Ruoff.BigWars.bigwar_frost import about_bigwar_frost, set_bigwar_frost, rem
 # [LOA]
 from Ruoff.BigWars.bigwar_loa import about_bigwar_loa, set_bigwar_loa, remove_bigwar_loa, \
     bigwar_loa_notification_wrapper
+# [CORAL RAID BOSS]
+from Ruoff.BigWars.coral_raidboss import about_coral_raidboss, set_coral_raidbosses, remove_coral_raidbosses, \
+    bigwar_coral_raidbosses_notification_wrapper
