@@ -85,7 +85,6 @@ async def bigwar_coral_raidbosses_notification(user: RuoffBigWar):
         with Session() as session:
             bosses = session.query(RaidBoss).all()
             for boss in bosses:
-                print(boss.name, boss.coral_time)
                 # time за 15 минут до респа
                 time_split = boss.coral_time.split(":")
                 hours = int(time_split[0])
@@ -97,23 +96,22 @@ async def bigwar_coral_raidbosses_notification(user: RuoffBigWar):
                     hours -= 1
                     new_minutes += 60
 
-                # Check for rollover of hours
                 if hours < 0:
                     hours += 24
 
-                # Format the new time
-                boss_time = str(hours)+':'+str(new_minutes)
-                print(boss_time)
+                boss_time = str(hours) + ':' + str(new_minutes)
+
                 if now == boss_time:
                     await mybot.send_message(
                         user.id_user,
                         f'👀👀 [CORAL] {boss.name} появится через 15 минут, в {boss.coral_time}')
                     print(now, user.id_user, f'получил сообщение о [CORAL] {boss.name}')
 
-                    coral_time = datetime.datetime.strptime(boss.coral_time, "%H:%M")
-                    new_coral_time = coral_time + datetime.timedelta(hours=22)
+                    new_coral_time = boss.coral_time + datetime.timedelta(hours=22)
+                    print(new_coral_time)
                     boss.coral_time = new_coral_time.strftime("%H:%M")
-                    boss.save()
+                    print(boss.coral_time)
+                    session.commit()
 
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.id_user)
