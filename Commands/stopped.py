@@ -57,6 +57,8 @@ async def yes_stop(callback_query: types.CallbackQuery):
         ruoff_setting.event = False
         ruoff_setting.calendar = False
         ruoff_setting.festival = False
+        ruoff_setting.invasion = False
+        ruoff_setting.keber = False
 
         bigwar_setting.toi = False
         bigwar_setting.gardens = False
