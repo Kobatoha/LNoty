@@ -38,6 +38,7 @@ async def mysettings(message: types.Message):
                               f'\n' \
                               f'Круглосуточное оповещение - {"Да" if setting_ruoff.fulltime else no}\n' \
                               f'Ивент - {"Да" if setting_ruoff.event else no}\n' \
+                              f'Секретная лавка - {"Да" if setting_ruoff.festival else no}\n' \
                               f'Календарь - {"Да" if setting_ruoff.calendar else no}\n' \
                               f'Кука и Джисра - {"Да" if setting_ruoff.kuka else no}\n' \
                               f'Логово Антараса - {"Да" if setting_ruoff.loa else no}\n' \

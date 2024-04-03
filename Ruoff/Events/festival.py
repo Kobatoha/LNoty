@@ -28,7 +28,7 @@ inline_festival_buttons.add(b1, b2)
 
 @dp.message_handler(commands=['festival'])
 async def about_festival(message: types.Message):
-    await message.answer('Фестиваль на [Lineage2 Legacy] в 12:00 | 20:00 | 22:00',
+    await message.answer('Секретная лавка в 16:00 | 20:00 ',
                          reply_markup=inline_festival_buttons)
 
 
@@ -43,7 +43,7 @@ async def set_festival(callback_query: types.CallbackQuery):
     session.commit()
     session.close()
 
-    await callback_query.message.answer('Оповещение о Фeстивале установлено')
+    await callback_query.message.answer('Оповещение о Секретной лавке установлено')
     await callback_query.answer()
 
 
@@ -58,7 +58,7 @@ async def remove_festival(callback_query: types.CallbackQuery):
     session.commit()
     session.close()
 
-    await callback_query.message.answer('Оповещение о Фeстивале убрано')
+    await callback_query.message.answer('Оповещение о Секретной лавке убрано')
     await callback_query.answer()
 
 
@@ -74,6 +74,6 @@ async def festival_notification_wrapper():
 
 async def festival_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    if now == '11:57' or now == '19:57' or now == '21:57':
-        await mybot.send_message(user.telegram_id, '🎁 [LEGACY] Фестиваль начнется через 3 минуты')
-        print(now, user.telegram_id, user.username, 'получил сообщение о Фестивале')
+    if now == '15:57' or now == '19:57':
+        await mybot.send_message(user.telegram_id, '🎁 Секретная лавка откроется через 3 минуты')
+        print(now, user.telegram_id, user.username, 'получил сообщение о Секретной лавке')

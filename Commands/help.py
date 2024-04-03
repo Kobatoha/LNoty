@@ -39,6 +39,7 @@ async def help(message: types.Message):
                              '\n'
                              '/time - установить время работы оповещений\n'
                              '/event - не подвезли\n'
+                             '/festival - Секретная лавка\n'
                              '/calendar - закончился\n'
                              '/kuka - Кука и Джисра\n'
                              '/keber - Кебер\n'
