@@ -36,22 +36,22 @@ async def mysettings(message: types.Message):
 
         ruoff_settings_text = f'Установленные настройки русских официальных серверов:\n' \
                               f'\n' \
-                              f'Круглосуточное оповещение - {"Да" if setting_ruoff.fulltime else no}\n' \
-                              f'Ивент - {"Да" if setting_ruoff.event else no}\n' \
-                              f'Секретная лавка - {"Да" if setting_ruoff.festival else no}\n' \
-                              f'Календарь - {"Да" if setting_ruoff.calendar else no}\n' \
-                              f'Кука и Джисра - {"Да" if setting_ruoff.kuka else no}\n' \
-                              f'Логово Антараса - {"Да" if setting_ruoff.loa else no}\n' \
-                              f'Замок Монарха Льда - {"Да" if setting_ruoff.frost else no}\n' \
-                              f'Крепость Орков - {"Да" if setting_ruoff.fortress else no}\n' \
-                              f'Битва с Валлоком - {"Да" if setting_ruoff.balok else no}\n' \
-                              f'Всемирная Олимпиада - {"Да" if setting_ruoff.olympiad else no}\n' \
-                              f'Остров Ада - {"Да" if setting_ruoff.hellbound else no}\n' \
-                              f'Осада Гирана - {"Да" if setting_ruoff.siege else no}\n' \
-                              f'Прайм-тайм Зачистки - {"Да" if setting_ruoff.primetime else no}\n' \
-                              f'Зачистка - {"Да" if setting_ruoff.purge else no}\n' \
-                              f'Кебер - {"Да" if setting_ruoff.keber else no}\n' \
-                              f'Вторжение - {"Да" if setting_ruoff.invasion else no}\n' \
+                              f'Круглосуточное оповещение - {"🌵" if setting_ruoff.fulltime else no}\n' \
+                              f'Ивент - {"🌵" if setting_ruoff.event else no}\n' \
+                              f'Секретная лавка - {"🌵" if setting_ruoff.festival else no}\n' \
+                              f'Календарь - {"🌵" if setting_ruoff.calendar else no}\n' \
+                              f'Кука и Джисра - {"🌵" if setting_ruoff.kuka else no}\n' \
+                              f'Логово Антараса - {"🌵" if setting_ruoff.loa else no}\n' \
+                              f'Замок Монарха Льда - {"🌵" if setting_ruoff.frost else no}\n' \
+                              f'Крепость Орков - {"🌵" if setting_ruoff.fortress else no}\n' \
+                              f'Битва с Валлоком - {"🌵" if setting_ruoff.balok else no}\n' \
+                              f'Всемирная Олимпиада - {"🌵" if setting_ruoff.olympiad else no}\n' \
+                              f'Остров Ада - {"🌵" if setting_ruoff.hellbound else no}\n' \
+                              f'Осада Гирана - {"🌵" if setting_ruoff.siege else no}\n' \
+                              f'Прайм-тайм Зачистки - {"🌵" if setting_ruoff.primetime else no}\n' \
+                              f'Зачистка - {"🌵" if setting_ruoff.purge else no}\n' \
+                              f'Кебер - {"🌵" if setting_ruoff.keber else no}\n' \
+                              f'Вторжение - {"🌵" if setting_ruoff.invasion else no}\n' \
 
         if not op and not bw:
             await message.answer(f'{ruoff_settings_text}')
@@ -66,17 +66,17 @@ async def mysettings(message: types.Message):
                 f'{op.frintezza_day + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n'
 
             if bw:
-                bigwar_setting_text = f'🌈 Башня Дерзости - {"Да" if bw.toi else no}\n' \
-                                      f'🌈 Забытый Сад - {"Да" if bw.gardens else no}\n' \
-                                      f'🌈 Языческий Храм/Крепость Кельбима - {"Да" if bw.pagan else no}\n' \
-                                      f'🌈 Битва с Антарасом - {"Да" if bw.antharas else no}\n' \
-                                      f'🌈 Остров Ада - {"Да" if bw.hellbound else no}\n' \
-                                      f'🌈 Хаотический Босс - {"Да" if bw.chaotic else no}\n' \
-                                      f'🌈 Лилит - {"Да" if bw.lilith else no}\n' \
-                                      f'🌈 Анаким - {"Да" if bw.anakim else no}\n' \
-                                      f'🌈 Горд - {"Да" if bw.gord else no}\n' \
-                                      f'🌈 Замок Монарха Льда - {"Да" if bw.frost else no}\n' \
-                                      f'🌈 Логово Антараса - {"Да" if bw.loa else no}\n'
+                bigwar_setting_text = f'🌈 Башня Дерзости - {"🍌" if bw.toi else no}\n' \
+                                      f'🌈 Забытый Сад - {"🍌" if bw.gardens else no}\n' \
+                                      f'🌈 Языческий Храм/Крепость Кельбима - {"🍌" if bw.pagan else no}\n' \
+                                      f'🌈 Битва с Антарасом - {"🍌" if bw.antharas else no}\n' \
+                                      f'🌈 Остров Ада - {"🍌" if bw.hellbound else no}\n' \
+                                      f'🌈 Хаотический Босс - {"🍌" if bw.chaotic else no}\n' \
+                                      f'🌈 Лилит - {"🍌" if bw.lilith else no}\n' \
+                                      f'🌈 Анаким - {"🍌" if bw.anakim else no}\n' \
+                                      f'🌈 Горд - {"🍌" if bw.gord else no}\n' \
+                                      f'🌈 Замок Монарха Льда - {"🍌" if bw.frost else no}\n' \
+                                      f'🌈 Логово Антараса - {"🍌" if bw.loa else no}\n'
 
                 await message.answer(f'{ruoff_settings_text}\n{option_settings_text}\n{bigwar_setting_text}')
 
