@@ -132,6 +132,11 @@ async def invasion_notification_hardwork(user: User):
             invasion_hardwork.append(current_time.strftime("%H:%M"))
             current_time += timedelta(hours=4)
     try:
+        # Проверяем, что текущее время не находится в промежутке с 23:00 до 8:00
+        if '23:00' <= now <= '23:59' or '00:00' <= now <= '07:59':
+            print('Сейчас ночное время, не отправляем уведомление')
+            return
+            
         if now in invasion_hardwork:
             await mybot.send_message(user.telegram_id, 'Вторжение начнется через 5 минут. Следите за анонсом в игре.')
             print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Вторжении')
