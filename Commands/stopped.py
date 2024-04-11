@@ -78,6 +78,7 @@ async def yes_stop(callback_query: types.CallbackQuery):
         custom_setting.valakas_time = None
         custom_setting.frintezza_day = None
         custom_setting.frintezza_time = None
+        custom_setting.gardens_time = None
 
         print(user.telegram_id, 'отменил все оповещения руоффа')
         session.commit()
