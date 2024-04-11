@@ -134,7 +134,6 @@ async def invasion_notification_hardwork(user: User):
     try:
         # Проверяем, что текущее время не находится в промежутке с 23:00 до 8:00
         if '23:00' <= now <= '23:59' or '00:00' <= now <= '07:59':
-            print('Сейчас ночное время, не отправляем уведомление')
             return
             
         if now in invasion_hardwork:
