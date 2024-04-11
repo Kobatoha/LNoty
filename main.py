@@ -193,6 +193,18 @@ dp.register_callback_query_handler(cancel_to_set_frintezza_time, text_contains='
 
 dp.register_callback_query_handler(remove_frintezza, text_contains='ruoff_option_remove_frintezza')
 
+# [GARDENS]
+dp.register_message_handler(about_gardens, commands=['gardens'])
+dp.register_callback_query_handler(set_gardens, text_contains='ruoff_option_set_gardens')
+dp.register_callback_query_handler(cancel_to_set_gardens, text_contains='ruoff_option_cancel_to_set_gardens')
+
+dp.register_callback_query_handler(set_gardens_time, text_contains='ruoff_option_set_time_gardens')
+dp.register_message_handler(save_gardens_time, state=GardensTime.waiting_for_gardens_time)
+dp.register_callback_query_handler(cancel_to_set_gardens_time, text_contains='ruoff_option_cancel_to_set_gardens',
+                                   state=GardensTime.waiting_for_gardens_time)
+
+dp.register_callback_query_handler(remove_gardens, text_contains='ruoff_option_remove_gardens')
+
 # [BIGWAR]
 dp.register_message_handler(bigwar_menu, commands=['bigwar'])
 
@@ -260,7 +272,8 @@ functions_to_crontab = [
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
     invasion_notification_wrapper,
-    festival_notification_wrapper
+    festival_notification_wrapper,
+    gardens_notification_wrapper
     ]
 
 
