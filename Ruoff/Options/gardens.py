@@ -31,7 +31,7 @@ class GardensTime(StatesGroup):
     waiting_for_gardens_time = State()
 
 
-# dream buttons
+# gardens buttons
 inline_gardens_buttons = types.InlineKeyboardMarkup()
 
 button_set = types.InlineKeyboardButton(text='Установить оповещение', callback_data='ruoff_option_set_gardens')
@@ -131,7 +131,7 @@ async def set_gardens_time(callback_query: types.CallbackQuery):
 
 
 # SAVE GARDENS TIME
-@dp.message_handler(state=DreamTime.waiting_for_gardens_time)
+@dp.message_handler(state=GardensTime.waiting_for_gardens_time)
 async def save_gardens_time(message: types.Message, state: FSMContext):
     try:
         gardens_time = message.text
@@ -251,7 +251,7 @@ async def gardens_notification(user: User):
 
         # финальная напоминалка       
         elif gardens_time and now == gardens_time and datetime.today().strftime('%A').lower() == 'вторник':
-             try:
+            try:
                 await mybot.send_message(
                     user.telegram_id,
                     'Завтра Забытые Сады обновятся, ты точно добил 1000 мобов в каждой зоне?'
@@ -261,7 +261,7 @@ async def gardens_notification(user: User):
                 print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
                 
          # ежедневная напоминалка
-         elif gardens_time and now == gardens_time: 
+        elif gardens_time and now == gardens_time:
             try:
                 await mybot.send_message(
                     user.telegram_id,
@@ -274,6 +274,7 @@ async def gardens_notification(user: User):
                 print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
 
     except Exception as e:
-        await mybot.send_message(chat_id='952604184',
-                                 text=f'[GARDENS] {message.from_user.id} - '
-                                      f'Произошла ошибка в функции gardens_notification: {e}')
+        await mybot.send_message(
+            chat_id='952604184',
+            text=f'[GARDENS] {message.from_user.id} - Произошла ошибка в функции gardens_notification: {e}'
+        )
