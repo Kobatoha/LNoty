@@ -63,7 +63,9 @@ async def mysettings(message: types.Message):
                 f'Храм Валакаса - ' \
                 f'{op.valakas_day + v + op.valakas_time if op.valakas_day and op.valakas_time else no}\n'\
                 f'Поход на Фринтезу - ' \
-                f'{op.frintezza_day + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n'
+                f'{op.frintezza_day + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n' \
+                f'Забытые Сады - ' \
+                f'ежедневно{ v + op.frintezza_time if op.frintezza_time else no}\n' \
 
             if bw:
                 bigwar_setting_text = f'🌈 Башня Дерзости - {"🍌" if bw.toi else no}\n' \
