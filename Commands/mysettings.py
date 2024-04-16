@@ -59,13 +59,13 @@ async def mysettings(message: types.Message):
         elif op:
             option_settings_text = \
                 f'Подземелье Грёз - ' \
-                f'🌵 {op.dream_day + v + op.dream_time if op.dream_day and op.dream_time else no}\n'\
+                f'{"🌵" + op.dream_day + v + op.dream_time if op.dream_day and op.dream_time else no}\n'\
                 f'Храм Валакаса - ' \
-                f'🌵 {op.valakas_day + v + op.valakas_time if op.valakas_day and op.valakas_time else no}\n'\
+                f'{"🌵" + op.valakas_day + v + op.valakas_time if op.valakas_day and op.valakas_time else no}\n'\
                 f'Поход на Фринтезу - ' \
-                f'🌵 {op.frintezza_day + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n' \
+                f'{"🌵" + op.frintezza_day + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n' \
                 f'Забытые Сады - ' \
-                f'🌵 ежедневно {v + op.gardens if op.gardens else no}\n' \
+                f'ежедневно {"🌵" + v + op.gardens if op.gardens else no}\n' \
 
             if bw:
                 bigwar_setting_text = f'🌈 Башня Дерзости - {"🍌" if bw.toi else no}\n' \
