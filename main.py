@@ -205,6 +205,18 @@ dp.register_callback_query_handler(cancel_to_set_gardens_time, text_contains='ru
 
 dp.register_callback_query_handler(remove_gardens, text_contains='ruoff_option_remove_gardens')
 
+# [GODDARD]
+dp.register_message_handler(about_goddard, commands=['goddard'])
+dp.register_callback_query_handler(set_goddard, text_contains='ruoff_option_set_goddard')
+dp.register_callback_query_handler(cancel_to_set_goddard, text_contains='ruoff_option_cancel_to_set_goddard')
+
+dp.register_callback_query_handler(set_goddard_time, text_contains='ruoff_option_set_time_goddard')
+dp.register_message_handler(save_goddard_time, state=GoddardTime.waiting_for_goddard_time)
+dp.register_callback_query_handler(cancel_to_set_goddard_time, text_contains='ruoff_option_cancel_to_set_goddard',
+                                   state=GoddardTime.waiting_for_goddard_time)
+
+dp.register_callback_query_handler(remove_goddard, text_contains='ruoff_option_remove_goddard')
+
 # [BIGWAR]
 dp.register_message_handler(bigwar_menu, commands=['bigwar'])
 
@@ -273,7 +285,8 @@ functions_to_crontab = [
     bigwar_gord_notification_wrapper,
     invasion_notification_wrapper,
     festival_notification_wrapper,
-    gardens_notification_wrapper
+    gardens_notification_wrapper,
+    goddard_notification_wrapper
     ]
 
 
