@@ -14,3 +14,7 @@ from Ruoff.Options.frintezza import frintezza_notification_wrapper, about_frinte
 from Ruoff.Options.gardens import gardens_notification_wrapper, about_gardens, \
     set_gardens_time, save_gardens_time, cancel_to_set_gardens, \
     cancel_to_set_gardens_time, remove_gardens, set_gardens, GardensTime
+# [GODDARD]
+from Ruoff.Options.goddard import goddard_notification_wrapper, about_goddard, \
+    set_goddard_time, save_goddard_time, cancel_to_set_goddard, \
+    cancel_to_set_goddard_time, remove_goddard, set_goddard, GoddardTime
