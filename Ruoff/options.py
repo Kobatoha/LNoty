@@ -18,3 +18,15 @@ from Ruoff.Options.gardens import gardens_notification_wrapper, about_gardens, \
 from Ruoff.Options.goddard import goddard_notification_wrapper, about_goddard, \
     set_goddard_time, save_goddard_time, cancel_to_set_goddard, \
     cancel_to_set_goddard_time, remove_goddard, set_goddard, GoddardTime
+# [TOI]
+from Ruoff.Options.toi import toi_notification_wrapper, about_toi, \
+    set_toi_time, save_toi_time, cancel_to_set_toi, \
+    cancel_to_set_toi_time, remove_toi, set_toi, ToiTime
+# [TRAINING]
+from Ruoff.Options.training import training_notification_wrapper, about_training, \
+    set_training_time, save_training_time, cancel_to_set_training, \
+    cancel_to_set_training_time, remove_training, set_training, TrainingTime
+# [TRANSCENDENT]
+from Ruoff.Options.transcendent import transcendent_notification_wrapper, about_transcendent, \
+    set_transcendent_time, save_transcendent_time, cancel_to_set_transcendent, \
+    cancel_to_set_transcendent_time, remove_transcendent, set_transcendent, TranscendentTime
