@@ -133,7 +133,7 @@ async def set_training_time(callback_query: types.CallbackQuery):
 
 
 # SAVE training TIME
-@dp.message_handler(state=GardensTime.waiting_for_training_time)
+@dp.message_handler(state=TrainingTime.waiting_for_training_time)
 async def save_training_time(message: types.Message, state: FSMContext):
     try:
         training = message.text

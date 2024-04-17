@@ -136,7 +136,7 @@ async def save_tattoo_time(message: types.Message, state: FSMContext):
             minutes.append(str(h))
 
         if len(tattoo) == 5 and tattoo[:2] in hours and tattoo[2] == ':' and tattoo[3:5] in minutes:
-            with Session() as session():
+            with Session() as session:
 
                 user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
     

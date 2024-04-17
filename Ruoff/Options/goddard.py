@@ -128,7 +128,7 @@ async def set_goddard_time(callback_query: types.CallbackQuery):
 
 
 # SAVE goddard TIME
-@dp.message_handler(state=GardensTime.waiting_for_goddard_time)
+@dp.message_handler(state=GoddardTime.waiting_for_goddard_time)
 async def save_goddard_time(message: types.Message, state: FSMContext):
     try:
         goddard = message.text
@@ -173,7 +173,7 @@ async def save_goddard_time(message: types.Message, state: FSMContext):
 
 # CANCEL SET goddard TIME
 @dp.callback_query_handler(lambda callback_query: callback_query.data == 'ruoff_option_cancel_to_set_goddard',
-                           state=GardensTime.waiting_for_goddard_time)
+                           state=GoddardTime.waiting_for_goddard_time)
 async def cancel_to_set_goddard_time(callback_query: types.CallbackQuery, state: FSMContext):
     try:
         await mybot.answer_callback_query(callback_query.id)

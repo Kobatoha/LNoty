@@ -30,3 +30,11 @@ from Ruoff.Options.training import training_notification_wrapper, about_training
 from Ruoff.Options.transcendent import transcendent_notification_wrapper, about_transcendent, \
     set_transcendent_time, save_transcendent_time, cancel_to_set_transcendent, \
     cancel_to_set_transcendent_time, remove_transcendent, set_transcendent, TranscendentTime
+# [PAGAN]
+from Ruoff.Options.pagan import pagan_notification_wrapper, about_pagan, \
+    set_pagan_time, save_pagan_time, cancel_to_set_pagan, \
+    cancel_to_set_pagan_time, remove_pagan, set_pagan, PaganTime
+# [TATTOO]
+from Ruoff.Options.tattoo import tattoo_notification_wrapper, about_tattoo, \
+    set_tattoo_time, save_tattoo_time, cancel_to_set_tattoo, \
+    cancel_to_set_tattoo_time, remove_tattoo, set_tattoo, TattooTime
