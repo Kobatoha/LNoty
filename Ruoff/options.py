@@ -38,3 +38,7 @@ from Ruoff.Options.pagan import pagan_notification_wrapper, about_pagan, \
 from Ruoff.Options.tattoo import tattoo_notification_wrapper, about_tattoo, \
     set_tattoo_time, save_tattoo_time, cancel_to_set_tattoo, \
     cancel_to_set_tattoo_time, remove_tattoo, set_tattoo, TattooTime
+# [AZTACAN]
+from Ruoff.Options.aztacan import aztacan_notification_wrapper, about_aztacan, \
+    set_aztacan_time, save_aztacan_time, cancel_to_set_aztacan, \
+    cancel_to_set_aztacan_time, remove_aztacan, set_aztacan, AztacanTime
