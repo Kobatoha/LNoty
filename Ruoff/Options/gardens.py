@@ -6,7 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffCustomSetting
+from DataBase.Ruoff import EssenceCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN, test_token
@@ -53,9 +53,9 @@ async def about_gardens(message: types.Message):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         if not option_setting:
-            option = RuoffCustomSetting(id_user=user.telegram_id)
+            option = EssenceCustomSetting(id_user=user.telegram_id)
             session.add(option)
             session.commit()
         session.close()
@@ -146,7 +146,7 @@ async def save_gardens_time(message: types.Message, state: FSMContext):
 
             user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             option_setting.gardens = gardens
             session.commit()
 
@@ -198,7 +198,7 @@ async def remove_gardens(callback_query: types.CallbackQuery):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         option_setting.gardens = None
 
         session.commit()
@@ -225,7 +225,7 @@ async def gardens_notification_wrapper():
         users = session.query(User).all()
 
         for user in users:
-            option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             if option and option.gardens:
                 await gardens_notification(user)
         session.close()
@@ -242,7 +242,7 @@ async def gardens_notification(user: User):
         now = datetime.now().strftime('%H:%M')
 
         with Session() as session:
-            option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
 
         gardens = option.gardens if option.gardens else None
         # если не время и не место

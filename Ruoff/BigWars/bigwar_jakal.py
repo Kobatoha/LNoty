@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffBigWar
+from DataBase.Ruoff import EssenceBigWar
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -38,7 +38,7 @@ async def about_bigwar_jakal(message: types.Message):
 async def set_bigwar_jakal(callback_query: types.CallbackQuery):
     with Session() as session:
   
-        bg_user = session.query(RuoffBigWar).filter_by(id_user=callback_query.from_user.id).first()
+        bg_user = session.query(EssenceBigWar).filter_by(id_user=callback_query.from_user.id).first()
         bg_user.jakal = True
         session.commit()
 
@@ -50,7 +50,7 @@ async def set_bigwar_jakal(callback_query: types.CallbackQuery):
 async def remove_bigwar_jakal(callback_query: types.CallbackQuery):
     with Session() as session:
 
-        bg_user = session.query(RuoffBigWar).filter_by(id_user=callback_query.from_user.id).first()
+        bg_user = session.query(EssenceBigWar).filter_by(id_user=callback_query.from_user.id).first()
         bg_user.jakal = False
         session.commit()
 
@@ -61,13 +61,13 @@ async def remove_bigwar_jakal(callback_query: types.CallbackQuery):
 async def bigwar_jakal_notification_wrapper():
 
     with Session() as session:
-        users = session.query(RuoffBigWar).all()
+        users = session.query(EssenceBigWar).all()
         for user in users:
             if user.jakal is True:
                 await bigwar_jakal_notification(user)
 
 
-async def bigwar_jakal_notification(user: RuoffBigWar):
+async def bigwar_jakal_notification(user: EssenceBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
         if now == '22:45':

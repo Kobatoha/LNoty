@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
+from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceClanDangeon
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -30,10 +30,10 @@ async def start(message: types.Message):
         user = User(telegram_id=message.from_user.id, username=message.from_user.username)
         session.add(user)
         session.commit()
-        setting = Setting(id_user=user.telegram_id)
+        setting = EssenceSetting(id_user=user.telegram_id)
         session.add(setting)
         session.commit()
-        custom = RuoffCustomSetting(id_user=user.telegram_id)
+        custom = EssenceCustomSetting(id_user=user.telegram_id)
         session.add(custom)
         session.commit()
         print(now, user.telegram_id, user.username, '- добавлен новый пользователь')

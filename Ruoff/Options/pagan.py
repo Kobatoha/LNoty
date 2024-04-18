@@ -6,7 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffCustomSetting
+from DataBase.Ruoff import EssenceCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN, test_token
@@ -49,9 +49,9 @@ async def about_pagan(message: types.Message):
     try:
         with Session() as session:
             user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             if not option_setting:
-                option = RuoffCustomSetting(id_user=user.telegram_id)
+                option = EssenceCustomSetting(id_user=user.telegram_id)
                 session.add(option)
                 session.commit()
 
@@ -137,7 +137,7 @@ async def save_pagan_time(message: types.Message, state: FSMContext):
 
                 user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
     
-                option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+                option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
                 option_setting.pagan = pagan
                 session.commit()
     
@@ -187,7 +187,7 @@ async def remove_pagan(callback_query: types.CallbackQuery):
         with Session() as session:
 
             user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             option_setting.pagan = None
     
             session.commit()
@@ -213,7 +213,7 @@ async def pagan_notification_wrapper():
             users = session.query(User).all()
     
             for user in users:
-                option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+                option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
                 if option and option.pagan:
                     await pagan_notification(user)
 
@@ -229,7 +229,7 @@ async def pagan_notification(user: User):
         now = datetime.now().strftime('%H:%M')
 
         with Session() as session:
-            option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
 
         pagan = option.pagan if option.pagan else None
         # если не время и не место

@@ -6,7 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffCustomSetting
+from DataBase.Ruoff import EssenceCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN, test_token
@@ -55,9 +55,9 @@ async def about_dream(message: types.Message):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         if not option_setting:
-            option = RuoffCustomSetting(id_user=user.telegram_id)
+            option = EssenceCustomSetting(id_user=user.telegram_id)
             session.add(option)
             session.commit()
         session.close()
@@ -152,7 +152,7 @@ async def save_dream_time(message: types.Message, state: FSMContext):
 
             user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             option_setting.dream_time = dream_time
             session.commit()
 
@@ -230,7 +230,7 @@ async def save_dream_day(callback_query: types.CallbackQuery):
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
 
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
         if callback_query.data == 'add_dream_monday':
             option_setting.dream_day = 'понедельник'
             session.commit()
@@ -300,7 +300,7 @@ async def remove_dream(callback_query: types.CallbackQuery):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         option_setting.dream_time = None
         option_setting.dream_day = None
 
@@ -328,7 +328,7 @@ async def dream_notification_wrapper():
         users = session.query(User).all()
 
         for user in users:
-            option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             if option and option.dream_time and option.dream_day:
                 await dream_notification(user)
         session.close()
@@ -346,7 +346,7 @@ async def dream_notification(user: User):
         today = datetime.now().strftime('%A').lower()
 
         session = Session()
-        option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         session.close()
 
         dream_day = option.dream_day.lower() if option.dream_day else None

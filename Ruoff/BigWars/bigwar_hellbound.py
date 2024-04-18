@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffBigWar
+from DataBase.Ruoff import EssenceBigWar
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -38,7 +38,7 @@ async def about_bigwar_hellbound(message: types.Message):
 async def set_bigwar_hellbound(callback_query: types.CallbackQuery):
     session = Session()
 
-    bg_user = session.query(RuoffBigWar).filter_by(id_user=callback_query.from_user.id).first()
+    bg_user = session.query(EssenceBigWar).filter_by(id_user=callback_query.from_user.id).first()
     bg_user.hellbound = True
     session.commit()
 
@@ -52,7 +52,7 @@ async def set_bigwar_hellbound(callback_query: types.CallbackQuery):
 async def remove_bigwar_hellbound(callback_query: types.CallbackQuery):
     session = Session()
 
-    bg_user = session.query(RuoffBigWar).filter_by(id_user=callback_query.from_user.id).first()
+    bg_user = session.query(EssenceBigWar).filter_by(id_user=callback_query.from_user.id).first()
     bg_user.hellbound = False
     session.commit()
 
@@ -65,14 +65,14 @@ async def remove_bigwar_hellbound(callback_query: types.CallbackQuery):
 async def bigwar_hellbound_notification_wrapper():
 
     session = Session()
-    users = session.query(RuoffBigWar).all()
+    users = session.query(EssenceBigWar).all()
     for user in users:
         if user.hellbound is True:
             await bigwar_hellbound_notification(user)
     session.close()
 
 
-async def bigwar_hellbound_notification(user: RuoffBigWar):
+async def bigwar_hellbound_notification(user: EssenceBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
         if now == '10:45' or now == '20:45' or now == '21:45':

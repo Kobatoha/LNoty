@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.User import User
 from DataBase.Base import Base
 from DataBase.Expanse import Expanse
-from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffBigWar
+from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceBigWar
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -27,9 +27,9 @@ async def mysettings(message: types.Message):
 
     user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
     if user and user.server == 'ruoff':
-        setting_ruoff = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-        op = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
-        bw = session.query(RuoffBigWar).filter_by(id_user=user.telegram_id).first()
+        setting_ruoff = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
+        op = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+        bw = session.query(EssenceBigWar).filter_by(id_user=user.telegram_id).first()
 
         v = " в "
         no = "не установлено"

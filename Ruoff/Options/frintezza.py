@@ -6,7 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffCustomSetting
+from DataBase.Ruoff import EssenceCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN, test_token
@@ -55,9 +55,9 @@ async def about_frintezza(message: types.Message):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         if not option_setting:
-            option = RuoffCustomSetting(id_user=user.telegram_id)
+            option = EssenceCustomSetting(id_user=user.telegram_id)
             session.add(option)
             session.commit()
         session.close()
@@ -155,7 +155,7 @@ async def save_frintezza_time(message: types.Message, state: FSMContext):
 
             user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             option_setting.frintezza_time = frintezza_time
             session.commit()
 
@@ -233,7 +233,7 @@ async def save_frintezza_day(callback_query: types.CallbackQuery):
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
 
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
         if callback_query.data == 'add_frintezza_monday':
             option_setting.frintezza_day = 'понедельник'
             session.commit()
@@ -303,7 +303,7 @@ async def remove_frintezza(callback_query: types.CallbackQuery):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         option_setting.frintezza_time = None
         option_setting.frintezza_day = None
 
@@ -331,7 +331,7 @@ async def frintezza_notification_wrapper():
         users = session.query(User).all()
 
         for user in users:
-            option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             if option and option.frintezza_time and option.frintezza_day:
                 await frintezza_notification(user)
         session.close()
@@ -349,7 +349,7 @@ async def frintezza_notification(user: User):
         today = datetime.now().strftime('%A').lower()
 
         session = Session()
-        option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         session.close()
 
         frintezza_day = option.frintezza_day.lower() if option.frintezza_day else None

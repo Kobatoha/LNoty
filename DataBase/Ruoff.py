@@ -3,7 +3,7 @@ from DataBase.Base import Base
 import datetime
 
 
-class Setting(Base):
+class EssenceSetting(Base):
     __tablename__ = 'settings'
 
     id = Column(Integer, primary_key=True)
@@ -30,7 +30,7 @@ class Setting(Base):
     fulltime = Column(Boolean, default=False)               # '00:00 - 23:59' if True else '9:00 - 23:00'
 
 
-class RuoffCustomSetting(Base):
+class EssenceCustomSetting(Base):
     __tablename__ = 'RuoffCustom_settings'
 
     id = Column(Integer, primary_key=True)
@@ -56,7 +56,7 @@ class RuoffCustomSetting(Base):
     tattoo = Column(VARCHAR(5))             # Прокачать тату
 
 
-class RuoffClanDangeon(Base):
+class EssenceClanDangeon(Base):
     __tablename__ = 'RuoffClanDangeon_settings'
 
     id = Column(Integer, primary_key=True)
@@ -73,7 +73,7 @@ class RuoffClanDangeon(Base):
     clan_dangeon_su = Column(Boolean, default=False)    # Подземелье клана [sunday]
 
 
-class RuoffBigWar(Base):
+class EssenceBigWar(Base):
     __tablename__ = 'bigwar_settings'
 
     id = Column(Integer, primary_key=True)

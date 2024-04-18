@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
+from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceClanDangeon
 from DataBase.RaidBoss import RaidBoss
 from DataBase.Feedback import Feedback
 from aiocron import crontab

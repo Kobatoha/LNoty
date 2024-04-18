@@ -6,7 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffCustomSetting
+from DataBase.Ruoff import EssenceCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN, test_token
@@ -48,9 +48,9 @@ options_menu_text = 'Добро пожаловать в меню персона�
 async def options_menu(message: types.CallbackQuery):
     try:
         session = Session()
-        user = session.query(RuoffCustomSetting).filter_by(id_user=message.from_user.id).first()
+        user = session.query(EssenceCustomSetting).filter_by(id_user=message.from_user.id).first()
         if not user:
-            user = RuoffCustomSetting(id_user=message.from_user.id)
+            user = EssenceCustomSetting(id_user=message.from_user.id)
             session.add(user)
             session.commit()
         session.close()

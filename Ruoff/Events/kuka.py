@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Ruoff import EssenceSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -45,7 +45,7 @@ async def set_kuka(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
     setting.kuka = True
 
     session.commit()
@@ -64,7 +64,7 @@ async def remove_kuka(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
     setting.kuka = False
 
     session.commit()
@@ -83,7 +83,7 @@ async def kuka_notification_wrapper():
     users = session.query(User).all()
     for user in users:
 
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
         if setting.kuka is True and setting.fulltime is True:
             await kuka_notification(user)
         elif setting.kuka is True and setting.fulltime is False:

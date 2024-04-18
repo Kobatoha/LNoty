@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.User import User
 from DataBase.Base import Base
 from DataBase.Expanse import Expanse
-from DataBase.Ruoff import Setting
+from DataBase.Ruoff import EssenceSetting
 from aiocron import crontab
 import asyncio
 from datetime import datetime

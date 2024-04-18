@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting, RuoffCustomSetting, RuoffClanDangeon
+from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceClanDangeon
 from DataBase.RaidBoss import RaidBoss
 from DataBase.Feedback import Feedback
 from aiocron import crontab
@@ -357,7 +357,8 @@ functions_to_crontab = [
     training_notification_wrapper,
     transcendent_notification_wrapper,
     tattoo_notification_wrapper,
-    pagan_notification_wrapper
+    pagan_notification_wrapper,
+    aztacan_notification_wrapper
     ]
 
 

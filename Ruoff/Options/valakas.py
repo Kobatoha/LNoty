@@ -6,7 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffCustomSetting
+from DataBase.Ruoff import EssenceCustomSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN, test_token
@@ -55,9 +55,9 @@ async def about_valakas(message: types.Message):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         if not option_setting:
-            option = RuoffCustomSetting(id_user=user.telegram_id)
+            option = EssenceCustomSetting(id_user=user.telegram_id)
             session.add(option)
             session.commit()
         session.close()
@@ -153,7 +153,7 @@ async def save_valakas_time(message: types.Message, state: FSMContext):
 
             user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
-            option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             option_setting.valakas_time = valakas_time
             session.commit()
 
@@ -231,7 +231,7 @@ async def save_valakas_day(callback_query: types.CallbackQuery):
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
 
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
         if callback_query.data == 'add_valakas_monday':
             option_setting.valakas_day = 'понедельник'
             session.commit()
@@ -301,7 +301,7 @@ async def remove_valakas(callback_query: types.CallbackQuery):
         session = Session()
 
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         option_setting.valakas_time = None
         option_setting.valakas_day = None
 
@@ -329,7 +329,7 @@ async def valakas_notification_wrapper():
         users = session.query(User).all()
 
         for user in users:
-            option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
             if option and option.valakas_time and option.valakas_day:
                 await valakas_notification(user)
         session.close()
@@ -347,7 +347,7 @@ async def valakas_notification(user: User):
         today = datetime.now().strftime('%A').lower()
 
         session = Session()
-        option = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+        option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
         session.close()
 
         valakas_day = option.valakas_day.lower() if option.valakas_day else None

@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import Setting, RuoffBigWar, RuoffCustomSetting
+from DataBase.Ruoff import EssenceSetting, EssenceBigWar, EssenceCustomSetting
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -39,9 +39,9 @@ async def stop(message: types.Message):
 async def yes_stop(callback_query: types.CallbackQuery):
     session = Session()
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    ruoff_setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
-    bigwar_setting = session.query(RuoffBigWar).filter_by(id_user=user.telegram_id).first()
-    custom_setting = session.query(RuoffCustomSetting).filter_by(id_user=user.telegram_id).first()
+    ruoff_setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
+    bigwar_setting = session.query(EssenceBigWar).filter_by(id_user=user.telegram_id).first()
+    custom_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
 
     if user and user.server == 'ruoff':
         ruoff_setting.kuka = False

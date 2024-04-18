@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.Base import Base
 from DataBase.RaidBoss import RaidBoss
-from DataBase.Ruoff import RuoffBigWar
+from DataBase.Ruoff import EssenceBigWar
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -46,7 +46,7 @@ async def about_coral_raidboss(message: types.Message):
 async def set_coral_raidbosses(callback_query: types.CallbackQuery):
     session = Session()
 
-    bg_user = session.query(RuoffBigWar).filter_by(id_user=callback_query.from_user.id).first()
+    bg_user = session.query(EssenceBigWar).filter_by(id_user=callback_query.from_user.id).first()
     bg_user.coral = True
     session.commit()
     session.close()
@@ -59,7 +59,7 @@ async def set_coral_raidbosses(callback_query: types.CallbackQuery):
 async def remove_coral_raidbosses(callback_query: types.CallbackQuery):
     session = Session()
 
-    bg_user = session.query(RuoffBigWar).filter_by(id_user=callback_query.from_user.id).first()
+    bg_user = session.query(EssenceBigWar).filter_by(id_user=callback_query.from_user.id).first()
     bg_user.coral = False
     session.commit()
 
@@ -72,14 +72,14 @@ async def remove_coral_raidbosses(callback_query: types.CallbackQuery):
 async def bigwar_coral_raidbosses_notification_wrapper():
 
     session = Session()
-    users = session.query(RuoffBigWar).all()
+    users = session.query(EssenceBigWar).all()
     for user in users:
         if user.coral is True:
             await bigwar_coral_raidbosses_notification(user)
     session.close()
 
 
-async def bigwar_coral_raidbosses_notification(user: RuoffBigWar):
+async def bigwar_coral_raidbosses_notification(user: EssenceBigWar):
     now = datetime.now().strftime('%H:%M')
     try:
         with Session() as session:

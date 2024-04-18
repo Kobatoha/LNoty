@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import RuoffBigWar
+from DataBase.Ruoff import EssenceBigWar
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -40,10 +40,10 @@ async def bigwar_menu(message: types.CallbackQuery):
     try:
         now = datetime.now().strftime('%H:%M')
         session = Session()
-        bg_user = session.query(RuoffBigWar).filter_by(id_user=message.from_user.id).first()
+        bg_user = session.query(EssenceBigWar).filter_by(id_user=message.from_user.id).first()
         if not bg_user:
             print(now, 'Добавление нового BIGWAR пользователя...')
-            bg_user = RuoffBigWar(id_user=message.from_user.id)
+            bg_user = EssenceBigWar(id_user=message.from_user.id)
             session.add(bg_user)
             session.commit()
         session.close()

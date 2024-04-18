@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from datetime import datetime, timedelta
 from DataBase.User import User
 from DataBase.Base import Base
-from DataBase.Ruoff import Setting
+from DataBase.Ruoff import EssenceSetting
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL, TOKEN
@@ -56,7 +56,7 @@ async def set_invasion(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
     setting.invasion = True
 
     session.commit()
@@ -75,7 +75,7 @@ async def remove_invasion(callback_query: types.CallbackQuery):
     session = Session()
 
     user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-    setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+    setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
     setting.invasion = False
 
     session.commit()
@@ -94,7 +94,7 @@ async def invasion_notification_wrapper():
     users = session.query(User).all()
     for user in users:
 
-        setting = session.query(Setting).filter_by(id_user=user.telegram_id).first()
+        setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
         if setting.invasion is True and setting.fulltime is True:
             await invasion_notification(user)
         elif setting.invasion is True and setting.fulltime is False:
@@ -115,7 +115,7 @@ async def invasion_notification(user: User):
 
     try:
         if now in invasion:
-            await mybot.send_message(user.telegram_id, 'Вторжение начнется через 5 минут. Следите за анонсом в игре.')
+            await mybot.send_message(user.telegram_id, 'Вторжение начнется через 2 минут. Следите за анонсом в игре.')
             print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Вторжении')
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
@@ -137,7 +137,7 @@ async def invasion_notification_hardwork(user: User):
             return
             
         if now in invasion_hardwork:
-            await mybot.send_message(user.telegram_id, 'Вторжение начнется через 5 минут. Следите за анонсом в игре.')
+            await mybot.send_message(user.telegram_id, 'Вторжение начнется через 2 минуты. Следите за анонсом в игре.')
             print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Вторжении')
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
