@@ -22,6 +22,7 @@ class EssenceSetting(Base):
     invasion = Column(Boolean, default=False)               # Вторжение
     primetime = Column(Boolean, default=False)              # Хот-тайм зачистки
     purge = Column(Boolean, default=False)                  # Сбор зачистки
+    sevensings = Column(Boolean, default=False)             # Семь Печатей
 
     event = Column(Boolean, default=False)                  # Ивент [меняется]
     calendar = Column(Boolean, default=False)               # Календарь [меняется]
