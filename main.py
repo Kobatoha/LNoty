@@ -270,18 +270,18 @@ dp.register_callback_query_handler(cancel_to_set_tattoo_time,
 
 dp.register_callback_query_handler(remove_tattoo, text_contains='ruoff_option_remove_tattoo')
 
-# [TATTOO]
-dp.register_message_handler(about_tattoo, commands=['tattoo'])
-dp.register_callback_query_handler(set_tattoo, text_contains='ruoff_option_set_tattoo')
-dp.register_callback_query_handler(cancel_to_set_tattoo, text_contains='ruoff_option_cancel_to_set_tattoo')
+# [AZTACAN]
+dp.register_message_handler(about_aztacan, commands=['aztacan'])
+dp.register_callback_query_handler(set_aztacan, text_contains='ruoff_option_set_aztacan')
+dp.register_callback_query_handler(cancel_to_set_aztacan, text_contains='ruoff_option_cancel_to_set_aztacan')
 
-dp.register_callback_query_handler(set_tattoo_time, text_contains='ruoff_option_set_time_tattoo')
-dp.register_message_handler(save_tattoo_time, state=TattooTime.waiting_for_tattoo_time)
-dp.register_callback_query_handler(cancel_to_set_tattoo_time,
-                                   text_contains='ruoff_option_cancel_to_set_tattoo',
-                                   state=TattooTime.waiting_for_tattoo_time)
+dp.register_callback_query_handler(set_aztacan_time, text_contains='ruoff_option_set_time_aztacan')
+dp.register_message_handler(save_aztacan_time, state=AztacanTime.waiting_for_aztacan_time)
+dp.register_callback_query_handler(cancel_to_set_aztacan_time,
+                                   text_contains='ruoff_option_cancel_to_set_aztacan',
+                                   state=AztacanTime.waiting_for_aztacan_time)
 
-dp.register_callback_query_handler(remove_tattoo, text_contains='ruoff_option_remove_tattoo')
+dp.register_callback_query_handler(remove_aztacan, text_contains='ruoff_option_remove_aztacan')
 
 # [BIGWAR]
 dp.register_message_handler(bigwar_menu, commands=['bigwar'])
