@@ -93,7 +93,5 @@ async def primetime_notification(user: User):
         elif now == '13:56' or now == '22:56':
             await mybot.send_message(user.telegram_id, '☄️ Хот-тайм зачистки закончится через 4 минуты')
             print(now, user.telegram_id, user.username, 'получил сообщение о конце Прайм-тайма')
-        else:
-            print(now, 'Неподходящее время для Прайм-тайма')
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
