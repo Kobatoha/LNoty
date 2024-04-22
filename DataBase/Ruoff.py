@@ -7,7 +7,7 @@ class EssenceSetting(Base):
     __tablename__ = 'settings'
 
     id = Column(Integer, primary_key=True)
-    id_user = Column(Integer, ForeignKey('users.telegram_id'))
+    id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
 
     soloraidboss = Column(Boolean, default=False)           # Соло Боссы
     kuka = Column(Boolean, default=False)                   # Кука и Джисра
@@ -35,7 +35,7 @@ class EssenceCustomSetting(Base):
     __tablename__ = 'RuoffCustom_settings'
 
     id = Column(Integer, primary_key=True)
-    id_user = Column(Integer, ForeignKey('users.telegram_id'))
+    id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
 
     dream_day = Column(VARCHAR)             # Грезы [день]
     dream_time = Column(VARCHAR(5))         # Грезы [время]
@@ -93,3 +93,32 @@ class EssenceBigWar(Base):
     frost = Column(Boolean, default=False)              # Замок Монарха Льда 21:30 | 22:00 [вторник, четверг]
     loa = Column(Boolean, default=False)                # Логово Антараса 22:00 [понедельник, среда]
     coral = Column(Boolean, default=False)              # Рейдовые Боссы 80-го, 85-го, 90-го уровней [22 часа]
+
+
+class LegacySetting(Base):
+    __tablename__ = 'legacy_settings'
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
+
+    prison = Column(Boolean, default=False)             # Тюрьма Бездны
+    olympiad = Column(Boolean, default=False)           # Олимпиада
+    goldberg = Column(Boolean, default=False)           # Комната Голдберга
+    garden = Column(Boolean, default=False)             # Забытый Первобытный Сад
+    frost = Column(Boolean, default=False)              # Замок Монарха Льда
+    tantar = Column(Boolean, default=False)             # Руины Тантар
+    pagan = Column(Boolean, default=False)              # Языческий Храм
+    pirates = Column(Boolean, default=False)            # Гробница Древних Пиратов
+    antharas = Column(Boolean, default=False)           # Рыцари Балтуса - Антарас
+    frintezza = Column(Boolean, default=False)          # Гробница Последнего Императора - Фринтеза
+    four_tomb = Column(Boolean, default=False)          # Четыре Гробницы
+    purge = Column(Boolean, default=False)              # Сбор зачистки
+    primetime = Column(Boolean, default=False)          # Прайм тайм
+    bauim = Column(Boolean, default=False)              # Рыцари Балтуса - Баюм
+    zaken = Column(Boolean, default=False)              # Рыцари Балтуса - Закен
+    arena = Column(Boolean, default=False)              # Арена Клана
+    elemental = Column(Boolean, default=False)          # Стихийные Короли
+
+    event = Column(Boolean, default=False)              # Ивент [меняется]
+
+    fulltime = Column(Boolean, default=False)           # '00:00 - 23:59' if True else '9:00 - 23:00'
