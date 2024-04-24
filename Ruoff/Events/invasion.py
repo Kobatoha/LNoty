@@ -96,7 +96,7 @@ async def invasion_notification_wrapper():
 
         setting = session.query(EssenceSetting).filter_by(id_user=user.telegram_id).first()
         if setting.invasion is True and setting.fulltime is True:
-            await invasion_notification(user)
+            await invasion_notification_hardwork(user)
         elif setting.invasion is True and setting.fulltime is False:
             await invasion_notification_hardwork(user)
     session.close()
@@ -104,7 +104,7 @@ async def invasion_notification_wrapper():
 
 async def invasion_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    invasion_time = ['16:22']
+    invasion_time = ['14:22']
     invasion = []
 
     for time in invasion_time:
@@ -123,7 +123,7 @@ async def invasion_notification(user: User):
 
 async def invasion_notification_hardwork(user: User):
     now = datetime.now().strftime('%H:%M')
-    invasion_time = ['16:22']
+    invasion_time = ['14:22']
     invasion_hardwork = []
 
     for time in invasion_time:
@@ -133,7 +133,7 @@ async def invasion_notification_hardwork(user: User):
             current_time += timedelta(hours=4)
     try:
         # Проверяем, что текущее время не находится в промежутке с 23:00 до 8:00
-        if '23:00' <= now <= '23:59' or '00:00' <= now <= '07:59':
+        if '23:00' <= now <= '23:59' or '00:00' <= now <= '09:59':
             return
             
         if now in invasion_hardwork:
