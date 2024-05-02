@@ -126,7 +126,7 @@ class LegacySetting(Base):
 
 
 class MainSetting(Base):
-    __tablename__ = 'legacy_settings'
+    __tablename__ = 'main_settings'
 
     id = Column(Integer, primary_key=True)
     id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
