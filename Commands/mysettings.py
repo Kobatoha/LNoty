@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.User import User
 from DataBase.Base import Base
 from DataBase.Expanse import Expanse
-from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceBigWar
+from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceBigWar, LegacySetting
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -84,6 +84,21 @@ async def mysettings(message: types.Message):
 
             else:
                 await message.answer(f'{ruoff_settings_text}\n{option_settings_text}')
+                
+elif user and user.server == 'legacy':
+        legacy_setting = session.query(LegacySetting).filter_by(id_user=user.telegram_id).first()
+
+        v = " в "
+        no = "не установлено"
+
+        legacy_setting_text = f'Установленные настройки русских официальных серверов:\n' \
+                              f'\n' \
+                              f'Круглосуточное оповещение - {"💅" if legacy_setting.fulltime else no}\n' \
+                              f'Замок Монарха Льда - {"💅" if legacy_setting.frost else no}\n' \
+                              f'Всемирная Олимпиада - {"💅" if legacy_setting.olympiad else no}\n' \
+
+        await message.answer(f'{legacy_setting_text}')
+
     else:
         await message.answer('Пожалуйста, вернитесь к /start')
 
