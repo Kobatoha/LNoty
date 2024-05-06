@@ -25,22 +25,24 @@ async def help(message: types.Message):
 
     user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
+    text = 'Доступные команды:\n'\
+           '\n'\
+           '/start - запуск бота и выбор сервера\n'\
+           '/about - о боте\n'\
+           '/mysettings - персональные настройки\n'\
+           '/help - список команд\n'\
+           '/donate - разработчику на проездной Т_Т\n'\
+           '/feedback - оставить предложение\n'\
+           '\n'\
+           '/stop - отменить все оповещения\n'\
+           '\n'\
+           '/time - установить время работы оповещений\n'\
+
     if user and user.server == 'ruoff':
-        await message.answer('Доступные команды:\n'
-                             '\n'
-                             '/start - запуск бота\n'
-                             '/about - о боте\n'
-                             '/mysettings - персональные настройки\n'
-                             '/help - список команд\n'
-                             '/donate - разработчику на мармелад\n'
-                             '/feedback - оставить предложение\n'
-                             '\n'
-                             '/stop - отменить все оповещения\n'
-                             '\n'
-                             '/time - установить время работы оповещений\n'
-                             '/event - не подвезли\n'
+        await message.answer(text + 
+                             '/event - Храм Воды до 22 мая 2024\n'
                              '/festival - Секретная лавка\n'
-                             '/calendar - закончился\n'
+                             '/calendar - идет, берем награды и радуемся\n'
                              '/kuka - Кука и Джисра\n'
                              '/keber - Кебер\n'
                              '/loa - Логово Антараса\n'
@@ -54,7 +56,11 @@ async def help(message: types.Message):
                              '/purge - Зачистка\n'
                              '/invasion - Вторжение\n'
                              '\n'
-                             '/options - раздел персональных настроек\n'
-                             '/bigwar - раздел для бигвара\n')
+                             '/options - раздел ручных настроек (сады, ацтакан, грёзы и т.д.)\n'
+                             '/bigwar - раздел для бигвара (респы рейд боссов)\n')
+    elif user and user.server == 'legacy':
+        await message.answer(text + 
+                             '/frost - Замок Монарха Льда\n'
+                             '/olympiad - Всемирная Олимпиада\n')
 
     session.close()
