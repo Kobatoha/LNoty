@@ -39,6 +39,7 @@ Base.metadata.create_all(engine)
 # GENERAL SETTINGS
 dp.register_message_handler(choice_server, commands=['server'])
 dp.register_callback_query_handler(ruoff, text_contains='ruoff_server')
+dp.register_callback_query_handler(ruoff_legacy, text_contains='ruoff_legacy')
 dp.register_callback_query_handler(expanse, text_contains='expanse')
 
 dp.register_message_handler(mysettings, commands=['mysettings'])
