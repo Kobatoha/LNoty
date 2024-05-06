@@ -104,7 +104,8 @@ class LegacySetting(Base):
     prison = Column(Boolean, default=False)             # Тюрьма Бездны
     olympiad = Column(Boolean, default=False)           # Олимпиада
     goldberg = Column(Boolean, default=False)           # Комната Голдберга
-    garden = Column(Boolean, default=False)             # Забытый Первобытный Сад
+    gardens = Column(VARCHAR(5))                        # Забытый Первобытный Сад
+    kadin = Column(Boolean, default=False)              # Забытый Первобытный Сад: Кадин
     frost = Column(Boolean, default=False)              # Замок Монарха Льда
     tantar = Column(Boolean, default=False)             # Руины Тантар
     pagan = Column(Boolean, default=False)              # Языческий Храм
@@ -120,5 +121,29 @@ class LegacySetting(Base):
     elemental = Column(Boolean, default=False)          # Стихийные Короли
 
     event = Column(Boolean, default=False)              # Ивент [меняется]
+
+    fulltime = Column(Boolean, default=False)           # '00:00 - 23:59' if True else '9:00 - 23:00'
+
+
+class MainSetting(Base):
+    __tablename__ = 'main_settings'
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(BigInteger, ForeignKey('users.telegram_id'))
+
+    valakas = Column(Boolean, default=False)            # Валакас
+    baylor = Column(Boolean, default=False)             # Кристальная тюрьма(Байлор) 6:30 каждый день
+    goldberg = Column(Boolean, default=False)           # Вечное Пристанище 6:30 каждый день 
+    gardens = Column(VARCHAR(5))                        # Лагерь Серой Тени 6:30 каждый день
+    kadin = Column(Boolean, default=False)              # Гнездо крофинов 6:30 каждый день
+    frost = Column(Boolean, default=False)              # Лес духов 6:30 каждый день
+    tantar = Column(Boolean, default=False)             # Таути
+    pagan = Column(Boolean, default=False)              # Фринтезы
+    pirates = Column(Boolean, default=False)            # Октависа
+    antharas = Column(Boolean, default=False)           # Секретная Мастерская рурина каждый день 6:30
+    frintezza = Column(Boolean, default=False)          # Лабиринт кастии каждый день 6:30
+
+
+    event = Column(Boolean, default=False)              # Ивент [меняется]Акаманах/Зарич с 18 до 24:00 по вторникам и четвергам
 
     fulltime = Column(Boolean, default=False)           # '00:00 - 23:59' if True else '9:00 - 23:00'

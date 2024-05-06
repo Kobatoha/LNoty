@@ -22,7 +22,7 @@ from Commands.donate import donate, donate_sberbank, donate_ethereum, donate_bit
 from Commands.help import help
 from Commands.mysettings import mysettings
 from Commands.options import options_menu
-from Commands.server import choice_server, ruoff, expanse
+from Commands.server import choice_server, ruoff
 from Commands.started import start
 from Commands.stopped import stop, yes_stop, no_stop
 from Commands.feedback import feedback, add_feedback, cancel_add_feedback, cancel_feedback, save_feedback, FeedbackState
@@ -39,8 +39,6 @@ Base.metadata.create_all(engine)
 # GENERAL SETTINGS
 dp.register_message_handler(choice_server, commands=['server'])
 dp.register_callback_query_handler(ruoff, text_contains='ruoff_server')
-dp.register_callback_query_handler(ruoff_legacy, text_contains='ruoff_legacy')
-dp.register_callback_query_handler(expanse, text_contains='expanse')
 
 dp.register_message_handler(mysettings, commands=['mysettings'])
 
@@ -351,7 +349,7 @@ functions_to_crontab = [
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
     invasion_notification_wrapper,
-    festival_notification_wrapper,
+    # festival_notification_wrapper,
     gardens_notification_wrapper,
     goddard_notification_wrapper,
     toi_notification_wrapper,
