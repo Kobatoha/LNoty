@@ -140,6 +140,8 @@ async def save_feedback(message: types.Message, state: FSMContext):
                                      text=f'Вы успешно оставили свое послание. Спасибо, Добби свободен!\n'
                                           f'\n'
                                           f'Можете продолжить устанавливать оповещения или отменять их - /help')
+            await mybot.send_message(chat_id='952604184',
+                                     text = feedback_ + f'от {message.from_user.username}')
 
         await state.finish()
 
