@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from DataBase.Base import Base
 from DataBase.User import User
-from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceClanDangeon
+from DataBase.Ruoff import EssenceSetting, EssenceCustomSetting, EssenceClanDangeon, LegacySetting
 from DataBase.RaidBoss import RaidBoss
 from DataBase.Feedback import Feedback
 from aiocron import crontab
@@ -22,7 +22,7 @@ from Commands.donate import donate, donate_sberbank, donate_ethereum, donate_bit
 from Commands.help import help
 from Commands.mysettings import mysettings
 from Commands.options import options_menu
-from Commands.server import choice_server, ruoff
+from Commands.server import choice_server, ruoff, ruoff_legacy
 from Commands.started import start
 from Commands.stopped import stop, yes_stop, no_stop
 from Commands.feedback import feedback, add_feedback, cancel_add_feedback, cancel_feedback, save_feedback, FeedbackState
@@ -39,6 +39,7 @@ Base.metadata.create_all(engine)
 # GENERAL SETTINGS
 dp.register_message_handler(choice_server, commands=['server'])
 dp.register_callback_query_handler(ruoff, text_contains='ruoff_server')
+dp.register_callback_query_handler(ruoff_legacy, text_contains='ruoff_legacy')
 
 dp.register_message_handler(mysettings, commands=['mysettings'])
 

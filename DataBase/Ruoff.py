@@ -104,7 +104,7 @@ class LegacySetting(Base):
     prison = Column(Boolean, default=False)             # Тюрьма Бездны
     olympiad = Column(Boolean, default=False)           # Олимпиада
     goldberg = Column(Boolean, default=False)           # Комната Голдберга
-    gardens = Column(VARCHAR(5))                        # Забытый Первобытный Сад
+    gardens = Column(VARCHAR(5), default=None)          # Забытый Первобытный Сад
     kadin = Column(Boolean, default=False)              # Забытый Первобытный Сад: Кадин
     frost = Column(Boolean, default=False)              # Замок Монарха Льда
     tantar = Column(Boolean, default=False)             # Руины Тантар

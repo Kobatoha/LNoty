@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from DataBase.User import User
 from DataBase.Base import Base
 from DataBase.Expanse import Expanse
-from DataBase.Ruoff import EssenceSetting
+from DataBase.Ruoff import EssenceSetting, LegacySetting
 from aiocron import crontab
 import asyncio
 from datetime import datetime
@@ -51,8 +51,10 @@ async def ruoff(callback_query: types.CallbackQuery):
             user.server = 'ruoff'
             print(user.telegram_id, user.username, 'выбрал оповещения с сервера', user.server)
             session.commit()
-            await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов Essence:\n'
-                                            '[ Magenta | Coral | Skyblue | Aqua ]')
+            await callback_query.message.answer(
+                'Вы выбрали получать оповещения с русских официальных серверов Essence:\n'
+                '[ Magenta | Coral | Skyblue | Aqua ]'
+            )
     await callback_query.answer()
 
 
@@ -60,7 +62,7 @@ async def ruoff(callback_query: types.CallbackQuery):
 async def ruoff_legacy(callback_query: types.CallbackQuery):
     with Session() as session:
         user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        setting = session.query(LegacySetting).filter_by(telegram_id=callback_query.from_user.id).first()
+        setting = session.query(LegacySetting).filter_by(id_user=callback_query.from_user.id).first()
         if user:
             user.server = 'legacy'
             print(user.telegram_id, user.username, 'выбрал оповещения с сервера', user.server)
@@ -70,5 +72,5 @@ async def ruoff_legacy(callback_query: types.CallbackQuery):
                 session.add(setting)
                 session.commit()
     await callback_query.message.answer('Вы выбрали получать оповещения с русских официальных серверов Legacy:\n'
-                                        '[ Gran Kain | Valakas | Antharas | Lindvior ]')    
+                                        '[ Gran Kain | Valakas | Antharas | Lindvior ]')
     await callback_query.answer()

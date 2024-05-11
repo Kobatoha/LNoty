@@ -85,7 +85,7 @@ async def mysettings(message: types.Message):
             else:
                 await message.answer(f'{ruoff_settings_text}\n{option_settings_text}')
                 
-elif user and user.server == 'legacy':
+    elif user and user.server == 'legacy':
         legacy_setting = session.query(LegacySetting).filter_by(id_user=user.telegram_id).first()
 
         v = " в "
