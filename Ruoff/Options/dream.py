@@ -52,15 +52,14 @@ inline_dream_buttons.add(button_set, button_remove)
 @dp.message_handler(commands=['dream'])
 async def about_dream(message: types.Message):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        if not option_setting:
-            option = EssenceCustomSetting(id_user=user.telegram_id)
-            session.add(option)
-            session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            if not option_setting:
+                option = EssenceCustomSetting(id_user=user.telegram_id)
+                session.add(option)
+                session.commit()
 
         text = 'Подземелье Грез — временная зона охоты для 2+ персонажей'\
                ' от 76 уровня и выше. Во время входа в Подземелье'\
@@ -148,18 +147,16 @@ async def save_dream_time(message: types.Message, state: FSMContext):
             minutes.append(str(h))
 
         if len(dream_time) == 5 and dream_time[:2] in hours and dream_time[2] == ':' and dream_time[3:5] in minutes:
-            session = Session()
+            with Session() as session:
 
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-
-            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.dream_time = dream_time
-            session.commit()
-
-            user.upd_date = datetime.today()
-            session.commit()
-
-            session.close()
+                user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    
+                option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                option_setting.dream_time = dream_time
+                session.commit()
+    
+                user.upd_date = datetime.today()
+                session.commit()
 
             keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_day, button_menu)
 
@@ -226,44 +223,42 @@ async def set_dream_day(callback_query: types.CallbackQuery):
 async def save_dream_day(callback_query: types.CallbackQuery):
     try:
         day_dream = None
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
-        if callback_query.data == 'add_dream_monday':
-            option_setting.dream_day = 'понедельник'
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+            if callback_query.data == 'add_dream_monday':
+                option_setting.dream_day = 'понедельник'
+                session.commit()
+                day_dream = 'понедельник'
+            elif callback_query.data == 'add_dream_tuesday':
+                option_setting.dream_day = 'вторник'
+                session.commit()
+                day_dream = 'вторник'
+            elif callback_query.data == 'add_dream_wednesday':
+                option_setting.dream_day = 'среда'
+                session.commit()
+                day_dream = 'среда'
+            elif callback_query.data == 'add_dream_thursday':
+                option_setting.dream_day = 'четверг'
+                session.commit()
+                day_dream = 'четверг'
+            elif callback_query.data == 'add_dream_friday':
+                option_setting.dream_day = 'пятница'
+                session.commit()
+                day_dream = 'пятница'
+            elif callback_query.data == 'add_dream_saturday':
+                option_setting.dream_day = 'суббота'
+                session.commit()
+                day_dream = 'суббота'
+            elif callback_query.data == 'add_dream_sunday':
+                option_setting.dream_day = 'воскресенье'
+                session.commit()
+                day_dream = 'воскресенье'
+    
+            user.upd_date = datetime.today()
             session.commit()
-            day_dream = 'понедельник'
-        elif callback_query.data == 'add_dream_tuesday':
-            option_setting.dream_day = 'вторник'
-            session.commit()
-            day_dream = 'вторник'
-        elif callback_query.data == 'add_dream_wednesday':
-            option_setting.dream_day = 'среда'
-            session.commit()
-            day_dream = 'среда'
-        elif callback_query.data == 'add_dream_thursday':
-            option_setting.dream_day = 'четверг'
-            session.commit()
-            day_dream = 'четверг'
-        elif callback_query.data == 'add_dream_friday':
-            option_setting.dream_day = 'пятница'
-            session.commit()
-            day_dream = 'пятница'
-        elif callback_query.data == 'add_dream_saturday':
-            option_setting.dream_day = 'суббота'
-            session.commit()
-            day_dream = 'суббота'
-        elif callback_query.data == 'add_dream_sunday':
-            option_setting.dream_day = 'воскресенье'
-            session.commit()
-            day_dream = 'воскресенье'
-
-        user.upd_date = datetime.today()
-        session.commit()
-
-        session.close()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
@@ -297,15 +292,14 @@ async def cancel_to_set_dream_day(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(filters.Text(contains='ruoff_option_remove_dream'))
 async def remove_dream(callback_query: types.CallbackQuery):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        option_setting.dream_time = None
-        option_setting.dream_day = None
-
-        session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting.dream_time = None
+            option_setting.dream_day = None
+    
+            session.commit()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_menu)
 
@@ -324,14 +318,14 @@ async def remove_dream(callback_query: types.CallbackQuery):
 # SELECT USER WITH TRUE SETTING
 async def dream_notification_wrapper():
     try:
-        session = Session()
-        users = session.query(User).all()
-
-        for user in users:
-            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            if option and option.dream_time and option.dream_day:
-                await dream_notification(user)
-        session.close()
+        with Session() as session:
+            users = session.query(User).all()
+    
+            for user in users:
+                if user.server == 'ruoff':
+                    option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                    if option and option.dream_time and option.dream_day:
+                        await dream_notification(user)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
@@ -345,9 +339,8 @@ async def dream_notification(user: User):
         now = datetime.now().strftime('%H:%M')
         today = datetime.now().strftime('%A').lower()
 
-        session = Session()
-        option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        session.close()
+        with Session() as session:
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
 
         dream_day = option.dream_day.lower() if option.dream_day else None
         if dream_day and today != dream_day:
