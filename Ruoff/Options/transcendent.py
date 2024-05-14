@@ -210,9 +210,10 @@ async def transcendent_notification_wrapper():
             users = session.query(User).all()
     
             for user in users:
-                option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-                if option and option.transcendent:
-                    await transcendent_notification(user)
+                if user.server == 'ruoff':
+                    option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                    if option and option.transcendent:
+                        await transcendent_notification(user)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
@@ -238,7 +239,7 @@ async def transcendent_notification(user: User):
             try:
                 await mybot.send_message(
                     user.telegram_id,
-                    'Иди фарми Невероятку'
+                    'Пора фармить Невероятку, печенек не дадут, звездюлей тоже, скажем спасибо и на этом.'
                 )
                 print(now, user.telegram_id, user.username, 'получил сообщение о Невероятной Временной Зоне')
             except BotBlocked:
