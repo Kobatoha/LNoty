@@ -47,15 +47,14 @@ inline_goddard_buttons.add(button_set, button_remove)
 @dp.message_handler(commands=['goddard'])
 async def about_goddard(message: types.Message):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        if not option_setting:
-            option = EssenceCustomSetting(id_user=user.telegram_id)
-            session.add(option)
-            session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            if not option_setting:
+                option = EssenceCustomSetting(id_user=user.telegram_id)
+                session.add(option)
+                session.commit()
 
         text = 'Исследование Годдарда - ежедневное задание для персонажей от 85 уровня и выше.\n'\
                'Цель: убить 1000 монстров\n'\
@@ -139,18 +138,16 @@ async def save_goddard_time(message: types.Message, state: FSMContext):
             minutes.append(str(h))
 
         if len(goddard) == 5 and goddard[:2] in hours and goddard[2] == ':' and goddard[3:5] in minutes:
-            session = Session()
+            with Session() as session:
 
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-
-            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.goddard = goddard
-            session.commit()
-
-            user.upd_date = datetime.today()
-            session.commit()
-
-            session.close()
+                user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    
+                option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                option_setting.goddard = goddard
+                session.commit()
+    
+                user.upd_date = datetime.today()
+                session.commit()
 
             keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_menu)
 
@@ -192,14 +189,13 @@ async def cancel_to_set_goddard_time(callback_query: types.CallbackQuery, state:
 @dp.callback_query_handler(filters.Text(contains='ruoff_option_remove_goddard'))
 async def remove_goddard(callback_query: types.CallbackQuery):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        option_setting.goddard = None
-
-        session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting.goddard = None
+    
+            session.commit()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_menu)
 
@@ -218,14 +214,14 @@ async def remove_goddard(callback_query: types.CallbackQuery):
 # SELECT USER WITH TRUE SETTING
 async def goddard_notification_wrapper():
     try:
-        session = Session()
-        users = session.query(User).all()
-
-        for user in users:
-            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            if option and option.goddard:
-                await goddard_notification(user)
-        session.close()
+        with Session() as session:
+            users = session.query(User).all()
+    
+            for user in users:
+                if user.server == 'ruoff':
+                    option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                    if option and option.goddard:
+                        await goddard_notification(user)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
