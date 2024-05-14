@@ -52,15 +52,14 @@ inline_frintezza_buttons.add(button_set, button_remove)
 @dp.message_handler(commands=['frintezza'])
 async def about_frintezza(message: types.Message):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        if not option_setting:
-            option = EssenceCustomSetting(id_user=user.telegram_id)
-            session.add(option)
-            session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            if not option_setting:
+                option = EssenceCustomSetting(id_user=user.telegram_id)
+                session.add(option)
+                session.commit()
 
         text = 'Поход на Фринтезу — временная зона охоты для 15+ персонажей'\
                ' от 76 уровня и выше. Доступна раз в неделю, откат зоны в среду в 6:30 по МСК.\n' \
@@ -151,18 +150,16 @@ async def save_frintezza_time(message: types.Message, state: FSMContext):
 
         if len(frintezza_time) == 5 and frintezza_time[:2] in hours\
                 and frintezza_time[2] == ':' and frintezza_time[3:5] in minutes:
-            session = Session()
+            with Session() as session:
 
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-
-            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.frintezza_time = frintezza_time
-            session.commit()
-
-            user.upd_date = datetime.today()
-            session.commit()
-
-            session.close()
+                user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    
+                option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                option_setting.frintezza_time = frintezza_time
+                session.commit()
+    
+                user.upd_date = datetime.today()
+                session.commit()
 
             keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_day, button_menu)
 
@@ -229,44 +226,42 @@ async def set_frintezza_day(callback_query: types.CallbackQuery):
 async def save_frintezza_day(callback_query: types.CallbackQuery):
     try:
         day_frintezza = None
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
-        if callback_query.data == 'add_frintezza_monday':
-            option_setting.frintezza_day = 'понедельник'
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+            if callback_query.data == 'add_frintezza_monday':
+                option_setting.frintezza_day = 'понедельник'
+                session.commit()
+                day_frintezza = 'понедельник'
+            elif callback_query.data == 'add_frintezza_tuesday':
+                option_setting.frintezza_day = 'вторник'
+                session.commit()
+                day_frintezza = 'вторник'
+            elif callback_query.data == 'add_frintezza_wednesday':
+                option_setting.frintezza_day = 'среда'
+                session.commit()
+                day_frintezza = 'среда'
+            elif callback_query.data == 'add_frintezza_thursday':
+                option_setting.frintezza_day = 'четверг'
+                session.commit()
+                day_frintezza = 'четверг'
+            elif callback_query.data == 'add_frintezza_friday':
+                option_setting.frintezza_day = 'пятница'
+                session.commit()
+                day_frintezza = 'пятница'
+            elif callback_query.data == 'add_frintezza_saturday':
+                option_setting.frintezza_day = 'суббота'
+                session.commit()
+                day_frintezza = 'суббота'
+            elif callback_query.data == 'add_frintezza_sunday':
+                option_setting.frintezza_day = 'воскресенье'
+                session.commit()
+                day_frintezza = 'воскресенье'
+    
+            user.upd_date = datetime.today()
             session.commit()
-            day_frintezza = 'понедельник'
-        elif callback_query.data == 'add_frintezza_tuesday':
-            option_setting.frintezza_day = 'вторник'
-            session.commit()
-            day_frintezza = 'вторник'
-        elif callback_query.data == 'add_frintezza_wednesday':
-            option_setting.frintezza_day = 'среда'
-            session.commit()
-            day_frintezza = 'среда'
-        elif callback_query.data == 'add_frintezza_thursday':
-            option_setting.frintezza_day = 'четверг'
-            session.commit()
-            day_frintezza = 'четверг'
-        elif callback_query.data == 'add_frintezza_friday':
-            option_setting.frintezza_day = 'пятница'
-            session.commit()
-            day_frintezza = 'пятница'
-        elif callback_query.data == 'add_frintezza_saturday':
-            option_setting.frintezza_day = 'суббота'
-            session.commit()
-            day_frintezza = 'суббота'
-        elif callback_query.data == 'add_frintezza_sunday':
-            option_setting.frintezza_day = 'воскресенье'
-            session.commit()
-            day_frintezza = 'воскресенье'
-
-        user.upd_date = datetime.today()
-        session.commit()
-
-        session.close()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
@@ -300,15 +295,14 @@ async def cancel_to_set_frintezza_day(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(filters.Text(contains='ruoff_option_remove_frintezza'))
 async def remove_frintezza(callback_query: types.CallbackQuery):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        option_setting.frintezza_time = None
-        option_setting.frintezza_day = None
-
-        session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting.frintezza_time = None
+            option_setting.frintezza_day = None
+    
+            session.commit()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_menu)
 
@@ -327,14 +321,14 @@ async def remove_frintezza(callback_query: types.CallbackQuery):
 # SELECT USER WITH TRUE SETTING
 async def frintezza_notification_wrapper():
     try:
-        session = Session()
-        users = session.query(User).all()
-
-        for user in users:
-            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            if option and option.frintezza_time and option.frintezza_day:
-                await frintezza_notification(user)
-        session.close()
+        with Session() as session:
+            users = session.query(User).all()
+    
+            for user in users:
+                if user.server == 'ruoff':
+                    option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                    if option and option.frintezza_time and option.frintezza_day:
+                        await frintezza_notification(user)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
@@ -348,9 +342,8 @@ async def frintezza_notification(user: User):
         now = datetime.now().strftime('%H:%M')
         today = datetime.now().strftime('%A').lower()
 
-        session = Session()
-        option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        session.close()
+        with Session() as session:
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
 
         frintezza_day = option.frintezza_day.lower() if option.frintezza_day else None
         if frintezza_day and today != frintezza_day:
