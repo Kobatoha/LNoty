@@ -75,9 +75,10 @@ async def legacy_frost_notification_wrapper():
     with Session() as session:
         users = session.query(User).all()
         for user in users:
-            setting = session.query(LegacySetting).filter_by(id_user=user.telegram_id).first()
-            if setting.frost is True:
-                await legacy_frost_notification(user)
+            if user.server == 'legacy':
+                setting = session.query(LegacySetting).filter_by(id_user=user.telegram_id).first()
+                if setting.frost is True:
+                    await legacy_frost_notification(user)
 
 
 async def legacy_frost_notification(user: User):
