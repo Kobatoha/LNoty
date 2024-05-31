@@ -52,15 +52,14 @@ inline_valakas_buttons.add(button_set, button_remove)
 @dp.message_handler(commands=['valakas'])
 async def about_valakas(message: types.Message):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        if not option_setting:
-            option = EssenceCustomSetting(id_user=user.telegram_id)
-            session.add(option)
-            session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            if not option_setting:
+                option = EssenceCustomSetting(id_user=user.telegram_id)
+                session.add(option)
+                session.commit()
 
         text = 'Храм Валакаса — временная зона охоты для 15+ персонажей'\
                ' от 76 уровня и выше. Доступна раз в неделю, откат зоны в среду в 6:30 по МСК.\n' \
@@ -149,18 +148,16 @@ async def save_valakas_time(message: types.Message, state: FSMContext):
 
         if len(valakas_time) == 5 and valakas_time[:2] in hours\
                 and valakas_time[2] == ':' and valakas_time[3:5] in minutes:
-            session = Session()
+            with Session() as session:
 
-            user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
-
-            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            option_setting.valakas_time = valakas_time
-            session.commit()
-
-            user.upd_date = datetime.today()
-            session.commit()
-
-            session.close()
+                user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
+    
+                option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                option_setting.valakas_time = valakas_time
+                session.commit()
+    
+                user.upd_date = datetime.today()
+                session.commit()
 
             keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_day, button_menu)
 
@@ -227,44 +224,42 @@ async def set_valakas_day(callback_query: types.CallbackQuery):
 async def save_valakas_day(callback_query: types.CallbackQuery):
     try:
         day_valakas = None
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
-        if callback_query.data == 'add_valakas_monday':
-            option_setting.valakas_day = 'понедельник'
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+    
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=callback_query.from_user.id).first()
+            if callback_query.data == 'add_valakas_monday':
+                option_setting.valakas_day = 'понедельник'
+                session.commit()
+                day_valakas = 'понедельник'
+            elif callback_query.data == 'add_valakas_tuesday':
+                option_setting.valakas_day = 'вторник'
+                session.commit()
+                day_valakas = 'вторник'
+            elif callback_query.data == 'add_valakas_wednesday':
+                option_setting.valakas_day = 'среда'
+                session.commit()
+                day_valakas = 'среда'
+            elif callback_query.data == 'add_valakas_thursday':
+                option_setting.valakas_day = 'четверг'
+                session.commit()
+                day_valakas = 'четверг'
+            elif callback_query.data == 'add_valakas_friday':
+                option_setting.valakas_day = 'пятница'
+                session.commit()
+                day_valakas = 'пятница'
+            elif callback_query.data == 'add_valakas_saturday':
+                option_setting.valakas_day = 'суббота'
+                session.commit()
+                day_valakas = 'суббота'
+            elif callback_query.data == 'add_valakas_sunday':
+                option_setting.valakas_day = 'воскресенье'
+                session.commit()
+                day_valakas = 'воскресенье'
+    
+            user.upd_date = datetime.today()
             session.commit()
-            day_valakas = 'понедельник'
-        elif callback_query.data == 'add_valakas_tuesday':
-            option_setting.valakas_day = 'вторник'
-            session.commit()
-            day_valakas = 'вторник'
-        elif callback_query.data == 'add_valakas_wednesday':
-            option_setting.valakas_day = 'среда'
-            session.commit()
-            day_valakas = 'среда'
-        elif callback_query.data == 'add_valakas_thursday':
-            option_setting.valakas_day = 'четверг'
-            session.commit()
-            day_valakas = 'четверг'
-        elif callback_query.data == 'add_valakas_friday':
-            option_setting.valakas_day = 'пятница'
-            session.commit()
-            day_valakas = 'пятница'
-        elif callback_query.data == 'add_valakas_saturday':
-            option_setting.valakas_day = 'суббота'
-            session.commit()
-            day_valakas = 'суббота'
-        elif callback_query.data == 'add_valakas_sunday':
-            option_setting.valakas_day = 'воскресенье'
-            session.commit()
-            day_valakas = 'воскресенье'
-
-        user.upd_date = datetime.today()
-        session.commit()
-
-        session.close()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_set_time, button_menu)
 
@@ -298,15 +293,14 @@ async def cancel_to_set_valakas_day(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(filters.Text(contains='ruoff_option_remove_valakas'))
 async def remove_valakas(callback_query: types.CallbackQuery):
     try:
-        session = Session()
+        with Session() as session:
 
-        user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
-        option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        option_setting.valakas_time = None
-        option_setting.valakas_day = None
-
-        session.commit()
-        session.close()
+            user = session.query(User).filter_by(telegram_id=callback_query.from_user.id).first()
+            option_setting = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+            option_setting.valakas_time = None
+            option_setting.valakas_day = None
+    
+            session.commit()
 
         keyboard = types.InlineKeyboardMarkup(row_width=2).add(button_menu)
 
@@ -325,14 +319,14 @@ async def remove_valakas(callback_query: types.CallbackQuery):
 # SELECT USER WITH TRUE SETTING
 async def valakas_notification_wrapper():
     try:
-        session = Session()
-        users = session.query(User).all()
-
-        for user in users:
-            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-            if option and option.valakas_time and option.valakas_day:
-                await valakas_notification(user)
-        session.close()
+        with Session() as session:
+            users = session.query(User).all()
+    
+            for user in users:
+                if user.server == 'ruoff':
+                    option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                    if option and option.valakas_time and option.valakas_day:
+                        await valakas_notification(user)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
@@ -346,9 +340,8 @@ async def valakas_notification(user: User):
         now = datetime.now().strftime('%H:%M')
         today = datetime.now().strftime('%A').lower()
 
-        session = Session()
-        option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-        session.close()
+        with Session() as session:
+            option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
 
         valakas_day = option.valakas_day.lower() if option.valakas_day else None
         if valakas_day and today != valakas_day:

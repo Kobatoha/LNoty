@@ -75,9 +75,10 @@ async def legacy_olympiad_notification_wrapper():
         users = session.query(User).all()
     
         for user in users:
-            setting = session.query(LegacySetting).filter_by(id_user=user.telegram_id).first()
-            if setting.olympiad is True:
-                await legacy_olympiad_notification(user)
+            if user.server = 'legacy':
+                setting = session.query(LegacySetting).filter_by(id_user=user.telegram_id).first()
+                if setting.olympiad is True:
+                    await legacy_olympiad_notification(user)
 
 
 async def legacy_olympiad_notification(user: User):

@@ -216,9 +216,10 @@ async def aztacan_notification_wrapper():
             users = session.query(User).all()
     
             for user in users:
-                option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
-                if option and option.aztacan:
-                    await aztacan_notification(user)
+                if user.server == 'ruoff':
+                    option = session.query(EssenceCustomSetting).filter_by(id_user=user.telegram_id).first()
+                    if option and option.aztacan:
+                        await aztacan_notification(user)
 
     except Exception as e:
         await mybot.send_message(chat_id='952604184',
