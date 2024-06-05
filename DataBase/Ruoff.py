@@ -23,6 +23,7 @@ class EssenceSetting(Base):
     primetime = Column(Boolean, default=False)              # Хот-тайм зачистки
     purge = Column(Boolean, default=False)                  # Сбор зачистки
     sevensings = Column(Boolean, default=False)             # Семь Печатей
+    celestial_tower = Column(Boolean, default=False)        # Небесная Башня
 
     event = Column(Boolean, default=False)                  # Ивент [меняется]
     calendar = Column(Boolean, default=False)               # Календарь [меняется]
