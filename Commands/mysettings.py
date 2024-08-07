@@ -52,6 +52,8 @@ async def mysettings(message: types.Message):
                               f'Зачистка - {"🌵" if setting_ruoff.purge else no}\n' \
                               f'Кебер - {"🌵" if setting_ruoff.keber else no}\n' \
                               f'Вторжение - {"🌵" if setting_ruoff.invasion else no}\n' \
+                              f'Небесная Башня - {"🌵" if setting_ruoff.celestial_tower else no}\n' \
+
 
         if not op and not bw:
             await message.answer(f'{ruoff_settings_text}')
@@ -66,6 +68,18 @@ async def mysettings(message: types.Message):
                 f'{"🌵" + op.frintezza_day + v + op.frintezza_time if op.frintezza_day and op.frintezza_time else no}\n' \
                 f'Забытые Сады - ' \
                 f'ежедневно {"🌵" + v + op.gardens if op.gardens else no}\n' \
+                f'Храм Ацтакана - ' \
+                f'ежедневно {"🌵" + v + op.aztacan if op.aztacan else no}\n' \
+                f'Исследование Годдарда - ' \
+                f'ежедневно {"🌵" + v + op.goddard if op.goddard else no}\n' \
+                f'Башня Дерзости - ' \
+                f'ежедневно {"🌵" + v + op.toi if op.toi else no}\n' \
+                f'Кельбим/Языческий - ' \
+                f'ежедневно {"🌵" + v + op.pagan if op.pagan else no}\n' \
+                f'Тренировочное подземелье - ' \
+                f'ежедневно {"🌵" + v + op.training if op.training else no}\n' \
+                f'Невероятная Зона - ' \
+                f'ежедневно {"🌵" + v + op.transcendent if op.transcendent else no}\n' \
 
             if bw:
                 bigwar_setting_text = f'🌈 Башня Дерзости - {"🍌" if bw.toi else no}\n' \

@@ -104,7 +104,7 @@ async def invasion_notification_wrapper():
 
 async def invasion_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    invasion_time = ['12:22']
+    invasion_time = ['20:22']
     invasion = []
 
     for time in invasion_time:
@@ -119,11 +119,13 @@ async def invasion_notification(user: User):
             print(now, user.telegram_id, user.username, '(круглосуточник) получил сообщение о Вторжении')
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
+    except Exception as error:
+        print(error, now, user.telegram_id, user.username)
 
 
 async def invasion_notification_hardwork(user: User):
     now = datetime.now().strftime('%H:%M')
-    invasion_time = ['12:22']
+    invasion_time = ['20:22']
     invasion_hardwork = []
 
     for time in invasion_time:
@@ -141,3 +143,5 @@ async def invasion_notification_hardwork(user: User):
             print(now, user.telegram_id, user.username, '(работяга) получил сообщение о Вторжении')
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)
+    except Exception as error:
+        print(error, now, user.telegram_id, user.username)

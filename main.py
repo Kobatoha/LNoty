@@ -135,6 +135,10 @@ dp.register_message_handler(about_invasion, commands=['invasion'])
 dp.register_callback_query_handler(set_invasion, text_contains='ruoff_set_invasion')
 dp.register_callback_query_handler(remove_invasion, text_contains='ruoff_remove_invasion')
 
+dp.register_message_handler(about_celestial_tower, commands=['celestial_tower'])
+dp.register_callback_query_handler(set_celestial_tower, text_contains='ruoff_set_celestial_tower')
+dp.register_callback_query_handler(remove_celestial_tower, text_contains='ruoff_remove_celestial_tower')
+
 # [DREAM]
 dp.register_message_handler(about_dream, commands=['dream'])
 dp.register_callback_query_handler(set_dream, text_contains='ruoff_option_set_dream')
@@ -350,7 +354,7 @@ functions_to_crontab = [
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
     invasion_notification_wrapper,
-    # festival_notification_wrapper,
+    festival_notification_wrapper,
     gardens_notification_wrapper,
     goddard_notification_wrapper,
     toi_notification_wrapper,
@@ -358,7 +362,8 @@ functions_to_crontab = [
     transcendent_notification_wrapper,
     tattoo_notification_wrapper,
     pagan_notification_wrapper,
-    aztacan_notification_wrapper
+    aztacan_notification_wrapper,
+    celestial_tower_notification_wrapper
     ]
 
 

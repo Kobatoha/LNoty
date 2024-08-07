@@ -17,3 +17,5 @@ from Ruoff.Events.festival import festival_notification_wrapper, about_festival,
 from Ruoff.Events.event_pass import about_event, set_event, remove_event
 from Ruoff.Events.keber import keber_notification_wrapper, about_keber, set_keber, remove_keber
 from Ruoff.Events.invasion import invasion_notification_wrapper, about_invasion, set_invasion, remove_invasion
+from Ruoff.Events.celestial_tower import celestial_tower_notification_wrapper, about_celestial_tower, \
+    set_celestial_tower, remove_celestial_tower
