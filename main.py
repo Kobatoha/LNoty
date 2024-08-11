@@ -426,7 +426,7 @@ async def crontab_notifications():
     #crontab('25 11,21 * * *', func=fantasyisle_notification_wrapper)
 
     # Запускаем keber каждый час в :58
-    crontab('58 * * * *', func=keber_notification_wrapper)
+    # crontab('58 * * * *', func=keber_notification_wrapper)
 
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
