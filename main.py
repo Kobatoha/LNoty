@@ -353,7 +353,7 @@ functions_to_crontab = [
     bigwar_gardens_notification_wrapper,
     bigwar_chaotic_notification_wrapper,
     bigwar_gord_notification_wrapper,
-    # invasion_notification_wrapper,
+    invasion_notification_wrapper,
     # festival_notification_wrapper,
     gardens_notification_wrapper,
     goddard_notification_wrapper,
