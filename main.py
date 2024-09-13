@@ -360,10 +360,11 @@ functions_to_crontab = [
     toi_notification_wrapper,
     training_notification_wrapper,
     transcendent_notification_wrapper,
-    tattoo_notification_wrapper,
+    # tattoo_notification_wrapper,
     pagan_notification_wrapper,
     aztacan_notification_wrapper,
-    celestial_tower_notification_wrapper
+    celestial_tower_notification_wrapper,
+    wishing_ceremony_notification_wrapper
     ]
 
 
@@ -412,21 +413,6 @@ async def crontab_notifications():
 
     # Запускаем bigwar_anakim в вторник и пятница в 18:45
     crontab('45 18 * * 2,5', func=bigwar_anakim_notification_wrapper)
-
-    # Запускаем bigwar_frost в вторник и четверг в 21:15 и в 21:45
-    crontab('15,45 21 * * 2,4', func=bigwar_frost_notification_wrapper)
-
-    # Запускаем bigwar_loa в понедельник и среда в 21:45
-    crontab('45 21 * * 1,3', func=bigwar_loa_notification_wrapper)
-
-    # Запускаем calendar ежедневно в 21:10
-    #crontab('10 21 * * *', func=calendar_notification_wrapper)
-
-    # Запускаем event ежедневно в 11:25 и 21:25
-    #crontab('25 11,21 * * *', func=fantasyisle_notification_wrapper)
-
-    # Запускаем keber каждый час в :58
-    # crontab('58 * * * *', func=keber_notification_wrapper)
 
     for func in functions_to_crontab:
         crontab('* * * * *', func=func)
