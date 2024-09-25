@@ -364,7 +364,7 @@ functions_to_crontab = [
     pagan_notification_wrapper,
     aztacan_notification_wrapper,
     celestial_tower_notification_wrapper,
-    wishing_ceremony_notification_wrapper
+    # wishing_ceremony_notification_wrapper
     ]
 
 

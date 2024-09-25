@@ -79,7 +79,11 @@ async def wishing_ceremony_notification_wrapper():
 async def wishing_ceremony_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     if now == '10:56' or now == '20:56':
-        await mybot.send_message(user.telegram_id, 'Церемония Желаний начнется через 4 минуты')
-        print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
+        try:
+            await mybot.send_message(user.telegram_id, 'Церемония Желаний начнется через 4 минуты')
+            print(now, user.telegram_id, user.username, 'получил сообщение об ивенте')
+        except:
+            print(now, user.telegram_id, user.username, 'не отправлено сообщение')
+
 
 
