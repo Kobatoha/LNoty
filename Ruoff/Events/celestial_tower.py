@@ -86,7 +86,7 @@ async def celestial_tower_notification_wrapper():
 async def celestial_tower_notification(user: User):
     now = datetime.now().strftime('%H:%M')
     today = datetime.now().strftime('%Y-%m-%d')
-    celestial_tower_time = ['20:55']
+    celestial_tower_time = ['21:55']
     celestial_tower_fridays = []
     
     start_date = datetime(2024, 6, 7)
@@ -103,6 +103,6 @@ async def celestial_tower_notification(user: User):
     try:
         if today in celestial_tower_fridays and now in celestial_tower_time:
             await mybot.send_message(user.telegram_id, 'Небесная Башня начнет терять перья через 5 минут.')
-            print(now, user.telegram_id, user.username, ' получил сообщение о Вторжении')
+            print(now, user.telegram_id, user.username, ' получил сообщение о Небесная Башня')
     except BotBlocked:
         print('[ERROR] Пользователь заблокировал бота:', now, user.telegram_id, user.username)

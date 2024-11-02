@@ -25,6 +25,8 @@ async def help(message: types.Message):
 
     user = session.query(User).filter_by(telegram_id=message.from_user.id).first()
 
+    update = 'Последний апдейт был 01.11.24\n\n'
+
     text = 'Доступные команды:\n'\
            '\n'\
            '/start - запуск бота и выбор сервера\n'\
@@ -39,7 +41,7 @@ async def help(message: types.Message):
            '/time - установить время работы оповещений\n'\
 
     if user and user.server == 'ruoff':
-        await message.answer(text + 
+        await message.answer(update + text +
                              '/event - Храм Воды до 22 мая 2024\n'
                              '/festival - Секретная лавка\n'
                              '/calendar - идет, берем награды и радуемся\n'
@@ -55,11 +57,12 @@ async def help(message: types.Message):
                              '/primetime - Прайм Тайм Зачистки\n'
                              '/purge - Зачистка\n'
                              '/invasion - Вторжение\n'
+                             '/celestial_tower\n'
                              '\n'
                              '/options - раздел ручных настроек (сады, ацтакан, грёзы и т.д.)\n'
                              '/bigwar - раздел для бигвара (респы рейд боссов)\n')
     elif user and user.server == 'legacy':
-        await message.answer(text + 
+        await message.answer(update + text +
                              '/frost - Замок Монарха Льда\n'
                              '/olympiad - Всемирная Олимпиада\n')
 
