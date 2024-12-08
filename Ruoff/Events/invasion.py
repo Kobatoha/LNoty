@@ -135,7 +135,7 @@ async def invasion_notification_hardwork(user: User):
             current_time += timedelta(hours=4)
     try:
         # Проверяем, что текущее время не находится в промежутке с 23:00 до 10:00
-        if '23:00' <= now <= '23:59' or '00:00' <= now <= '09:59':
+        if '00:00' <= now <= '09:59':
             return
             
         if now in invasion_hardwork:
