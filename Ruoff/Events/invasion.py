@@ -104,7 +104,7 @@ async def invasion_notification_wrapper():
 
 async def invasion_notification(user: User):
     now = datetime.now().strftime('%H:%M')
-    invasion_time = ['15:54']
+    invasion_time = ['08:28']
     invasion = []
 
     for time in invasion_time:
@@ -125,7 +125,7 @@ async def invasion_notification(user: User):
 
 async def invasion_notification_hardwork(user: User):
     now = datetime.now().strftime('%H:%M')
-    invasion_time = ['15:54']
+    invasion_time = ['08:28']
     invasion_hardwork = []
 
     for time in invasion_time:
