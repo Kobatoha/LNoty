@@ -9,28 +9,24 @@ init(autoreset=True)
 # weekday(): 0=Пн, 1=Вт, 2=Ср, 3=Чт, 4=Пт, 5=Сб, 6=Вс
 SCHEDULE = {
     "09:00": {"text": "🔥 Проюзать все проходки и светочи до профилактики", "days": [2]},
-    "09:57": {"text": "🔥 Остров Ада", "days": [5]},
-    "10:57": {"text": "🔥 Фестиваль цветов - Желтопухи и Розовопухи на острове грёз", "days": None},
-    "17:57": {"text": "🔥 Остров Ада. Цитадель", "days": [5]},
-    "19:00": {"text": "🔥 Валакас на старых", "days": [6]},
-    "20:27": {"text": "🔥 Лес Состязаний", "days": None},
-    "21:00": {"text": "🔥 Мафия", "days": None},
-    "21:27": {"text": "🔥 Олимп: нужно выгрузить окна", "days": [0, 1, 2, 3, 4]},
-    "21:28": {"text": "🔥 Сады", "days": None},
-    "22:00": {"text": "🔥 Антарас на старых", "days": [6]},
+    "09:57": {"text": "😈 Остров Ада", "days": [5]},
+    "10:57": {"text": "🌷 Фестиваль цветов - Желтопухи и Розовопухи на острове грёз", "days": None},
+    "17:57": {"text": "😈 Остров Ада. Цитадель", "days": [5]},
+    "19:00": {"text": "🐉 Валакас | Фуфарион", "days": [6]},
+    "20:30": {"text": "🌳 Лес Состязаний", "days": None},
+    "21:00": {"text": "🚔 Мафия", "days": None},
+    "21:01": {"text": "🏰 Осада Гирана?", "days": [3, 4, 5]},
+    "21:27": {"text": "🥇 Олимп: нужно выгрузить окна", "days": [0, 1, 2, 3, 4]},
+    "21:30": {"text": "🌳 Сады", "days": None},
+    "21:59": {"text": "🌷 Фестиваль цветов - Желтопухи и Розовопухи на острове грёз", "days": None},
+    "22:00": {"text": "🐉 Антарас", "days": [6]},
 }
 
 BEORO_TIMES = ["19:25"]
 
-# 🍪 Расписание для "Куки"
-COOKIE_TIMES = [
-    "08:47", "10:47", "12:47", "14:47", "16:47", "18:47", "20:47", "22:47"
-]
-COOKIE_TEXT = "🍪 Кука через 3 минуты"
-
 # ⚔ Вторжение (каждые 4 часа после стартового времени)
-INVASION_START = ["17:15"]
-INVASION_TEXT = "⚔ Вторжение"
+INVASION_START = ["18:41"]
+INVASION_TEXT = "⚔️ Вторжение"
 INVASION_TIMES = []
 
 for time in INVASION_START:
@@ -75,12 +71,6 @@ def print_event(time: str, text: str, status: str = "sent"):
     print(f"  {icon} {time_colored} │ {status_text} │ {Fore.WHITE}{text}{Style.RESET_ALL}")
 
 
-def print_cookie(time: str):
-    """Специальное оформление для куки"""
-    print(f"  {Fore.MAGENTA}🍪{Style.RESET_ALL} {Fore.YELLOW}[{time}]{Style.RESET_ALL} │ "
-          f"{Fore.MAGENTA}КУКА{Style.RESET_ALL} │ "
-          f"{Fore.WHITE}{COOKIE_TEXT} {Fore.CYAN}(@gr0m4){Style.RESET_ALL}")
-
 
 async def scheduler():
     sent_today = set()
@@ -88,7 +78,6 @@ async def scheduler():
     print_header("📅 ПЛАНИРОВЩИК ИГРОВЫХ СОБЫТИЙ")
     print(f"  {Fore.CYAN}⏰{Style.RESET_ALL} Ожидание наступления событий...")
     print(f"  {Fore.CYAN}📋{Style.RESET_ALL} Всего событий в расписании: {Fore.YELLOW}{len(SCHEDULE)}{Style.RESET_ALL}")
-    print(f"  {Fore.CYAN}🍪{Style.RESET_ALL} Кука-таймеров: {Fore.YELLOW}{len(COOKIE_TIMES)}{Style.RESET_ALL}")
     print(f"  {Fore.CYAN}⚔{Style.RESET_ALL} Таймеров вторжения: {Fore.YELLOW}{len(INVASION_TIMES)}{Style.RESET_ALL}")
 
     # Вывод расписания на сегодня
@@ -120,17 +109,12 @@ async def scheduler():
                 print_event(current_time, event["text"], "skipped_day")
                 sent_today.add(current_time)
 
-        # --- Куки ---
-        if current_time in COOKIE_TIMES and current_time not in sent_today:
-            print_cookie(current_time)
-            sent_today.add(current_time)
-
-        # --- Беоро ---
-        if current_time in BEORO_TIMES and current_time not in sent_today:
-            print(f"  {Fore.BLUE}🐻{Style.RESET_ALL} {Fore.YELLOW}[{current_time}]{Style.RESET_ALL} │ "
-                  f"{Fore.BLUE}БЕОРО{Style.RESET_ALL} │ "
-                  f"{Fore.WHITE}Беоро через 5 минут{Style.RESET_ALL}")
-            sent_today.add(current_time)
+        # # --- Беоро ---
+        # if current_time in BEORO_TIMES and current_time not in sent_today:
+        #     print(f"  {Fore.BLUE}🐻{Style.RESET_ALL} {Fore.YELLOW}[{current_time}]{Style.RESET_ALL} │ "
+        #           f"{Fore.BLUE}БЕОРО{Style.RESET_ALL} │ "
+        #           f"{Fore.WHITE}Беоро через 5 минут{Style.RESET_ALL}")
+        #     sent_today.add(current_time)
 
         # --- Вторжение ---
         if current_time in INVASION_TIMES and current_time not in sent_today:
